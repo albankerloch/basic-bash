@@ -19,12 +19,13 @@ int	main()
 	line = NULL;
 	while (1)
 	{
-	//prompt
-	ft_putstr("<minishell> ");
-	get_next_line(0, &line);
-	ft_exec(ft_parser(line), line);
-	//parser
-	//exec
+		//prompt
+		ft_putstr("<minishell> ");
+		get_next_line(0, &line);
+		ft_exec(ft_parser(line), line);
+		free(line);
+		//parser
+		//exec
 	}
 	return (0);
 }

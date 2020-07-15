@@ -9,7 +9,7 @@ t_command ft_parser(char *line)
 
     c.k_begin = 0;
     i = 0;
-    while(line[i] != ' ')
+    while(line[i] != ' ' && line[i])
         i++;
     c.k_end = i;
     c.a_begin = i + 1;
