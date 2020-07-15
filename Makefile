@@ -1,4 +1,6 @@
-CUB_SRCS_NAME	= main.c
+CUB_SRCS_NAME	= 	main.c \
+					parser.c \
+					exec.c
 
 CUB_SRCS_DIR	= ./srcs
 

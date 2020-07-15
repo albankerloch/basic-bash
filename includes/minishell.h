@@ -14,4 +14,17 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <stdio.h>
+
+typedef struct s_command
+{
+    int k_begin;
+    int k_end;
+    int a_begin;
+    int a_end;
+}       t_command;
+
+t_command ft_parser(char *line);
+int ft_exec(t_command c, char *line);
+
 #endif

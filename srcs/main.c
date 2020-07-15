@@ -22,6 +22,7 @@ int	main()
 	//prompt
 	ft_putstr("<minishell> ");
 	get_next_line(0, &line);
+	ft_exec(ft_parser(line), line);
 	//parser
 	//exec
 	}
