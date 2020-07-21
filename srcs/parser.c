@@ -27,10 +27,10 @@ t_command ft_parser(char *line)
         if (!ft_redirection(&c, line, &i))
         {
     	    c.arg = ft_realloc_concat(c.arg, line[i]);
-            printf("%d %c\n", i, line[i]);
+//            printf("%d %c %s\n", i, line[i], c.arg);
         }
-        else   
-            printf("redir : %d\n", i);
+ //       else   
+ //           printf("redir : %d\n", i);
         i++;
 	}
  
@@ -75,7 +75,6 @@ int    ft_redirection(t_command *c, char *line, int *i)
         }
         else
         {
-            printf("youpi\n");
             *i = *i + 1;
             return (ft_redir_right(c, line, i, 1));
         }

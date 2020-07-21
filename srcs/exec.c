@@ -23,6 +23,8 @@ int ft_exec(t_command c, char *line)
         while(arg[i])
         {
             ft_putstr(arg[i]);
+            if (arg[i + 1])
+                ft_putchar(' ');
             i++;
         }
         ft_putchar('\n');
