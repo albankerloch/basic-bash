@@ -2,23 +2,38 @@
 
 #include "../includes/minishell.h"
 
+void    ft_command_construct(t_command *c)
+{
+    c->arg = malloc(1);
+    c->input = 0;
+    c->n_input = malloc(1);
+    c->add = 0;
+    c->out = 1;
+    c->n_out = malloc(1);
+    c->err = 2;
+    c->n_err = malloc(1);
+}
+
 t_command ft_parser(char *line)
 {
     t_command   c;
     int         i;
 
- //   c.k_begin = 0;
     i = 0;
-c.arg = malloc(1);
-	
-    
+
+    ft_command_construct(&c);
     while(line[i])
     {
-    	c.arg = ft_realloc_concat(c.arg, line[i]);
+        if (!ft_redirection(&c, line, &i))
+        {
+    	    c.arg = ft_realloc_concat(c.arg, line[i]);
+            printf("%d %c\n", i, line[i]);
+        }
+        else   
+            printf("redir : %d\n", i);
         i++;
 	}
- //   c.k_end = i;
-   // c.a_begin = i + 1;
+ 
    /* while(line[i] != '\0')
     {
     	//realloc char si diff " ' > space et pas debut d'un redic en debut mot
@@ -27,11 +42,74 @@ c.arg = malloc(1);
 	// si redir, chg struct
 	
 	i++;
-	}
+	}*/
 	// supprimer space a la fin de arg
-    c.a_end = i;*/
-
- //   printf("%d %d %d %d\n", c.k_begin, c.k_end, c.a_begin, c.a_end);
 
     return (c);
+}
+
+int    ft_redirection(t_command *c, char *line, int *i)
+{
+    if ((line[*i] == '1' || line[*i] == '2') && *i > 0 && line[*i - 1] == ' ')
+    {
+        if (line[*i + 1]== '>')
+        {
+            if (line[*i + 2] && line[*i + 2] == '>')
+            {
+                *i = *i + 3;
+                 return (ft_add(c, line, i, line[*i - 3]));
+            }
+            else
+            {
+                *i = *i + 2;
+                return (ft_redir_right(c, line, i, line[*i - 2]));
+            }
+        }
+    }
+    else if (line[*i] == '>')
+    {
+        if (line[*i + 1] && line[*i + 1] == '>')
+        {
+            *i = *i + 2;
+            return (ft_add(c, line, i, 1));
+        }
+        else
+        {
+            printf("youpi\n");
+            *i = *i + 1;
+            return (ft_redir_right(c, line, i, 1));
+        }
+    }
+    return (0);
+}
+
+int    ft_add(t_command *c, char *line, int *i, char output)
+{   
+    c->add = 1;
+   while (line[*i] == ' ')
+        *i = *i + 1;
+    while (line[*i] != ' ' && line[*i] != '\0')
+    {
+        if (output == '1')
+            c->n_out = ft_realloc_concat(c->n_out, line[*i]);
+        else
+            c->n_err = ft_realloc_concat(c->n_err, line[*i]);
+        *i = *i + 1;
+    }
+    return (1);
+}
+
+int    ft_redir_right(t_command *c, char *line, int *i, char output)
+{
+    while (line[*i] == ' ')
+        *i = *i + 1;
+    while (line[*i] != ' ' && line[*i] != '\0')
+    {
+        if (output == '1')
+            c->n_out = ft_realloc_concat(c->n_out, line[*i]);
+        else
+            c->n_err = ft_realloc_concat(c->n_err, line[*i]);
+        *i = *i + 1;
+    }
+    return (1);
 }

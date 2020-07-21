@@ -20,14 +20,20 @@
 typedef struct s_command
 {
 	char *arg;
-  /*  int k_begin;
-    int k_end;
-    int a_begin;
-    int a_end;*/
+  int   input;
+  char  *n_input;
+  int   add;
+  int   out;
+  char  *n_out;
+  int   err;
+  char  *n_err;
 }       t_command;
 
 t_command ft_parser(char *line);
 int ft_exec(t_command c, char *line);
 char *ft_realloc_concat(char *line, char c);
+int    ft_redirection(t_command *c, char *line, int *i);
+int    ft_redir_right(t_command *c, char *line, int *i, char output);
+int    ft_add(t_command *c, char *line, int *i, char output);
 
 #endif
