@@ -1,47 +1,55 @@
-CUB_SRCS_NAME	= 	main.c \
+SRCS_NAME	= 	main.c \
 					parser.c \
 					exec.c \
 					utils.c
 
-CUB_SRCS_DIR	= ./srcs
+SRCS_DIR	= ./srcs
 
-CUB_SRCS	= $(addprefix $(CUB_SRCS_DIR)/, $(CUB_SRCS_NAME))
+SRCS		= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
 
-CUB_OBJS	= $(CUB_SRCS_NAME:.c=.o)
+OBJS		= $(SRCS_NAME:.c=.o)
 
 NAME		= minishell
 
-CUB_INCLUDES_DIR= ./includes
+INCLUDES_DIR= ./includes
 
 LIBFT_DIR	= ./libft
 
 LIBFT_EXEC	= $(LIBFT_DIR)/libft.a
 
-CC		= clang
+CC			= clang
 
-RM		= rm -f
+RM			= rm -f
 
 CFLAGS		= -Wall -Wextra -Werror
 
-IFLAGS		= -I $(CUB_INCLUDES_DIR) -I $(LIBFT_DIR)
+IFLAGS		= -I $(INCLUDES_DIR) -I $(LIBFT_DIR)
 
 all:		$(LIBFT_EXEC) $(NAME)
 
+deb:		$(NAME)
+
 $(NAME):	
-		$(CC) -c $(IFLAGS) $(CUB_SRCS)
-		$(CC) -o $@ $(CUB_OBJS) $(LIBFT_EXEC) $(CFLAGS)
+		$(CC) -c $(IFLAGS) $(SRCS)
+		$(CC) -o $@ $(OBJS) $(LIBFT_EXEC) $(CFLAGS)
 
 $(LIBFT_EXEC):
 		cd $(LIBFT_DIR) && $(MAKE)
 
 clean:
-		$(RM) $(CUB_OBJS)
+		$(RM) $(OBJS)
 		cd $(LIBFT_DIR) && $(MAKE) $@
 
 fclean:		clean
 		$(RM) $(NAME)
 		cd $(LIBFT_DIR) && $(MAKE) $@
 
+clean_deb:	
+		$(RM) $(OBJS)
+		$(RM) $(NAME)
+
 re:		fclean all
 
-.PHONY:		all clean fclean re
+debug:	clean_deb deb
+
+.PHONY:		all clean fclean re debug
