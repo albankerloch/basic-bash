@@ -8,6 +8,7 @@ void    ft_command_construct(t_command *c)
     c->input = 0;
     c->n_input = malloc(1);
     c->add = 0;
+    c->quote = 0;
     c->out = 1;
     c->n_out = malloc(1);
     c->err = 2;
@@ -20,14 +21,23 @@ t_command ft_parser(char *line)
     int         i;
 
     i = 0;
-
+  /*  printf("test--\n");
+    ft_putstr("lol \n hehe");
+    printf("--test\n");*/
     ft_command_construct(&c);
     while(line[i])
     {
+        ft_quoting(&c, line, &i);
+        if (ft_backslash(&c, line, &i))
+        {
+            c.arg = NULL;
+            return (c);
+        }
+     //   ft_putchar(line[i]);
         if (!ft_redirection(&c, line, &i))
         {
     	    c.arg = ft_realloc_concat(c.arg, line[i]);
-//            printf("%d %c %s\n", i, line[i], c.arg);
+         //   printf("%d %c %s\n", i, line[i], c.arg);
         }
  //       else   
  //           printf("redir : %d\n", i);
@@ -44,8 +54,46 @@ t_command ft_parser(char *line)
 	i++;
 	}*/
 	// supprimer space a la fin de arg
-
     return (c);
+}
+
+void    ft_quoting(t_command *c, char *line, int *i)
+{
+    if (line[*i] == '\'' && c->quote == 0)
+    {
+        c->quote = 1;
+        if (line[*i - 1] && line[*i - 1] != '\\')
+            *i = *i + 1;
+    }    
+    else if (line[*i] == '\'' && c->quote == 1)
+    {
+        c->quote = 0;
+        if (line[*i - 1] && line[*i - 1] != '\\')
+            *i = *i + 1;
+    }
+    else if (line[*i] == '\"' && c->quote == 0)
+    {
+        c->quote = 2;
+        if (line[*i - 1] && line[*i - 1] != '\\')
+            *i = *i + 1;
+    }
+    else if (line[*i] == '\"' && c->quote == 2)
+    {
+        c->quote = 0;
+        if (line[*i - 1] && line[*i - 1] != '\\')
+            *i = *i + 1;
+    }
+}
+
+int    ft_backslash(t_command *c, char *line, int *i)
+{
+    if (line[*i] == '\\' && c->quote == 0)
+        *i = *i + 1;
+    else if (line[*i] == '\\' && c->quote == 1 && line[*i + 1] && line[*i + 1] == '\'')
+        return (1);   
+    else if (line[*i] == '\\' && c->quote == 2 && line[*i + 1] && (line[*i + 1] == '`' || line[*i + 1] == '\"'))
+        *i = *i + 1;
+    return (0);
 }
 
 int    ft_redirection(t_command *c, char *line, int *i)

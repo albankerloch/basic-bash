@@ -23,6 +23,7 @@ typedef struct s_command
   int   input;
   char  *n_input;
   int   add;
+  int   quote;
   int   out;
   char  *n_out;
   int   err;
@@ -35,5 +36,8 @@ char *ft_realloc_concat(char *line, char c);
 int    ft_redirection(t_command *c, char *line, int *i);
 int    ft_redir_right(t_command *c, char *line, int *i, char output);
 int    ft_add(t_command *c, char *line, int *i, char output);
+void    ft_quoting(t_command *c, char *line, int *i);
+int    ft_backslash(t_command *c, char *line, int *i);
+void    ft_sub_arg(char **arg, int i);
 
 #endif
