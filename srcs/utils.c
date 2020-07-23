@@ -14,6 +14,18 @@ char	*ft_realloc_concat(char *line, char c)
 	return (new);
 }
 
+void ft_check(char **new)
+{
+	int i;
+	
+	i = 0;
+	while (new[i])
+    {
+        printf("LLL%i\n", i);
+        i++;
+    }
+}
+
 char	**ft_realloc_arg(char **arg)
 {
 	char	**new;
@@ -22,20 +34,18 @@ char	**ft_realloc_arg(char **arg)
 	i = 0;
 	while (arg[i])
 		i++;
-//	printf ("--> %d\n", i);
-	if (!(new = malloc(sizeof(char*) * (i + 1))))
+	if (!(new = malloc(sizeof(char*) * (i + 2))))
 		return (NULL);
-//	printf ("milieu realloc arg\n");
 	i = 0;
 	while (arg[i])
 	{
 		new[i] = ft_strdup(arg[i]);
-//		printf ("----> %d\n", i);
 		free(arg[i]);
 		i++;
 	}
 	new[i] = malloc(1);
+	new[i + 1] = NULL;
 	free(arg);
-//	printf ("fin realloc arg\n");
+
 	return (new);
 }

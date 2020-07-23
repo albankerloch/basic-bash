@@ -32,20 +32,35 @@ t_command ft_parser(char *line)
                 i++;
         else
         {
-            printf ("-> %d | %s\n", t, c.arg[t]);
-            /*
+           /* if (line[i] == quote)
+                vérif finie ---> erreur
+                verif faux arg (double quote d'affilé) --> avance 2
+              else
+                t++ et realloc arg
+                if (line[i] == quote)
+                    c.quote = 1 (ou c.quote= 2) et avance de 1
+                boucle (avec à l'intérieur gestion des backslah)
+            */
+                
             t++;
             if (t != 0)
                 c.arg = ft_realloc_arg(c.arg);
-            while(line[i] != ' ' && line[i])
+            while(line[i] != ' ' && c.quote == 0 && line[i])
             {
+                if (line[i] == '\"')
+                    ft_double_quoting(&c, line, &i);
+                else if (line[i] == '\'')
+                    ft_simple_quoting(&c, line, &i);
+                if (ft_backslash(&c, line, &i))
+                {
+                    c.arg = NULL;
+                    return (c);
+                }
                 c.arg[t] = ft_realloc_concat(c.arg[t], line[i]);
                 i++;
             }
-            */
         }
     }
-    printf("FIN de parser\n");
     /*
     while(line[i])
     {
@@ -87,6 +102,7 @@ t_command ft_parser(char *line)
 
 void    ft_simple_quoting(t_command *c, char *line, int *i)
 {
+    ft_check_end_quote(c, line, *i, 1);
     if (line[*i - 1] && line[*i - 1] != '\\')
     {
         while (line[*i] == '\'' && c->quote != 2)
@@ -102,6 +118,7 @@ void    ft_simple_quoting(t_command *c, char *line, int *i)
 
 void    ft_double_quoting(t_command *c, char *line, int *i)
 {
+    ft_check_end_quote(c, line, *i, 2);
     if (line[*i - 1] && line[*i - 1] != '\\')
     {
         while (line[*i] == '\"' && c->quote != 1)
@@ -187,6 +204,32 @@ int    ft_redir_right(t_command *c, char *line, int *i, char output)
         else
             c->n_err = ft_realloc_concat(c->n_err, line[*i]);
         *i = *i + 1;
+    }
+    return (1);
+}
+
+int    ft_check_end_quote(t_command *c, char *line, int i, int q)
+{
+    i++;
+    if (q == 2 && c->quote == 0)
+    {
+        while (line[i] != '\0')
+        {
+            if (line[i] == '\"')
+                return (0);
+            i++;
+        }
+        printf("erreur double quote ouverte i=%d\n", i);
+    }
+    else if (q == 1 && c->quote == 0)
+    {
+        while (line[i] != '\0')
+        {
+            if (line[i] == '\'')
+                return (0);
+            i++;
+        }
+        printf("erreur simple quote ouverte i=%d\n", i);
     }
     return (1);
 }

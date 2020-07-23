@@ -41,5 +41,6 @@ void    ft_double_quoting(t_command *c, char *line, int *i);
 int    ft_backslash(t_command *c, char *line, int *i);
 void    ft_sub_arg(char **arg, int i);
 char	**ft_realloc_arg(char **arg);
+int    ft_check_end_quote(t_command *c, char *line, int i, int q);
 
 #endif

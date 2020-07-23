@@ -6,7 +6,6 @@ int ft_exec(t_command c, char *line)
 	char *envir[] = { NULL };
     int i;
 
-    printf("c.arg[0]=%s\n", c.arg[0]);
     /*
 	if (c.arg == NULL)
     {
@@ -17,8 +16,6 @@ int ft_exec(t_command c, char *line)
     */
     if (ft_strncmp(c.arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c.arg[0]))
     {
-      //  printf("arg0=%s\n", arg[0]);
-        //printf("arg1=%s\n", arg[1]);
         i = 1;
         while(c.arg[i])
         {
