@@ -4,7 +4,6 @@
 
 void    ft_command_construct(t_command *c)
 {
-    c->arg = malloc(1);
     c->input = 0;
     c->n_input = malloc(1);
     c->add = 0;
@@ -13,15 +12,41 @@ void    ft_command_construct(t_command *c)
     c->n_out = malloc(1);
     c->err = 2;
     c->n_err = malloc(1);
+    c->arg = malloc(sizeof(char*));
+    c->arg[0] = malloc(1);
 }
 
 t_command ft_parser(char *line)
 {
     t_command   c;
     int         i;
+    int         t;
 
+
+    t = -1;
     i = 0;
     ft_command_construct(&c);
+    while(line[i])
+    {
+        if (line[i] == ' ')
+                i++;
+        else
+        {
+            printf ("-> %d | %s\n", t, c.arg[t]);
+            /*
+            t++;
+            if (t != 0)
+                c.arg = ft_realloc_arg(c.arg);
+            while(line[i] != ' ' && line[i])
+            {
+                c.arg[t] = ft_realloc_concat(c.arg[t], line[i]);
+                i++;
+            }
+            */
+        }
+    }
+    printf("FIN de parser\n");
+    /*
     while(line[i])
     {
         printf("quote=%d line[%d]=%c\n", c.quote, i, line[i]);
@@ -45,7 +70,8 @@ t_command ft_parser(char *line)
        // if (!(line[i] == '\"' && line[i - 1] && line[i - 1] == '\"'))
         i++;
 	}
- 
+    */
+
    /* while(line[i] != '\0')
     {
     	//realloc char si diff " ' > space et pas debut d'un redic en debut mot

@@ -13,3 +13,29 @@ char	*ft_realloc_concat(char *line, char c)
 	free(line);
 	return (new);
 }
+
+char	**ft_realloc_arg(char **arg)
+{
+	char	**new;
+	int		i;
+
+	i = 0;
+	while (arg[i])
+		i++;
+//	printf ("--> %d\n", i);
+	if (!(new = malloc(sizeof(char*) * (i + 1))))
+		return (NULL);
+//	printf ("milieu realloc arg\n");
+	i = 0;
+	while (arg[i])
+	{
+		new[i] = ft_strdup(arg[i]);
+//		printf ("----> %d\n", i);
+		free(arg[i]);
+		i++;
+	}
+	new[i] = malloc(1);
+	free(arg);
+//	printf ("fin realloc arg\n");
+	return (new);
+}

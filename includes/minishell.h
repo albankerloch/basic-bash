@@ -19,7 +19,7 @@
 
 typedef struct s_command
 {
-	char *arg;
+	char **arg;
   int   input;
   char  *n_input;
   int   add;
@@ -40,5 +40,6 @@ void    ft_simple_quoting(t_command *c, char *line, int *i);
 void    ft_double_quoting(t_command *c, char *line, int *i);
 int    ft_backslash(t_command *c, char *line, int *i);
 void    ft_sub_arg(char **arg, int i);
+char	**ft_realloc_arg(char **arg);
 
 #endif
