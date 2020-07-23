@@ -15,14 +15,17 @@ int ft_exec(t_command c, char *line)
         ft_putchar('\n');
     }
 */
+ //   printf("c.arg=%s\n", c.arg);
 	if (c.arg == NULL)
     {
-        printf("erreur quote à gérer\n");
+        printf("quote ouvert\n");
         return (1);
     }
     arg = ft_split(c.arg, ' ');
     if (ft_strncmp(arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(arg[0]))
     {
+      //  printf("arg0=%s\n", arg[0]);
+        //printf("arg1=%s\n", arg[1]);
         i = 1;
         while(arg[i])
         {
@@ -33,8 +36,8 @@ int ft_exec(t_command c, char *line)
         }
         ft_putchar('\n');
     }
-    else
-    	execve(arg[0], arg, envir);
+    else if (execve(arg[0], arg, envir) == -1)
+        ft_putchar('\n');
     return (0);
 }
 

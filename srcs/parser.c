@@ -21,26 +21,28 @@ t_command ft_parser(char *line)
     int         i;
 
     i = 0;
-  /*  printf("test--\n");
-    ft_putstr("lol \n hehe");
-    printf("--test\n");*/
     ft_command_construct(&c);
     while(line[i])
     {
-        ft_quoting(&c, line, &i);
+        printf("quote=%d line[%d]=%c\n", c.quote, i, line[i]);
+        if (line[i] == '\"')
+            ft_double_quoting(&c, line, &i);
+        else if (line[i] == '\'')
+            ft_simple_quoting(&c, line, &i);
         if (ft_backslash(&c, line, &i))
         {
             c.arg = NULL;
             return (c);
         }
-     //   ft_putchar(line[i]);
         if (!ft_redirection(&c, line, &i))
         {
     	    c.arg = ft_realloc_concat(c.arg, line[i]);
-         //   printf("%d %c %s\n", i, line[i], c.arg);
+      //      printf("redir ok %d %c %d %s\n", i, line[i], c.quote, c.arg);
         }
+       // printf("realloc=%s\n", c.arg);
  //       else   
  //           printf("redir : %d\n", i);
+       // if (!(line[i] == '\"' && line[i - 1] && line[i - 1] == '\"'))
         i++;
 	}
  
@@ -57,31 +59,33 @@ t_command ft_parser(char *line)
     return (c);
 }
 
-void    ft_quoting(t_command *c, char *line, int *i)
+void    ft_simple_quoting(t_command *c, char *line, int *i)
 {
-    if (line[*i] == '\'' && c->quote == 0)
+    if (line[*i - 1] && line[*i - 1] != '\\')
     {
-        c->quote = 1;
-        if (line[*i - 1] && line[*i - 1] != '\\')
+        while (line[*i] == '\'' && c->quote != 2)
+        {
             *i = *i + 1;
-    }    
-    else if (line[*i] == '\'' && c->quote == 1)
-    {
-        c->quote = 0;
-        if (line[*i - 1] && line[*i - 1] != '\\')
-            *i = *i + 1;
+            if (c->quote == 0)
+                c->quote = 1;
+            else if (c->quote == 1)
+                c->quote = 0;
+        }
     }
-    else if (line[*i] == '\"' && c->quote == 0)
+}
+
+void    ft_double_quoting(t_command *c, char *line, int *i)
+{
+    if (line[*i - 1] && line[*i - 1] != '\\')
     {
-        c->quote = 2;
-        if (line[*i - 1] && line[*i - 1] != '\\')
+        while (line[*i] == '\"' && c->quote != 1)
+        {
             *i = *i + 1;
-    }
-    else if (line[*i] == '\"' && c->quote == 2)
-    {
-        c->quote = 0;
-        if (line[*i - 1] && line[*i - 1] != '\\')
-            *i = *i + 1;
+            if (c->quote == 0)
+                c->quote = 2;
+            else if (c->quote == 2)
+                c->quote = 0;
+        }
     }
 }
 
