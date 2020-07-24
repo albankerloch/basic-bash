@@ -1,7 +1,8 @@
 SRCS_NAME	= 	main.c \
 					parser.c \
 					exec.c \
-					utils.c
+					utils.c \
+					quotes.c
 
 SRCS_DIR	= ./srcs
 

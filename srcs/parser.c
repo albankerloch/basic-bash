@@ -22,14 +22,15 @@ t_command ft_parser(char *line)
     int         i;
     int         t;
 
-
     t = -1;
     i = 0;
     ft_command_construct(&c);
     while(line[i])
     {
+        if (c.quote == 3)
+            c.quote = 0;
         if (line[i] == ' ')
-                i++;
+            i++;
         else
         {
            /* if (line[i] == quote)
@@ -41,16 +42,40 @@ t_command ft_parser(char *line)
                     c.quote = 1 (ou c.quote= 2) et avance de 1
                 boucle (avec à l'intérieur gestion des backslah)
             */
-                
-            t++;
-            if (t != 0)
-                c.arg = ft_realloc_arg(c.arg);
-            while(line[i] != ' ' && c.quote == 0 && line[i])
+            if (line[i] == '\'')
             {
-                if (line[i] == '\"')
-                    ft_double_quoting(&c, line, &i);
-                else if (line[i] == '\'')
-                    ft_simple_quoting(&c, line, &i);
+                if (ft_simple_quoting(&c, line, &i))
+                    return (c);
+            }
+            else if (line[i] == '\"')
+            {
+                if (ft_double_quoting(&c, line, &i))
+                    return (c);
+            }
+            t++;
+            if (t != 0 && line[i])
+            {
+                if (c.quote == 0 && line[i - 1] && line[i - 1] != '\"' && line[i - 1] != '\'')
+                {
+                    c.arg = ft_realloc_arg(c.arg);
+                //    printf("new arg quote=%d line[%d]=%c\n", c.quote, i, line[i]);
+                }
+                else if ((c.quote == 1 || c.quote == 2) && line[i - 1] && (line[i - 1] == '\"' || line[i - 1] == '\''))
+                {
+                    c.arg = ft_realloc_arg(c.arg);
+                  //  printf("new arg quote=%d line[%d]=%c\n", c.quote, i, line[i]);
+                }
+                else
+                    t--;
+            }
+            else if (t == 0 && line[i] && c.quote == 0 && line[i - 1] && line[i - 1] != '\"' && line[i - 1] != '\'')
+            {
+                t++;
+                c.arg = ft_realloc_arg(c.arg);
+            }
+            while (line[i] && c.quote != 3)
+            {
+             //   printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
                 if (ft_backslash(&c, line, &i))
                 {
                     c.arg = NULL;
@@ -58,6 +83,11 @@ t_command ft_parser(char *line)
                 }
                 c.arg[t] = ft_realloc_concat(c.arg[t], line[i]);
                 i++;
+                if ((line[i] == '\"' && c.quote == 2) || (line[i] == '\'' && c.quote == 1) || (line[i] == '\"' && c.quote == 0) || (line[i] == '\'' && c.quote == 0))
+                    c.quote = 3;
+                if (line[i] == ' ' && c.quote == 0)
+                    c.quote = 3;
+      //          printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
             }
         }
     }
@@ -98,49 +128,6 @@ t_command ft_parser(char *line)
 	}*/
 	// supprimer space a la fin de arg
     return (c);
-}
-
-void    ft_simple_quoting(t_command *c, char *line, int *i)
-{
-    ft_check_end_quote(c, line, *i, 1);
-    if (line[*i - 1] && line[*i - 1] != '\\')
-    {
-        while (line[*i] == '\'' && c->quote != 2)
-        {
-            *i = *i + 1;
-            if (c->quote == 0)
-                c->quote = 1;
-            else if (c->quote == 1)
-                c->quote = 0;
-        }
-    }
-}
-
-void    ft_double_quoting(t_command *c, char *line, int *i)
-{
-    ft_check_end_quote(c, line, *i, 2);
-    if (line[*i - 1] && line[*i - 1] != '\\')
-    {
-        while (line[*i] == '\"' && c->quote != 1)
-        {
-            *i = *i + 1;
-            if (c->quote == 0)
-                c->quote = 2;
-            else if (c->quote == 2)
-                c->quote = 0;
-        }
-    }
-}
-
-int    ft_backslash(t_command *c, char *line, int *i)
-{
-    if (line[*i] == '\\' && c->quote == 0)
-        *i = *i + 1;
-    else if (line[*i] == '\\' && c->quote == 1 && line[*i + 1] && line[*i + 1] == '\'')
-        return (1);   
-    else if (line[*i] == '\\' && c->quote == 2 && line[*i + 1] && (line[*i + 1] == '`' || line[*i + 1] == '\"'))
-        *i = *i + 1;
-    return (0);
 }
 
 int    ft_redirection(t_command *c, char *line, int *i)
@@ -204,32 +191,6 @@ int    ft_redir_right(t_command *c, char *line, int *i, char output)
         else
             c->n_err = ft_realloc_concat(c->n_err, line[*i]);
         *i = *i + 1;
-    }
-    return (1);
-}
-
-int    ft_check_end_quote(t_command *c, char *line, int i, int q)
-{
-    i++;
-    if (q == 2 && c->quote == 0)
-    {
-        while (line[i] != '\0')
-        {
-            if (line[i] == '\"')
-                return (0);
-            i++;
-        }
-        printf("erreur double quote ouverte i=%d\n", i);
-    }
-    else if (q == 1 && c->quote == 0)
-    {
-        while (line[i] != '\0')
-        {
-            if (line[i] == '\'')
-                return (0);
-            i++;
-        }
-        printf("erreur simple quote ouverte i=%d\n", i);
     }
     return (1);
 }
