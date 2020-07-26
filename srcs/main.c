@@ -24,6 +24,7 @@ int	main()
 		get_next_line(0, &line);
 		ft_exec(ft_parser(line), line);
 		free(line);
+		// test branche
 	}
 	return (0);
 }
