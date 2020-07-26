@@ -24,8 +24,6 @@ typedef struct s_command
   char  *n_input;
   int   add;
   int   quote;
-  int   simple_quote;
-  int   double_quote;
   int   out;
   char  *n_out;
   int   err;
@@ -44,5 +42,6 @@ int    ft_backslash(t_command *c, char *line, int *i);
 void    ft_sub_arg(char **arg, int i);
 char	**ft_realloc_arg(char **arg);
 int    ft_check_end_quote(t_command *c, char *line, int i, int q);
+void    ft_skip_quotes(t_command *c, char *line, int *i);
 
 #endif

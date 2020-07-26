@@ -8,3 +8,23 @@ int    ft_backslash(t_command *c, char *line, int *i)
         *i = *i + 1;
     return (0);
 }
+
+void    ft_skip_quotes(t_command *c, char *line, int *i)
+{
+    while (line[*i] == '\'' && c->quote != 2)
+                {
+                    if (c->quote == 0)
+                        c->quote = 1;
+                    else
+                        c->quote = 0;
+                    (*i)++;
+                }
+    while (line[*i] == '\"' && c->quote != 1)
+                    {
+                        if (c->quote == 0)
+                            c->quote = 2;
+                        else
+                            c->quote = 0;
+                        (*i)++;
+                    }
+}

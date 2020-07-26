@@ -1,5 +1,16 @@
 /*best parser ever*/
 
+   /* while(line[i] != '\0')
+    {
+    	//realloc char si diff " ' > space et pas debut d'un redic en debut mot
+        // si space realloc une fois (cmp avec malloc en cours arg)
+        // si " ', cherche second, realloc ou erreur
+        // si redir, chg struct
+        
+	i++;
+	}
+    */
+
 #include "../includes/minishell.h"
 
 void    ft_command_construct(t_command *c)
@@ -29,38 +40,18 @@ t_command ft_parser(char *line)
     {
         if (line[i] == ' ')
             i++;
+            // si on est au début d'une redirection
+        else if (line[i] == '>' || ((line[i] == '1' || line[i] == '2') && line[i + 1] == '>'))
+            ft_redirection(&c, line, &i);
         else
         {
-           /* if (line[i] == quote)
-                vérif finie ---> erreur
-              else
-                t++ et realloc arg
-                if (line[i] == quote)
-                    c.quote = 1 (ou c.quote= 2) et avance de 1
-                boucle (avec à l'intérieur gestion des backslah)
-            */
-            //printf("AA line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
+            // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
             t++;
             c.arg = ft_realloc_arg(c.arg);
             while (line[i])
             {
                 //printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
-                while (line[i] == '\'' && c.quote != 2)
-                {
-                    if (c.quote == 0)
-                        c.quote = 1;
-                    else
-                        c.quote = 0;
-                    i++;
-                }
-                while (line[i] == '\"' && c.quote != 1)
-                {
-                    if (c.quote == 0)
-                        c.quote = 2;
-                    else
-                        c.quote = 0;
-                    i++;
-                }
+                ft_skip_quotes(&c, line, &i);
                 ft_backslash(&c, line, &i);
                 c.arg[t] = ft_realloc_concat(c.arg[t], line[i]);
                 i++;
@@ -69,7 +60,7 @@ t_command ft_parser(char *line)
                     c.quote = 0;
                     i++;
                 }
-                if (line[i] == ' ' && c.quote == 0)
+                if (c.quote == 0 && (line[i] == ' ' || line[i] == '>'))
                     break;
                 //          printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
             }
@@ -80,42 +71,7 @@ t_command ft_parser(char *line)
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
     }
-    /*
-    while(line[i])
-    {
-        printf("quote=%d line[%d]=%c\n", c.quote, i, line[i]);
-        if (line[i] == '\"')
-            ft_double_quoting(&c, line, &i);
-        else if (line[i] == '\'')
-            ft_simple_quoting(&c, line, &i);
-        if (ft_backslash(&c, line, &i))
-        {
-            c.arg = NULL;
-            return (c);
-        }
-        if (!ft_redirection(&c, line, &i))
-        {
-    	    c.arg = ft_realloc_concat(c.arg, line[i]);
-      //      printf("redir ok %d %c %d %s\n", i, line[i], c.quote, c.arg);
-        }
-       // printf("realloc=%s\n", c.arg);
- //       else   
- //           printf("redir : %d\n", i);
-       // if (!(line[i] == '\"' && line[i - 1] && line[i - 1] == '\"'))
-        i++;
-	}
-    */
 
-   /* while(line[i] != '\0')
-    {
-    	//realloc char si diff " ' > space et pas debut d'un redic en debut mot
-	// si space realloc une fois (cmp avec malloc en cours arg)
-	// si " ', cherche second, realloc ou erreur
-	// si redir, chg struct
-	
-	i++;
-	}*/
-	// supprimer space a la fin de arg
     return (c);
 }
 
