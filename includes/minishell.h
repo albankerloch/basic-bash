@@ -24,6 +24,8 @@ typedef struct s_command
   char  *n_input;
   int   add;
   int   quote;
+  int   simple_quote;
+  int   double_quote;
   int   out;
   char  *n_out;
   int   err;
