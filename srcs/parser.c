@@ -62,7 +62,7 @@ t_command ft_parser(char *line)
                 }
                 if (c.quote == 0 && (line[i] == ' ' || line[i] == '>'))
                     break;
-                //          printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
+                //printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
             }
         }
     }
