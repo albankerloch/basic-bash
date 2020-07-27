@@ -25,54 +25,71 @@ void    ft_command_construct(t_command *c)
     c->n_err = malloc(1);
     c->arg = malloc(sizeof(char*));
     c->arg[0] = malloc(1);
+    c->arg[0][0] = '\0';
 }
 
-t_command ft_parser(char *line)
+void    ft_command_destroy(t_command *c)
 {
-    t_command   c;
+    int     i;
+
+    i = 0;
+    free(c->n_input);
+    free(c->n_out);
+    free(c->n_err);
+    while (c->arg[i])
+    {
+     //   printf("c->arg[%d]=%s\n", i, c->arg[i]);
+        free(c->arg[i]);
+        c->arg[i] = NULL;
+        i++;
+    }
+    free(c->arg);
+    c->arg = NULL;
+}
+
+void ft_parser(t_command *c, char *line)
+{
     int         i;
     int         t;
 
     t = -1;
     i = 0;
-    ft_command_construct(&c);
     while(line[i])
     {
         if (line[i] == ' ')
             i++;
             // si on est au début d'une redirection
         else if (line[i] == '>' || ((line[i] == '1' || line[i] == '2') && line[i + 1] == '>'))
-            ft_redirection(&c, line, &i);
+            ft_redirection(c, line, &i);
         else
         {
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
             t++;
-	    if (t != 0)
-	      c.arg = ft_realloc_arg(c.arg);
+            if (t != 0)
+            c->arg = ft_realloc_arg(c->arg);
             while (line[i])
             {
-                //printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
-                ft_skip_quotes(&c, line, &i);
-                ft_backslash(&c, line, &i);
-                c.arg[t] = ft_realloc_concat(c.arg[t], line[i]);
+                //   printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c->quote, t);
+                ft_skip_quotes(c, line, &i);
+                ft_backslash(c, line, &i);
+                c->arg[t] = ft_realloc_concat(c->arg[t], line[i]);
                 i++;
-                if ((line[i] == '\"' && c.quote == 2) || (line[i] == '\'' && c.quote == 1))
+                if ((line[i] == '\"' && c->quote == 2) || (line[i] == '\'' && c->quote == 1))
                 {
-                    c.quote = 0;
+                    c->quote = 0;
                     i++;
                 }
-                if (c.quote == 0 && (line[i] == ' ' || line[i] == '>'))
+                if (c->quote == 0 && (line[i] == ' ' || line[i] == '>'))
                     break;
                 //printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
             }
         }
     }
-    if (c.quote != 0)
+    if (c->quote != 0)
     {
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
     }
-    return (c);
 }
 
 int    ft_redirection(t_command *c, char *line, int *i)

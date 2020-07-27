@@ -30,7 +30,7 @@ typedef struct s_command
   char  *n_err;
 }       t_command;
 
-t_command ft_parser(char *line);
+void ft_parser(t_command *c, char *line);
 int ft_exec(t_command c, char *line);
 char *ft_realloc_concat(char *line, char c);
 int    ft_redirection(t_command *c, char *line, int *i);
@@ -40,5 +40,7 @@ int    ft_backslash(t_command *c, char *line, int *i);
 void    ft_sub_arg(char **arg, int i);
 char	**ft_realloc_arg(char **arg);
 void    ft_skip_quotes(t_command *c, char *line, int *i);
+void    ft_command_construct(t_command *c);
+void    ft_command_destroy(t_command *c);
 
 #endif

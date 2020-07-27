@@ -15,6 +15,7 @@
 int	main()
 {
 	char *line;
+    t_command   c;
 
 	line = NULL;
 	while (1)
@@ -22,8 +23,10 @@ int	main()
 		//prompt
 		ft_putstr("<minishell> ");
 		get_next_line(0, &line);
-		ft_exec(ft_parser(line), line);
-		free(line);
+    	ft_command_construct(&c);
+		ft_parser(&c, line);
+		ft_exec(c, line);
+		ft_command_destroy(&c);
 	}
 	return (0);
 }
