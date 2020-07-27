@@ -36,11 +36,9 @@ char *ft_realloc_concat(char *line, char c);
 int    ft_redirection(t_command *c, char *line, int *i);
 int    ft_redir_right(t_command *c, char *line, int *i, char output);
 int    ft_add(t_command *c, char *line, int *i, char output);
-int    ft_simple_quoting(t_command *c, char *line, int *i);
-int    ft_double_quoting(t_command *c, char *line, int *i);
 int    ft_backslash(t_command *c, char *line, int *i);
 void    ft_sub_arg(char **arg, int i);
 char	**ft_realloc_arg(char **arg);
-int    ft_check_end_quote(t_command *c, char *line, int i, int q);
+int    ft_check_end_quote(t_command *c, char *line, int i);
 
 #endif
