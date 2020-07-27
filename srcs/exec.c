@@ -1,19 +1,18 @@
-
 #include "../includes/minishell.h"
 
 int ft_exec(t_command c, char *line)
 {
-	char *envir[] = { NULL };
+    char *envir[] = { NULL };
     int i;
-
+    
     /*
-	if (c.arg == NULL)
+    i = 0;
+    while(c.arg [i])
     {
-        printf("quote ouvert\n");
-        return (1);
+        printf("arg %d %s\n", i, c.arg[i]);
+        i++;
     }
-    arg = ft_split(c.arg, ' ');
-    */
+    ft_putstr(c.arg[0]);*/
     if (ft_strncmp(c.arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c.arg[0]))
     {
         i = 1;

@@ -39,6 +39,11 @@ int    ft_add(t_command *c, char *line, int *i, char output);
 int    ft_backslash(t_command *c, char *line, int *i);
 void    ft_sub_arg(char **arg, int i);
 char	**ft_realloc_arg(char **arg);
+<<<<<<< HEAD
 int    ft_check_end_quote(t_command *c, char *line, int i);
+=======
+int    ft_check_end_quote(t_command *c, char *line, int i, int q);
+void    ft_skip_quotes(t_command *c, char *line, int *i);
+>>>>>>> origin/quotes_v_alban
 
 #endif
