@@ -24,8 +24,6 @@ int	main()
 		get_next_line(0, &line);
 		ft_exec(ft_parser(line), line);
 		free(line);
-		//parser
-		//exec
 	}
 	return (0);
 }
