@@ -47,7 +47,8 @@ t_command ft_parser(char *line)
         {
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
             t++;
-            c.arg = ft_realloc_arg(c.arg);
+	    if (t != 0)
+	      c.arg = ft_realloc_arg(c.arg);
             while (line[i])
             {
                 //printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
