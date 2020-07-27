@@ -38,18 +38,6 @@ t_command ft_parser(char *line)
     ft_command_construct(&c);
     while(line[i])
     {
-<<<<<<< HEAD
-        /* if (line[i] == quote)
-            vérif finie ---> erreur
-            verif faux arg (double quote d'affilé) --> avance 2
-            else
-            t++ et realloc arg
-            if (line[i] == quote)
-                c.quote = 1 (ou c.quote= 2) et avance de 1
-            boucle (avec à l'intérieur gestion des backslah)
-        */
-=======
->>>>>>> origin/quotes_v_alban
         if (line[i] == ' ')
             i++;
             // si on est au début d'une redirection
@@ -57,46 +45,6 @@ t_command ft_parser(char *line)
             ft_redirection(&c, line, &i);
         else
         {
-<<<<<<< HEAD
-            if (ft_check_end_quote(&c, line, i))
-                return (c);
-            t++;
-            if (t != 0)
-                c.arg = ft_realloc_arg(c.arg);
-            while (line[i])
-            {
-                //  printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
-                while (line[i] && (line[i] == '\"' || line[i] == '\''))
-                {
-                    if (c.quote == 2 && line[i] == '\"')
-                        c.quote = 0;
-                    else if (c.quote == 1 && line[i] == '\'')
-                        c.quote = 0;
-                    else if (c.quote == 0 && line[i] == '\"')
-                        c.quote = 2;
-                    else if (c.quote == 0 && line[i] == '\'')
-                        c.quote = 1;
-                    else
-                        break ;
-                    i++;
-                }
-                if (ft_backslash(&c, line, &i))
-                {
-                    printf("erreur à gérer\n");
-                    c.arg = NULL;
-                    return (c);
-                }
-                if (c.quote == 0 && line[i] == ' ' && line[i - 1] != '\\')
-                    break ;
-                if (!ft_redirection(&c, line, &i))
-                    c.arg[t] = ft_realloc_concat(c.arg[t], line[i]);
-                else
-                    printf("redir\n");
-                i++;
-            }
-        }
-    }
-=======
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
             t++;
 	    if (t != 0)
@@ -124,8 +72,6 @@ t_command ft_parser(char *line)
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
     }
->>>>>>> origin/quotes_v_alban
-
     return (c);
 }
 
