@@ -17,12 +17,15 @@ void    ft_command_construct(t_command *c)
 {
     c->input = 0;
     c->n_input = malloc(1);
+    c->n_input[0] = '\0';
     c->add = 0;
     c->quote = 0;
     c->out = 1;
     c->n_out = malloc(1);
+    c->n_out[0] = '\0';
     c->err = 2;
     c->n_err = malloc(1);
+    c->n_err[0] = '\0';
     c->arg = malloc(sizeof(char*));
     c->arg[0] = malloc(1);
     c->arg[0][0] = '\0';
@@ -90,6 +93,8 @@ void ft_parser(t_command *c, char *line)
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
     }
+    printf("output stdout = %s \n", c->n_out);
+    printf("output stderr = %s \n", c->n_err);
 }
 
 int    ft_redirection(t_command *c, char *line, int *i)
@@ -115,22 +120,37 @@ int    ft_redirection(t_command *c, char *line, int *i)
         if (line[*i + 1] && line[*i + 1] == '>')
         {
             *i = *i + 2;
-            return (ft_add(c, line, i, 1));
+            return (ft_add(c, line, i, '1'));
         }
         else
         {
             *i = *i + 1;
-            return (ft_redir_right(c, line, i, 1));
+            printf("P");
+            return (ft_redir_right(c, line, i, '1'));
         }
     }
     return (0);
 }
 
-int    ft_add(t_command *c, char *line, int *i, char output)
-{   
-    c->add = 1;
-   while (line[*i] == ' ')
+int    ft_redir_right(t_command *c, char *line, int *i, char output)
+{
+    c->add = 0;
+    //printf("fd output = %c | i = %d | line[i] = '%c' \n", output, *i, line[*i]);
+    while (line[*i] == ' ')
         *i = *i + 1;
+    if (c->n_out[0] != '\0')
+    {
+        free(c->n_out);
+        c->n_out = malloc(1);
+        c->n_out[0] = '\0';
+    }
+    if (c->n_err[0] != '\0')
+    {
+        free(c->n_err);
+        c->n_err = malloc(1);
+        c->n_err[0] = '\0';
+    }
+    //printf("--> i = %d | line[i] = '%c' \n", *i, line[*i]);
     while (line[*i] != ' ' && line[*i] != '\0')
     {
         if (output == '1')
@@ -142,10 +162,23 @@ int    ft_add(t_command *c, char *line, int *i, char output)
     return (1);
 }
 
-int    ft_redir_right(t_command *c, char *line, int *i, char output)
-{
+int    ft_add(t_command *c, char *line, int *i, char output)
+{   
+    c->add = 1;
     while (line[*i] == ' ')
         *i = *i + 1;
+    if (c->n_out[0] != '\0')
+    {
+        free(c->n_out);
+        c->n_out = malloc(1);
+        c->n_out[0] = '\0';
+    }
+    if (c->n_err[0] != '\0')
+    {
+        free(c->n_err);
+        c->n_err = malloc(1);
+        c->n_err[0] = '\0';
+    }
     while (line[*i] != ' ' && line[*i] != '\0')
     {
         if (output == '1')
