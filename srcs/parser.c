@@ -95,6 +95,7 @@ void ft_parser(t_command *c, char *line)
     }
     printf("output stdout = %s \n", c->n_out);
     printf("output stderr = %s \n", c->n_err);
+    printf("redir = %d \n", c->add);
 }
 
 int    ft_redirection(t_command *c, char *line, int *i)
@@ -125,7 +126,6 @@ int    ft_redirection(t_command *c, char *line, int *i)
         else
         {
             *i = *i + 1;
-            printf("P");
             return (ft_redir_right(c, line, i, '1'));
         }
     }
@@ -134,7 +134,7 @@ int    ft_redirection(t_command *c, char *line, int *i)
 
 int    ft_redir_right(t_command *c, char *line, int *i, char output)
 {
-    c->add = 0;
+    c->add = 1;
     //printf("fd output = %c | i = %d | line[i] = '%c' \n", output, *i, line[*i]);
     while (line[*i] == ' ')
         *i = *i + 1;
@@ -159,12 +159,13 @@ int    ft_redir_right(t_command *c, char *line, int *i, char output)
             c->n_err = ft_realloc_concat(c->n_err, line[*i]);
         *i = *i + 1;
     }
+    ft_touch(c,output);
     return (1);
 }
 
 int    ft_add(t_command *c, char *line, int *i, char output)
 {   
-    c->add = 1;
+    c->add = 2;
     while (line[*i] == ' ')
         *i = *i + 1;
     if (c->n_out[0] != '\0')
@@ -187,5 +188,25 @@ int    ft_add(t_command *c, char *line, int *i, char output)
             c->n_err = ft_realloc_concat(c->n_err, line[*i]);
         *i = *i + 1;
     }
+    ft_touch(c,output);
     return (1);
+}
+
+void    ft_touch(t_command *c, char output)
+{
+    int fd;
+
+    if (output == '1' && c->add == 1)
+        fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | \
+        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    else if (output == '1' && c->add == 2)
+        fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | \
+        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    else if (output == '2' && c->add == 1)
+        fd = open(c->n_err, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | \
+        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    else if (output == '1' && c->add == 2)
+        fd = open(c->n_err, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | \
+        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    close(fd);
 }

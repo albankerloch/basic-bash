@@ -37,10 +37,11 @@ int    ft_redirection(t_command *c, char *line, int *i);
 int    ft_redir_right(t_command *c, char *line, int *i, char output);
 int    ft_add(t_command *c, char *line, int *i, char output);
 int    ft_backslash(t_command *c, char *line, int *i);
-void    ft_sub_arg(char **arg, int i);
 char	**ft_realloc_arg(char **arg);
 void    ft_skip_quotes(t_command *c, char *line, int *i);
 void    ft_command_construct(t_command *c);
 void    ft_command_destroy(t_command *c);
+void    ft_touch(t_command *c, char output);
+void    ft_redir_echo(t_command *c);
 
 #endif
