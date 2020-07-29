@@ -16,6 +16,7 @@
 # include "../libft/libft.h"
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/stat.h>
 
 typedef struct s_command
 {
@@ -28,7 +29,7 @@ typedef struct s_command
   char  *n_out;
 }       t_command;
 
-void ft_parser(t_command *c, char *line);
+int ft_parser(t_command *c, char *line);
 int ft_exec(t_command c, char *line);
 char *ft_realloc_concat(char *line, char c);
 int    ft_redirection_right(t_command *c, char *line, int *i);
@@ -40,6 +41,7 @@ void    ft_skip_quotes(char *line, int *i, int *quote);
 void    ft_command_construct(t_command *c);
 void    ft_command_destroy(t_command *c);
 void    ft_touch(t_command *c);
+int     ft_checkfile(t_command *c);
 void    ft_redir_echo(t_command *c);
 
 #endif

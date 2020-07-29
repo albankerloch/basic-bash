@@ -1,19 +1,19 @@
 /*best parser ever*/
 
-   /* while(line[i] != '\0')
+/* while(line[i] != '\0')
     {
-    	//realloc char si diff " ' > space et pas debut d'un redic en debut mot
+        //realloc char si diff " ' > space et pas debut d'un redic en debut mot
         // si space realloc une fois (cmp avec malloc en cours arg)
         // si " ', cherche second, realloc ou erreur
         // si redir, chg struct
         
-	i++;
-	}
-    */
+    i++;
+    }
+*/
 
 #include "../includes/minishell.h"
 
-void ft_parser(t_command *c, char *line)
+int ft_parser(t_command *c, char *line)
 {
     int         i;
     int         t;
@@ -28,7 +28,10 @@ void ft_parser(t_command *c, char *line)
         else if (line[i] == '>')
             ft_redirection_right(c, line, &i);
         else if (line[i] == '<')
-            ft_redirection_left(c, line, &i);
+        {
+            if (ft_redirection_left(c, line, &i))
+                return (1);
+        }
         else
         {
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
@@ -60,4 +63,7 @@ void ft_parser(t_command *c, char *line)
     }
     printf("output stdout = %s \n", c->n_out);
     printf("redir = %d \n", c->add);
+    printf("input stdin = %s \n", c->n_input);
+    printf("flag input = %d \n", c->input);
+    return (0);
 }
