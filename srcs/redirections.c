@@ -53,17 +53,21 @@ void    ft_touch(t_command *c)
 
 int    ft_redirection_left(t_command *c, char *line, int *i)
 {
-    if (line[*i + 1] && line[*i + 1]== '>')
-    {
-        *i = *i + 2;
-        c->add = 2;
-        return (ft_redir_right(c, line, i));
-    }
-    else
-    {
+    *i = *i + 1;
+    c->input = 1;
+    while (line[*i] == ' ')
         *i = *i + 1;
-        c->add = 1;
-        return (ft_redir_right(c, line, i));
+    if (c->n_input[0] != '\0')
+    {
+        free(c->n_input);
+        c->n_input = malloc(1);
+        c->n_input[0] = '\0';
+    }
+    //printf("--> i = %d | line[i] = '%c' \n", *i, line[*i]);
+    while (line[*i] != ' ' && line[*i] != '\0')
+    {
+        c->n_input = ft_realloc_concat(c->n_input, line[*i]);
+        *i = *i + 1;
     }
     return (0);
 }
