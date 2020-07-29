@@ -29,7 +29,7 @@ int ft_parser(t_command *c, char *line)
             ft_redirection_right(c, line, &i);
         else if (line[i] == '<')
         {
-            if (!ft_redirection_left(c, line, &i))
+            if (ft_redirection_left(c, line, &i))
                 return (1);
         }
         else

@@ -79,7 +79,7 @@ int ft_checkfile(t_command *c)
     if (stat(c->n_input, &buffer) != 0)
     {
         ft_putstr("Error : file or directory doesn't exist\n");
-        //return (1);
+        return (1);
     }
     return (0);
 }
