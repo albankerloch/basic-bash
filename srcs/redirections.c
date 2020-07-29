@@ -19,6 +19,9 @@ int    ft_redirection_right(t_command *c, char *line, int *i)
 
 int    ft_redir_right(t_command *c, char *line, int *i)
 {
+    int quote;
+
+    quote = 0;
     //printf("fd output = %c | i = %d | line[i] = '%c' \n", output, *i, line[*i]);
     while (line[*i] == ' ')
         *i = *i + 1;
@@ -29,11 +32,34 @@ int    ft_redir_right(t_command *c, char *line, int *i)
         c->n_out[0] = '\0';
     }
     //printf("--> i = %d | line[i] = '%c' \n", *i, line[*i]);
-    while (line[*i] != ' ' && line[*i] != '\0')
+   /* while (line[*i] != ' ' && line[*i] != '\0')
     {
         c->n_out = ft_realloc_concat(c->n_out, line[*i]);
         *i = *i + 1;
+    }*/
+    while (line[*i])
+    {
+        //   printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c->quote, t);
+        ft_skip_quotes(line, i, &quote);
+     //   printf("line[%d]=%c quote=%d\n", *i, line[*i], quote);
+        ft_backslash(line, i, &quote);
+        c->n_out = ft_realloc_concat(c->n_out, line[*i]);
+        (*i)++;
+        if ((line[*i] == '\"' && quote == 2) || (line[*i] == '\'' && quote == 1))
+        {
+            quote = 0;
+            (*i)++;
+        }
+        if (quote == 0 && (line[*i] == ' ' || line[*i] == '>'))
+            break;
+        //printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
     }
+    if (quote != 0)
+    {
+        ft_putstr("WARNING : Quotes automatically closed");
+        ft_putchar('\n');
+    }
+   // printf("redir right = %s\n", c->n_out);
     ft_touch(c);
     return (1);
 }

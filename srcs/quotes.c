@@ -1,24 +1,25 @@
 #include "../includes/minishell.h"
 
-int    ft_backslash(t_command *c, char *line, int *i)
+
+int    ft_backslash(char *line, int *i, int *quote)
 {
-    if (line[*i] == '\\' && c->quote == 0)
-        *i = *i + 1;
-    else if (line[*i] == '\\' && c->quote == 2 && line[*i + 1] && (line[*i + 1] == '`' || line[*i + 1] == '\"'))
-        *i = *i + 1;
+    if (line[*i] == '\\' && *quote == 0)
+        (*i)++;
+    else if (line[*i] == '\\' && *quote == 2 && line[*i + 1] && (line[*i + 1] == '`' || line[*i + 1] == '\"'))
+        (*i)++;
     return (0);
 }
 
-void    ft_skip_quotes(t_command *c, char *line, int *i)
+void    ft_skip_quotes(char *line, int *i, int *quote)
 {
-    while ((line[*i] == '\'' && c->quote != 2) || (line[*i] == '\"' && c->quote != 1))
+    while ((line[*i] == '\'' && *quote != 2) || (line[*i] == '\"' && *quote != 1))
     {
-        if (c->quote == 0 && line[*i] == '\'')
-            c->quote = 1;
-        else if (c->quote == 0 && line[*i] == '\"')
-            c->quote = 2;
+        if (*quote == 0 && line[*i] == '\'')
+            *quote = 1;
+        else if (*quote == 0 && line[*i] == '\"')
+            *quote = 2;
         else
-            c->quote = 0;
+            *quote = 0;
         (*i)++;
     }
 }

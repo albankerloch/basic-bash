@@ -38,8 +38,8 @@ void ft_parser(t_command *c, char *line)
             while (line[i])
             {
                 //   printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c->quote, t);
-                ft_skip_quotes(c, line, &i);
-                ft_backslash(c, line, &i);
+                ft_skip_quotes(line, &i, &(c->quote));
+                ft_backslash(line, &i, &(c->quote));
                 c->arg[t] = ft_realloc_concat(c->arg[t], line[i]);
                 i++;
                 if ((line[i] == '\"' && c->quote == 2) || (line[i] == '\'' && c->quote == 1))
