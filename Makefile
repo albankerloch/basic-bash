@@ -2,7 +2,9 @@ SRCS_NAME	= 	main.c \
 					parser.c \
 					exec.c \
 					utils.c \
-					quotes.c
+					quotes.c \
+					construct.c \
+					redirections.c
 
 SRCS_DIR	= ./srcs
 

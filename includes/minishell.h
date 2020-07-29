@@ -31,7 +31,8 @@ typedef struct s_command
 void ft_parser(t_command *c, char *line);
 int ft_exec(t_command c, char *line);
 char *ft_realloc_concat(char *line, char c);
-int    ft_redirection(t_command *c, char *line, int *i);
+int    ft_redirection_right(t_command *c, char *line, int *i);
+int    ft_redirection_left(t_command *c, char *line, int *i);
 int    ft_redir_right(t_command *c, char *line, int *i);
 int    ft_backslash(t_command *c, char *line, int *i);
 char	**ft_realloc_arg(char **arg);
