@@ -31,17 +31,9 @@ int    ft_redir_right(t_command *c, char *line, int *i)
         c->n_out = malloc(1);
         c->n_out[0] = '\0';
     }
-    //printf("--> i = %d | line[i] = '%c' \n", *i, line[*i]);
-   /* while (line[*i] != ' ' && line[*i] != '\0')
-    {
-        c->n_out = ft_realloc_concat(c->n_out, line[*i]);
-        *i = *i + 1;
-    }*/
     while (line[*i])
     {
-        //   printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c->quote, t);
         ft_skip_quotes(line, i, &quote);
-     //   printf("line[%d]=%c quote=%d\n", *i, line[*i], quote);
         ft_backslash(line, i, &quote);
         c->n_out = ft_realloc_concat(c->n_out, line[*i]);
         (*i)++;
@@ -59,7 +51,6 @@ int    ft_redir_right(t_command *c, char *line, int *i)
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
     }
-   // printf("redir right = %s\n", c->n_out);
     ft_touch(c);
     return (0);
 }
