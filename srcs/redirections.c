@@ -35,7 +35,7 @@ int    ft_redir_right(t_command *c, char *line, int *i)
         *i = *i + 1;
     }
     ft_touch(c);
-    return (1);
+    return (0);
 }
 
 void    ft_touch(t_command *c)
@@ -68,6 +68,18 @@ int    ft_redirection_left(t_command *c, char *line, int *i)
     {
         c->n_input = ft_realloc_concat(c->n_input, line[*i]);
         *i = *i + 1;
+    }
+    return (ft_checkfile(c));
+}
+
+int ft_checkfile(t_command *c)
+{
+    struct stat   buffer;
+
+    if (stat(c->n_input, &buffer) != 0)
+    {
+        ft_putstr("Error : file or directory doesn't exist\n");
+        //return (1);
     }
     return (0);
 }

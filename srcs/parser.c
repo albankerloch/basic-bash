@@ -13,7 +13,7 @@
 
 #include "../includes/minishell.h"
 
-void ft_parser(t_command *c, char *line)
+int ft_parser(t_command *c, char *line)
 {
     int         i;
     int         t;
@@ -28,7 +28,10 @@ void ft_parser(t_command *c, char *line)
         else if (line[i] == '>')
             ft_redirection_right(c, line, &i);
         else if (line[i] == '<')
-            ft_redirection_left(c, line, &i);
+        {
+            if (!ft_redirection_left(c, line, &i))
+                return (1);
+        }
         else
         {
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
@@ -62,4 +65,5 @@ void ft_parser(t_command *c, char *line)
     printf("redir = %d \n", c->add);
     printf("input stdin = %s \n", c->n_input);
     printf("flag input = %d \n", c->input);
+    return (0);
 }

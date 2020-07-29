@@ -5,7 +5,10 @@ void ft_execve(t_command *c)
     int fd;
     int fdi;
     char *envir[] = { NULL };
+    int out_save;
 
+
+    printf("TEST TEST\n");
     if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
@@ -16,12 +19,18 @@ void ft_execve(t_command *c)
         dup2(fd, 1);
     if (c->input == 1)
     {
+        out_save = dup(0);
         fdi = open(c->n_input, O_RDONLY, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
         dup2(fdi, 0);
     }
     execve(c->arg[0], c->arg, envir);
     close(fd);
+    if (c->input == 1)
+    {
+        dup2(out_save, 0);
+        close(out_save);
+    }
 }
 
 void ft_redir_echo(t_command *c)

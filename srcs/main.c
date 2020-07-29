@@ -24,8 +24,8 @@ int	main()
 		ft_putstr("<minishell> ");
 		get_next_line(0, &line);
     	ft_command_construct(&c);
-		ft_parser(&c, line);
-		ft_exec(c, line);
+		if (!ft_parser(&c, line))
+			ft_exec(c, line);
 		ft_command_destroy(&c);
 	}
 	return (0);
