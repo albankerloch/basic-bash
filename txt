@@ -1,13 +1,5 @@
-Makefile
-exec.o
-fichier
-includes
-libft
-main.o
-minishell
-parser.o
-quotes.o
-srcs
-twt
-txt
-utils.o
+lol
+lol
+lol
+lol2
+lol dazdaz

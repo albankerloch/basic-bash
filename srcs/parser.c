@@ -23,9 +23,6 @@ void    ft_command_construct(t_command *c)
     c->out = 1;
     c->n_out = malloc(1);
     c->n_out[0] = '\0';
-    c->err = 2;
-    c->n_err = malloc(1);
-    c->n_err[0] = '\0';
     c->arg = malloc(sizeof(char*));
     c->arg[0] = malloc(1);
     c->arg[0][0] = '\0';
@@ -38,7 +35,6 @@ void    ft_command_destroy(t_command *c)
     i = 0;
     free(c->n_input);
     free(c->n_out);
-    free(c->n_err);
     while (c->arg[i])
     {
      //   printf("c->arg[%d]=%s\n", i, c->arg[i]);
@@ -62,7 +58,7 @@ void ft_parser(t_command *c, char *line)
         if (line[i] == ' ')
             i++;
             // si on est au début d'une redirection
-        else if (line[i] == '>' || ((line[i] == '1' || line[i] == '2') && line[i + 1] == '>'))
+        else if (line[i] == '>')
             ft_redirection(c, line, &i);
         else
         {
@@ -94,47 +90,28 @@ void ft_parser(t_command *c, char *line)
         ft_putchar('\n');
     }
     printf("output stdout = %s \n", c->n_out);
-    printf("output stderr = %s \n", c->n_err);
     printf("redir = %d \n", c->add);
 }
 
 int    ft_redirection(t_command *c, char *line, int *i)
 {
-    if ((line[*i] == '1' || line[*i] == '2') && *i > 0 && line[*i - 1] == ' ')
+    if (line[*i + 1] && line[*i + 1]== '>')
     {
-        if (line[*i + 1]== '>')
-        {
-            if (line[*i + 2] && line[*i + 2] == '>')
-            {
-                *i = *i + 3;
-                 return (ft_add(c, line, i, line[*i - 3]));
-            }
-            else
-            {
-                *i = *i + 2;
-                return (ft_redir_right(c, line, i, line[*i - 2]));
-            }
-        }
+        *i = *i + 2;
+        c->add = 2;
+        return (ft_redir_right(c, line, i));
     }
-    else if (line[*i] == '>')
+    else
     {
-        if (line[*i + 1] && line[*i + 1] == '>')
-        {
-            *i = *i + 2;
-            return (ft_add(c, line, i, '1'));
-        }
-        else
-        {
-            *i = *i + 1;
-            return (ft_redir_right(c, line, i, '1'));
-        }
+        *i = *i + 1;
+        c->add = 1;
+        return (ft_redir_right(c, line, i));
     }
     return (0);
 }
 
-int    ft_redir_right(t_command *c, char *line, int *i, char output)
+int    ft_redir_right(t_command *c, char *line, int *i)
 {
-    c->add = 1;
     //printf("fd output = %c | i = %d | line[i] = '%c' \n", output, *i, line[*i]);
     while (line[*i] == ' ')
         *i = *i + 1;
@@ -144,69 +121,25 @@ int    ft_redir_right(t_command *c, char *line, int *i, char output)
         c->n_out = malloc(1);
         c->n_out[0] = '\0';
     }
-    if (c->n_err[0] != '\0')
-    {
-        free(c->n_err);
-        c->n_err = malloc(1);
-        c->n_err[0] = '\0';
-    }
     //printf("--> i = %d | line[i] = '%c' \n", *i, line[*i]);
     while (line[*i] != ' ' && line[*i] != '\0')
     {
-        if (output == '1')
-            c->n_out = ft_realloc_concat(c->n_out, line[*i]);
-        else
-            c->n_err = ft_realloc_concat(c->n_err, line[*i]);
+        c->n_out = ft_realloc_concat(c->n_out, line[*i]);
         *i = *i + 1;
     }
-    ft_touch(c,output);
+    ft_touch(c);
     return (1);
 }
 
-int    ft_add(t_command *c, char *line, int *i, char output)
-{   
-    c->add = 2;
-    while (line[*i] == ' ')
-        *i = *i + 1;
-    if (c->n_out[0] != '\0')
-    {
-        free(c->n_out);
-        c->n_out = malloc(1);
-        c->n_out[0] = '\0';
-    }
-    if (c->n_err[0] != '\0')
-    {
-        free(c->n_err);
-        c->n_err = malloc(1);
-        c->n_err[0] = '\0';
-    }
-    while (line[*i] != ' ' && line[*i] != '\0')
-    {
-        if (output == '1')
-            c->n_out = ft_realloc_concat(c->n_out, line[*i]);
-        else
-            c->n_err = ft_realloc_concat(c->n_err, line[*i]);
-        *i = *i + 1;
-    }
-    ft_touch(c,output);
-    return (1);
-}
-
-void    ft_touch(t_command *c, char output)
+void    ft_touch(t_command *c)
 {
     int fd;
 
-    if (output == '1' && c->add == 1)
+    if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | \
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    else if (output == '1' && c->add == 2)
+    else if (c->add == 2)
         fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | \
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    else if (output == '2' && c->add == 1)
-        fd = open(c->n_err, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | \
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    else if (output == '1' && c->add == 2)
-        fd = open(c->n_err, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | \
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     close(fd);
 }

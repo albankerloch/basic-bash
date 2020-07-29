@@ -26,22 +26,19 @@ typedef struct s_command
   int   quote;
   int   out;
   char  *n_out;
-  int   err;
-  char  *n_err;
 }       t_command;
 
 void ft_parser(t_command *c, char *line);
 int ft_exec(t_command c, char *line);
 char *ft_realloc_concat(char *line, char c);
 int    ft_redirection(t_command *c, char *line, int *i);
-int    ft_redir_right(t_command *c, char *line, int *i, char output);
-int    ft_add(t_command *c, char *line, int *i, char output);
+int    ft_redir_right(t_command *c, char *line, int *i);
 int    ft_backslash(t_command *c, char *line, int *i);
 char	**ft_realloc_arg(char **arg);
 void    ft_skip_quotes(t_command *c, char *line, int *i);
 void    ft_command_construct(t_command *c);
 void    ft_command_destroy(t_command *c);
-void    ft_touch(t_command *c, char output);
+void    ft_touch(t_command *c);
 void    ft_redir_echo(t_command *c);
 
 #endif
