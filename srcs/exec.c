@@ -22,7 +22,10 @@ void ft_execve(t_command *c)
         dup2(fdi, 0);
     }
     execve(c->arg[0], c->arg, envir);
-    close(fd);
+    if (c->add == 1 || c->add == 2)
+        close(fd);
+    if (c->input == 1)
+        close(fdi);
 }
 
 void ft_redir_echo(t_command *c)

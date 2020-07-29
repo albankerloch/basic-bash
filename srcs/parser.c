@@ -50,7 +50,7 @@ int ft_parser(t_command *c, char *line)
                     c->quote = 0;
                     i++;
                 }
-                if (c->quote == 0 && (line[i] == ' ' || line[i] == '>'))
+                if (c->quote == 0 && (line[i] == ' ' || line[i] == '>' || line[i] == '<'))
                     break;
                 //printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
             }
