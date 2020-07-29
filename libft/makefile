@@ -18,8 +18,8 @@ CFLAGS		= -Wall -Wextra -Werror -D BUFFER_SIZE=1024 -I .${FICHIER_H}
 
 all:		${NAME}
 
-${NAME}:	${OBJS}
-			ar rc ${NAME} ${OBJS}
+${NAME}:	${OBJS} ${OBJS_BONUS}
+			ar rc ${NAME} ${OBJS} ${OBJS_BONUS}
 
 bonus:		${OBJS} ${OBJS_BONUS}
 			ar rc ${NAME} ${OBJS} ${OBJS_BONUS}

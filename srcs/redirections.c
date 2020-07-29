@@ -42,7 +42,7 @@ int    ft_redir_right(t_command *c, char *line, int *i)
             quote = 0;
             (*i)++;
         }
-        if (quote == 0 && (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<'))
+        if (quote == 0 && (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || line[*i] == '|'))
             break;
         //printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
     }

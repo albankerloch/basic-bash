@@ -1,7 +1,10 @@
 #include "../includes/minishell.h"
 
-void    ft_command_construct(t_command *c)
+t_command *ft_command_construct()
 {
+    t_command *c;
+
+    c = malloc(sizeof(t_command));
     c->input = 0;
     c->n_input = malloc(1);
     c->n_input[0] = '\0';
@@ -13,6 +16,7 @@ void    ft_command_construct(t_command *c)
     c->arg = malloc(sizeof(char*));
     c->arg[0] = malloc(1);
     c->arg[0][0] = '\0';
+    return(c);
 }
 
 void    ft_command_destroy(t_command *c)

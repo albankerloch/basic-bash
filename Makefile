@@ -4,7 +4,8 @@ SRCS_NAME	= 	main.c \
 					utils.c \
 					quotes.c \
 					construct.c \
-					redirections.c
+					redirections.c \
+					arg.c
 
 SRCS_DIR	= ./srcs
 

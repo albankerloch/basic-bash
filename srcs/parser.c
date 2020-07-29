@@ -13,12 +13,12 @@
 
 #include "../includes/minishell.h"
 
-int ft_parser(t_command *c, char *line)
+int ft_parser(t_list *t, char *line)
 {
     int         i;
-    int         t;
+    int         k;
 
-    t = -1;
+    k = -1;
     i = 0;
     while(line[i])
     {
@@ -26,44 +26,49 @@ int ft_parser(t_command *c, char *line)
             i++;
             // si on est au début d'une redirection
         else if (line[i] == '>')
-            ft_redirection_right(c, line, &i);
+            ft_redirection_right(t->content, line, &i);
         else if (line[i] == '<')
         {
-            if (ft_redirection_left(c, line, &i))
+            if (ft_redirection_left(t->content, line, &i))
                 return (1);
         }
+       /* else if (line[i] == '|')
+        {
+            ft_lstnew()
+        }*/
         else
         {
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
-            t++;
-            if (t != 0)
-            c->arg = ft_realloc_arg(c->arg);
+           ft_name(t->content, line, &i, &k);
+         /*   k++;
+            if (k != 0)
+                t->content->arg = ft_realloc_arg(t->content->arg);
             while (line[i])
             {
                 //   printf("line[%d]=%c quote=%d t=%d\n", i, line[i], c->quote, t);
-                ft_skip_quotes(line, &i, &(c->quote));
-                ft_backslash(line, &i, &(c->quote));
-                c->arg[t] = ft_realloc_concat(c->arg[t], line[i]);
+                ft_skip_quotes(line, &i, &(t->content->quote));
+                ft_backslash(line, &i, &(t->content->quote));
+                t->content->arg[t] = ft_realloc_concat(t->content->arg[t], line[i]);
                 i++;
-                if ((line[i] == '\"' && c->quote == 2) || (line[i] == '\'' && c->quote == 1))
+                if ((line[i] == '\"' && t->content->quote == 2) || (line[i] == '\'' && t->content->quote == 1))
                 {
-                    c->quote = 0;
+                    t->content->quote = 0;
                     i++;
                 }
-                if (c->quote == 0 && (line[i] == ' ' || line[i] == '>' || line[i] == '<'))
+                if (t->content->quote == 0 && (line[i] == ' ' || line[i] == '>' || line[i] == '<' || line[i] == '|'))
                     break;
                 //printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
-            }
+            }*/
         }
     }
-    if (c->quote != 0)
+  /*  if (t->content->quote != 0)
     {
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
-    }
-    printf("output stdout = %s \n", c->n_out);
-    printf("redir = %d \n", c->add);
-    printf("input stdin = %s \n", c->n_input);
-    printf("flag input = %d \n", c->input);
+    }*/
+ /*   printf("output stdout = %s \n", t->content->n_out);
+    printf("redir = %d \n", t->content->add);
+    printf("input stdin = %s \n", t->content->n_input);
+    printf("flag input = %d \n", t->content->input);*/
     return (0);
 }
