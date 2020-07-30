@@ -69,9 +69,5 @@ int ft_parser(t_list *t, char *line)
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
     }*/
- /*   printf("output stdout = %s \n", t->content->n_out);
-    printf("redir = %d \n", t->content->add);
-    printf("input stdin = %s \n", t->content->n_input);
-    printf("flag input = %d \n", t->content->input);*/
     return (0);
 }
