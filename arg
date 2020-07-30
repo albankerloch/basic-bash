@@ -1,0 +1,14 @@
+
+<minishell> 0 arg 0 CMD2
+0 arg 1 CAT
+0 arg 2 -E
+  output stdout =  
+  redir = 0 
+  input stdin =  
+  flag input = 0 
+CMD1 ECHO LOL
+ ==> arg 0 CMD2
+ ==> arg 1 CAT
+ ==> arg 2 -E
+CMD2 CAT -E 
+<minishell> 

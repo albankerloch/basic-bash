@@ -98,15 +98,16 @@ int ft_exec(t_list *t, char *line)
     pid_t   pid;
     int     status;
     int     pipe_fd[2];
+    int     pipe_fd2[2];
     int     k;
     char      buffer[1024];
     int       ret;
 
     aff_list(t);
 
-  //  pid = fork();
-  //  if (pid == 0)
-  //  {
+    pid = fork();
+    if (pid == 0)
+    {
         pipe(pipe_fd);
         pid = fork();
         if (pid != 0)
@@ -119,25 +120,56 @@ int ft_exec(t_list *t, char *line)
         }
         else
         {
-            printf("CMD2 LS \n");
+            t = t->next;
+            pipe(pipe_fd2);
+            pid = fork();
+            if (pid != 0)
+            {
+                printf("CMD2 CAT -E \n");
+                aff_arg(t);
+                dup2(pipe_fd[0], 0);
+                dup2(pipe_fd2[1], 1);
+                ft_exec_cmd(t, t->content, line);
+            }
+            else
+            {
+                printf("CMD2 CAT -B \n");
+                t = t->next;
+                close(pipe_fd[1]);
+                dup2(pipe_fd2[0], 0);
+                ft_exec_cmd(t, t->content, line);
+            }
+        }
+    }
+    else
+        wait(&status);
+/*
+    pid = fork();
+    if (pid == 0)
+    {cc
+        pipe(pipe_fd);
+        pid = fork();
+        if (pid != 0)
+        {
+            printf("CMD1 ECHO LOL\n");
+            aff_arg(t);
+            close(pipe_fd[0]);
+            dup2(pipe_fd[1], 1);
+            ft_exec_cmd(t, t->content, line);
+        }
+        else
+        {
+            printf("CMD2 CAT -E \n");
             t = t->next;
             aff_arg(t);
             close(pipe_fd[1]);
-            /*
-            while ((ret = read(pipe_fd[0], buffer, 1023)) != 0)
-            {
-                buffer[ret] = 0;
-                printf("->> %s\n", buffer);
-            }   
-            */         
             dup2(pipe_fd[0], 0);
             ft_exec_cmd(t, t->content, line);
-            //wait(&status);
         }
- //   }
- //   else
-//        wait(&status);
-
+    }
+    else
+        wait(&status);
+*/
     /*
     while (t)
     {
