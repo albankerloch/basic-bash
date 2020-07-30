@@ -32,10 +32,13 @@ int ft_parser(t_list *t, char *line)
             if (ft_redirection_left(t->content, line, &i))
                 return (1);
         }
-       /* else if (line[i] == '|')
+        else if (line[i] == '|')
         {
-            ft_lstnew()
-        }*/
+            ft_lstadd_back(&t, ft_lstnew(ft_command_construct()));
+            t = t->next;
+            k = -1;
+            i++;
+        }
         else
         {
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg

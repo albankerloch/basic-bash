@@ -54,19 +54,33 @@ void ft_redir_echo(t_command *c)
     close(fd);
 }
 
+void aff_list(t_list *begin)
+{
+    t_command *c;
+    int i;
+    int k;
+
+    k = 0;
+    while(begin)
+    {
+        c = begin->content;
+        i = 0;
+        while(c->arg [i])
+        {
+            printf("%d arg %d %s\n", k, i, c->arg[i]);
+            i++;
+        }
+        k++;
+        begin = begin->next;
+    }
+}
+
 int ft_exec(t_list *t, char *line)
 {
-  //  int i;
-
-    /*
-    i = 0;
-    while(c.arg [i])
-    {
-        printf("arg %d %s\n", i, c.arg[i]);
-        i++;
-    }
-    ft_putstr(c.arg[0]);*/
-    ft_exec_cmd(t, t->content, line);
+    aff_list(t);
+        
+//    ft_putstr(c.arg[0]);
+//    ft_exec_cmd(t, t->content, line);
  /*   if (ft_strncmp(t->content.arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(t->content.arg[0]))
     {
         if (t->content.add == 0)
