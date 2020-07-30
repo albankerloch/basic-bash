@@ -81,34 +81,19 @@ void aff_list(t_list *begin)
 
 int ft_exec(t_list *t, char *line)
 {
+    pid_t   pid;
+    int     status;
     aff_list(t);
         
-//    ft_putstr(c.arg[0]);
-//    ft_exec_cmd(t, t->content, line);
- /*   if (ft_strncmp(t->content.arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(t->content.arg[0]))
+    while (t)
     {
-        if (t->content.add == 0)
-        {
-            i = 1;
-            while(c.arg[i])
-            {
-                ft_putstr(c.arg[i]);
-                if (c.arg[i + 1])
-                    ft_putchar(' ');
-                i++;
-            }
-            ft_putchar('\n');
-        }
+        pid = fork();
+        if (pid == 0)
+            ft_exec_cmd(t, t->content, line);
         else
-        {
-            ft_redir_echo(&c);
-        }
+            wait(&status);
+        t = t->next;
     }
-    else
-    {
-        ft_execve(&c);
-        ft_putchar('\n');
-    }*/
     return (0);
 }
 
