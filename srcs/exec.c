@@ -70,6 +70,10 @@ void aff_list(t_list *begin)
             printf("%d arg %d %s\n", k, i, c->arg[i]);
             i++;
         }
+        printf("  output stdout = %s \n", c->n_out);
+        printf("  redir = %d \n", c->add);
+        printf("  input stdin = %s \n", c->n_input);
+        printf("  flag input = %d \n", c->input);
         k++;
         begin = begin->next;
     }
