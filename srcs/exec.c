@@ -104,7 +104,7 @@ int ft_exec(t_list *t, char *line)
     int     ret;
     int     save_fd;
 
-    aff_list(t);
+    //aff_list(t);
 
     if (!t->next)
     {
@@ -117,8 +117,8 @@ int ft_exec(t_list *t, char *line)
         pid = fork();
         if (pid == 0)
         {
-            printf("CMD1 MAN WRITE \n");
-            aff_arg(t);
+           // printf("CMD1 MAN WRITE \n");
+           // aff_arg(t);
 
             save_fd = dup(1);
             close(pipe_fd[0]);
@@ -133,58 +133,22 @@ int ft_exec(t_list *t, char *line)
         }
         else
         {
-            printf("CMD2 TAIL \n");
+           // printf("CMD2 TAIL \n");
             t = t->next;
-            aff_arg(t);
-            /*
-            while ((ret = read(pipe_fd[0], buffer, 1023)) != 0)
-            {
-                buffer[ret] = 0;
-                printf("->> %s\n", buffer);
-            }   
-            */ 
+           // aff_arg(t);
+
             save_fd = dup(0);
             close(pipe_fd[1]);       
             dup2(pipe_fd[0], 0);
             close(pipe_fd[0]);
 
-            fork_exec_cmd(t, t->content, line);
+            ft_exec(t,  line);
 
             dup2(save_fd, 0);
             close(save_fd);
             (void)wait(NULL);
         }
     }
-
- //   }
- //   else
-//        wait(&status);
-
-    /*
-    while (t)
-    {
-        if (k != 0)
-            pipe(pipe_fd);
-        pid = fork();
-        if (pid == 0)
-        {
-            if (k != 0)
-            {
-                close(pipe_fd[0]);
-                dup2(pipe_fd[0], 1);
-            }
-            else
-            {
-                close(pipe_fd[1]);
-                dup2(pipe_fd[1], 0);
-            }
-            ft_exec_cmd(t, t->content, line);
-        }
-        else
-            wait(&status);
-        t = t->next;
-    }
-    */
     return (0);
 }
 
