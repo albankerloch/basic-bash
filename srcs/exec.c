@@ -98,6 +98,7 @@ int ft_exec(t_list *t, char *line)
     pid_t   pid;
     int     status;
     int     pipe_fd[2];
+    int     pipe_fd2[2];
     int     k;
     char    buffer[1024];
     int     ret;
