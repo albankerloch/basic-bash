@@ -106,51 +106,55 @@ int ft_exec(t_list *t, char *line)
 
     aff_list(t);
 
-/*    pid = fork();
-    if (pid == 0)
-    {*/
-    pipe(pipe_fd);
-    pid = fork();
-    if (pid == 0)
+    if (!t->next)
     {
-        printf("CMD1 MAN WRITE \n");
-        aff_arg(t);
-
-        save_fd = dup(1);
-        close(pipe_fd[0]);
-        dup2(pipe_fd[1], 1);
-        close(pipe_fd[1]);
-
         fork_exec_cmd(t, t->content, line);
-
-        dup2(save_fd, 1);
-        close(save_fd);
-        exit(0);
+        return (0);
     }
     else
     {
-        printf("CMD2 TAIL \n");
-        t = t->next;
-        aff_arg(t);
-        /*
-        while ((ret = read(pipe_fd[0], buffer, 1023)) != 0)
+        pipe(pipe_fd);
+        pid = fork();
+        if (pid == 0)
         {
-            buffer[ret] = 0;
-            printf("->> %s\n", buffer);
-        }   
-        */ 
-        save_fd = dup(0);
-        close(pipe_fd[1]);       
-        dup2(pipe_fd[0], 0);
-        close(pipe_fd[0]);
+            printf("CMD1 MAN WRITE \n");
+            aff_arg(t);
 
-        fork_exec_cmd(t, t->content, line);
+            save_fd = dup(1);
+            close(pipe_fd[0]);
+            dup2(pipe_fd[1], 1);
+            close(pipe_fd[1]);
 
-        dup2(save_fd, 0);
-        close(save_fd);
-        (void)wait(NULL);
+            fork_exec_cmd(t, t->content, line);
+
+            dup2(save_fd, 1);
+            close(save_fd);
+            exit(0);
+        }
+        else
+        {
+            printf("CMD2 TAIL \n");
+            t = t->next;
+            aff_arg(t);
+            /*
+            while ((ret = read(pipe_fd[0], buffer, 1023)) != 0)
+            {
+                buffer[ret] = 0;
+                printf("->> %s\n", buffer);
+            }   
+            */ 
+            save_fd = dup(0);
+            close(pipe_fd[1]);       
+            dup2(pipe_fd[0], 0);
+            close(pipe_fd[0]);
+
+            fork_exec_cmd(t, t->content, line);
+
+            dup2(save_fd, 0);
+            close(save_fd);
+            (void)wait(NULL);
+        }
     }
-
 
  //   }
  //   else
