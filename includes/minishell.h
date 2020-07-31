@@ -49,5 +49,6 @@ int     ft_checkfile(t_command *c);
 void    ft_redir_echo(t_command *c);
 int    ft_name(t_command *c, char *line, int *i, int *k);
 int ft_exec_cmd(t_list *t, t_command *c, char *line);
+int fork_exec_cmd(t_list *t, t_command *c, char *line);
 
 #endif

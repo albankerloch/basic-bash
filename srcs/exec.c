@@ -99,41 +99,58 @@ int ft_exec(t_list *t, char *line)
     int     status;
     int     pipe_fd[2];
     int     k;
-    char      buffer[1024];
-    int       ret;
+    char    buffer[1024];
+    int     ret;
+    int     save_fd;
 
     aff_list(t);
 
-  //  pid = fork();
-  //  if (pid == 0)
-  //  {
-        pipe(pipe_fd);
-        pid = fork();
-        if (pid != 0)
+/*    pid = fork();
+    if (pid == 0)
+    {*/
+    pipe(pipe_fd);
+    pid = fork();
+    if (pid == 0)
+    {
+        printf("CMD1 MAN WRITE \n");
+        aff_arg(t);
+
+        save_fd = dup(1);
+        close(pipe_fd[0]);
+        dup2(pipe_fd[1], 1);
+        close(pipe_fd[1]);
+
+        fork_exec_cmd(t, t->content, line);
+
+        dup2(save_fd, 1);
+        close(save_fd);
+        exit(0);
+    }
+    else
+    {
+        printf("CMD2 TAIL \n");
+        t = t->next;
+        aff_arg(t);
+        /*
+        while ((ret = read(pipe_fd[0], buffer, 1023)) != 0)
         {
-            printf("CMD1 ECHO LOL\n");
-            aff_arg(t);
-            close(pipe_fd[0]);
-            dup2(pipe_fd[1], 1);
-            ft_exec_cmd(t, t->content, line);
-        }
-        else
-        {
-            printf("CMD2 LS \n");
-            t = t->next;
-            aff_arg(t);
-            close(pipe_fd[1]);
-            /*
-            while ((ret = read(pipe_fd[0], buffer, 1023)) != 0)
-            {
-                buffer[ret] = 0;
-                printf("->> %s\n", buffer);
-            }   
-            */         
-            dup2(pipe_fd[0], 0);
-            ft_exec_cmd(t, t->content, line);
-            //wait(&status);
-        }
+            buffer[ret] = 0;
+            printf("->> %s\n", buffer);
+        }   
+        */ 
+        save_fd = dup(0);
+        close(pipe_fd[1]);       
+        dup2(pipe_fd[0], 0);
+        close(pipe_fd[0]);
+
+        fork_exec_cmd(t, t->content, line);
+
+        dup2(save_fd, 0);
+        close(save_fd);
+        (void)wait(NULL);
+    }
+
+
  //   }
  //   else
 //        wait(&status);
@@ -188,6 +205,7 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line)
         {
             ft_redir_echo(c);
         }
+        exit(0);
     }
     else
     {
@@ -195,4 +213,20 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line)
         ft_putchar('\n');
     }
     return (0);
+}
+
+int fork_exec_cmd(t_list *t, t_command *c, char *line)
+{
+    pid_t   pidf;
+    
+    pidf = fork();
+    if (pidf == 0)
+    {
+        ft_exec_cmd(t, t->content, line);
+    }
+    else
+    {
+        (void)wait(NULL);
+    }
+    return(0);
 }
