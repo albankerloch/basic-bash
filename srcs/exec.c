@@ -1,11 +1,11 @@
 #include "../includes/minishell.h"
 
-void ft_execve(t_command *c)
+void ft_execve(t_command *c, char **envp)
 {
     int fd;
     int fdi;
-    char *envir[] = { NULL };
-
+  //  char *envir[] = { NULL };
+    
    // printf("TEST TEST\n");
     if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
@@ -21,11 +21,21 @@ void ft_execve(t_command *c)
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
         dup2(fdi, 0);
     }
-    execve(c->arg[0], c->arg, envir);
+    if (c->arg[0][0] != '/')
+    {
+        ft_relative_path(c->arg[0]);
+        exit(0);
+    }   
+    execve(c->arg[0], c->arg, envp);
     if (c->add == 1 || c->add == 2)
         close(fd);
     if (c->input == 1)
         close(fdi);
+}
+
+void    ft_relative_path(char *cmd)
+{
+    printf("chercher chemin relatif\n");
 }
 
 void ft_redir_echo(t_command *c)
@@ -93,7 +103,7 @@ void aff_list(t_list *begin)
     }
 }
 
-int ft_exec(t_list *t, char *line)
+int ft_exec(t_list *t, char *line, char **envp)
 {
     pid_t   pid;
     int     status;
@@ -108,7 +118,7 @@ int ft_exec(t_list *t, char *line)
 
     if (!t->next)
     {
-        fork_exec_cmd(t, t->content, line);
+        fork_exec_cmd(t, t->content, line, envp);
         return (0);
     }
     else
@@ -125,7 +135,7 @@ int ft_exec(t_list *t, char *line)
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
 
-            fork_exec_cmd(t, t->content, line);
+            fork_exec_cmd(t, t->content, line, envp);
 
             dup2(save_fd, 1);
             close(save_fd);
@@ -142,7 +152,7 @@ int ft_exec(t_list *t, char *line)
             dup2(pipe_fd[0], 0);
             close(pipe_fd[0]);
 
-            ft_exec(t,  line);
+            ft_exec(t, line, envp);
 
             dup2(save_fd, 0);
             close(save_fd);
@@ -152,9 +162,17 @@ int ft_exec(t_list *t, char *line)
     return (0);
 }
 
-int ft_exec_cmd(t_list *t, t_command *c, char *line)
+int ft_exec_cmd(t_list *t, t_command *c, char *line, char **envp)
 {
     int i;
+    int j = 0;
+ /*   while (envp && envp[j]) // TEST PATH
+    {
+        if (envp[j] && ft_strncmp(envp[j], "PATH", ft_strlen("PATH")) == 0)
+            printf("%s\n", envp[j]);
+        j++;
+    }
+    j = 0;*/
 
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
     {
@@ -171,27 +189,48 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line)
             ft_putchar('\n');
         }
         else
-        {
             ft_redir_echo(c);
+        exit(0);
+    }
+    else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
+    {
+        while (envp && envp[j])
+        {
+            ft_putstr(envp[j]);
+            ft_putchar('\n');
+            j++;
+        }
+        exit(0);
+    }
+    else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
+    {
+        while (envp && envp[j])
+        {
+            if (envp[j] && ft_strncmp(envp[j], "PWD", ft_strlen("PWD")) == 0)
+            {
+                ft_putstr(ft_substr(envp[j], 4, ft_strlen(envp[j]) - 4));
+                ft_putchar('\n');
+            }
+            j++;
         }
         exit(0);
     }
     else
     {
-        ft_execve(c);
+        ft_execve(c, envp);
         ft_putchar('\n');
     }
     return (0);
 }
 
-int fork_exec_cmd(t_list *t, t_command *c, char *line)
+int fork_exec_cmd(t_list *t, t_command *c, char *line, char **envp)
 {
     pid_t   pidf;
     
     pidf = fork();
     if (pidf == 0)
     {
-        ft_exec_cmd(t, t->content, line);
+        ft_exec_cmd(t, t->content, line, envp);
     }
     else
     {

@@ -12,11 +12,12 @@
 
 #include "../includes/minishell.h"
 
-int	main()
+int	main(int argc, char *argv[], char *envp[])
 {
 	char *line;
     t_command   *c;
 	t_list *t;
+
 
 	line = NULL;
 	while (1)
@@ -27,7 +28,7 @@ int	main()
 		//c = ft_command_construct();
 		t = ft_lstnew(ft_command_construct());
 		if (!ft_parser(t, line))
-			ft_exec(t, line);
+			ft_exec(t, line, envp);
 	//	ft_command_destroy(&c);
 	}
 	return (0);
