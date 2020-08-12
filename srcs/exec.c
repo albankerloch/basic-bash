@@ -23,7 +23,7 @@ void ft_execve(t_command *c, char **envp)
     }
     if (c->arg[0][0] != '/')
     {
-        ft_relative_path(c->arg[0]);
+        ft_relative_path(c, envp);
         exit(0);
     }   
     execve(c->arg[0], c->arg, envp);
@@ -33,9 +33,41 @@ void ft_execve(t_command *c, char **envp)
         close(fdi);
 }
 
-void    ft_relative_path(char *cmd)
+void    ft_relative_path(t_command *c, char **envp)
 {
-    printf("chercher chemin relatif\n");
+    int j;
+    int k;
+    char *try_path;
+    char *new;
+
+    try_path = malloc(1);
+    try_path[0] = '\0';
+    j = 0;
+    while (envp && envp[j])
+    {
+        if (envp[j] && ft_strncmp(envp[j], "PATH", ft_strlen("PATH")) == 0)
+        {
+            k = 5;
+            while (envp[j] && envp[j][k])
+            {
+                if (envp[j][k] != ':')
+                    try_path = ft_realloc_concat(try_path, envp[j][k]);
+                else
+                {
+                    try_path = ft_realloc_concat(try_path, '/');
+                    new = ft_strjoin(try_path, c->arg[0]);
+                    execve(new, c->arg, envp);
+                    //si pas d'exit, c'est que execve return -1 -> alors cherche le chemin suivant de la variable PATH
+                    free(try_path);
+                    try_path = malloc(1);
+                    try_path[0] = '\0';
+                    free(new);
+                }
+                k++;
+            }
+        }
+        j++;
+    }
 }
 
 void ft_redir_echo(t_command *c)
