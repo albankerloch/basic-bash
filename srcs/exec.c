@@ -198,19 +198,18 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char **envp)
 {
     int i;
     int j = 0;
- /*   while (envp && envp[j]) // TEST PATH
-    {
-        if (envp[j] && ft_strncmp(envp[j], "PATH", ft_strlen("PATH")) == 0)
-            printf("%s\n", envp[j]);
-        j++;
-    }
-    j = 0;*/
+    int n = 0;
 
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
     {
         if (c->add == 0)
         {
             i = 1;
+            if (ft_strncmp(c->arg[1], "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(c->arg[1]))
+            {
+                n = 1;
+                i++;
+            }
             while(c->arg[i])
             {
                 ft_putstr(c->arg[i]);
@@ -218,7 +217,8 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char **envp)
                     ft_putchar(' ');
                 i++;
             }
-            ft_putchar('\n');
+            if (n == 0)
+                ft_putchar('\n');
         }
         else
             ft_redir_echo(c);
