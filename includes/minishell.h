@@ -33,6 +33,9 @@ typedef struct s_command
 
 int ft_parser(t_list *t, char *line);
 int ft_exec(t_list *t, char *line, char **envp);
+char  **ft_set_env(char **envp, int len);
+void	ft_swap_env(char **envp, int len);
+
 char *ft_realloc_concat(char *line, char c);
 int    ft_redirection_right(t_command *c, char *line, int *i);
 int    ft_redirection_left(t_command *c, char *line, int *i);

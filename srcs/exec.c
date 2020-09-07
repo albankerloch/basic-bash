@@ -21,12 +21,13 @@ void ft_execve(t_command *c, char **envp)
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
         dup2(fdi, 0);
     }
-    if (c->arg[0][0] != '/')
+    if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
     {
-        ft_relative_path(c, envp);
-        exit(0);
-    }   
-    execve(c->arg[0], c->arg, envp);
+        printf("%s %s\n", c->arg[0], c->arg[1]);
+        execve(c->arg[0], c->arg, envp);
+    }
+    ft_relative_path(c, envp);
+    exit(0);
     if (c->add == 1 || c->add == 2)
         close(fd);
     if (c->input == 1)
@@ -246,6 +247,12 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char **envp)
             j++;
         }
         exit(0);
+    }
+    else if (ft_strncmp(c->arg[0], "export", ft_strlen("export")) == 0  && ft_strlen("export") == ft_strlen(c->arg[0]))
+    {
+        while (envp && envp[j])
+            j++;
+        ft_swap_env(envp, j);
     }
     else
     {

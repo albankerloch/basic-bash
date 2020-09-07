@@ -17,7 +17,13 @@ int	main(int argc, char *argv[], char *envp[])
 	char *line;
     t_command   *c;
 	t_list *t;
+	char **env;
+	int	len;
 
+	len = 0;
+	while (envp && envp[len])
+		len++;
+	env = ft_set_env(envp, len);
 
 	line = NULL;
 	while (1)
@@ -28,7 +34,7 @@ int	main(int argc, char *argv[], char *envp[])
 		//c = ft_command_construct();
 		t = ft_lstnew(ft_command_construct());
 		if (!ft_parser(t, line))
-			ft_exec(t, line, envp);
+			ft_exec(t, line, env);
 	//	ft_command_destroy(&c);
 	}
 	return (0);
