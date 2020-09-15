@@ -4,9 +4,7 @@ void ft_execve(t_command *c, char **envp)
 {
     int fd;
     int fdi;
-  //  char *envir[] = { NULL };
     
-   // printf("TEST TEST\n");
     if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
@@ -23,23 +21,27 @@ void ft_execve(t_command *c, char **envp)
     }
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
     {
-        printf("%s %s\n", c->arg[0], c->arg[1]);
+      //  printf("%s %s\n", c->arg[0], c->arg[1]);
         execve(c->arg[0], c->arg, envp);
     }
-    ft_relative_path(c, envp);
-    exit(0);
+    else
+    {
+       ft_relative_path(c, envp);
+    //    printf("relative path\n");
+    }
     if (c->add == 1 || c->add == 2)
         close(fd);
     if (c->input == 1)
         close(fdi);
 }
 
-void    ft_relative_path(t_command *c, char **envp)
+int    ft_relative_path(t_command *c, char **envp)
 {
     int j;
     int k;
     char *try_path;
     char *new;
+    int ret;
 
     try_path = malloc(1);
     try_path[0] = '\0';
@@ -57,18 +59,22 @@ void    ft_relative_path(t_command *c, char **envp)
                 {
                     try_path = ft_realloc_concat(try_path, '/');
                     new = ft_strjoin(try_path, c->arg[0]);
-                    execve(new, c->arg, envp);
+                    ret = execve(new, c->arg, envp);
                     //si pas d'exit, c'est que execve return -1 -> alors cherche le chemin suivant de la variable PATH
                     free(try_path);
                     try_path = malloc(1);
                     try_path[0] = '\0';
                     free(new);
+                 //   printf("relative ret = %d\n", ret);
+                    if (ret == 0)
+                        return (0);
                 }
                 k++;
             }
         }
         j++;
     }
+    return (0);
 }
 
 void ft_redir_echo(t_command *c)
@@ -136,23 +142,20 @@ void aff_list(t_list *begin)
     }
 }
 
-int ft_exec(t_list *t, char *line, char **envp)
+void ft_exec(t_list *t, char *line, char ***envp)
 {
     pid_t   pid;
-    int     status;
+    pid_t   pid2;
     int     pipe_fd[2];
-    int     pipe_fd2[2];
-    int     k;
-    char    buffer[1024];
     int     ret;
     int     save_fd;
+    char    ***p;
 
     //aff_list(t);
-
     if (!t->next)
     {
-        fork_exec_cmd(t, t->content, line, envp);
-        return (0);
+        p = fork_exec_cmd(t, t->content, line, envp);
+        swap_envir(t, line, envp, p);
     }
     else
     {
@@ -160,23 +163,21 @@ int ft_exec(t_list *t, char *line, char **envp)
         pid = fork();
         if (pid == 0)
         {
-           // printf("CMD1 MAN WRITE \n");
-           // aff_arg(t);
-
             save_fd = dup(1);
             close(pipe_fd[0]);
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
 
-            fork_exec_cmd(t, t->content, line, envp);
-
+            p = fork_exec_cmd(t, t->content, line, envp);
+            swap_envir(t, line, envp, p);
+    
             dup2(save_fd, 1);
             close(save_fd);
+           
             exit(0);
         }
         else
         {
-           // printf("CMD2 TAIL \n");
             t = t->next;
            // aff_arg(t);
 
@@ -192,14 +193,15 @@ int ft_exec(t_list *t, char *line, char **envp)
             (void)wait(NULL);
         }
     }
-    return (0);
 }
 
-int ft_exec_cmd(t_list *t, t_command *c, char *line, char **envp)
+char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
 {
     int i;
     int j = 0;
     int n = 0;
+    char **env2;
+    char    ***p;
 
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
     {
@@ -223,57 +225,68 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char **envp)
         }
         else
             ft_redir_echo(c);
-        exit(0);
+     //   exit(0);
+        return (envp);
     }
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
     {
-        while (envp && envp[j])
+        while (*envp && (*envp)[j])
         {
-            ft_putstr(envp[j]);
+            ft_putstr((*envp)[j]);
             ft_putchar('\n');
             j++;
         }
-        exit(0);
+     //   exit(0);
+     return (envp);
     }
     else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
     {
-        while (envp && envp[j])
+        while (*envp && (*envp)[j])
         {
-            if (envp[j] && ft_strncmp(envp[j], "PWD", ft_strlen("PWD")) == 0)
+            if ((*envp)[j] && ft_strncmp((*envp)[j], "PWD", ft_strlen("PWD")) == 0)
             {
-                ft_putstr(ft_substr(envp[j], 4, ft_strlen(envp[j]) - 4));
+                ft_putstr(ft_substr((*envp)[j], 4, ft_strlen((*envp)[j]) - 4));
                 ft_putchar('\n');
             }
             j++;
         }
-        exit(0);
+       // exit(envp);
+       return (envp);
     }
     else if (ft_strncmp(c->arg[0], "export", ft_strlen("export")) == 0  && ft_strlen("export") == ft_strlen(c->arg[0]))
     {
-        while (envp && envp[j])
+        while (*envp && (*envp)[j])
             j++;
-        ft_swap_env(envp, j);
+        env2 = malloc(sizeof(char **) * j + 2);
+        p = &env2;
+        j = 0;
+        while (*envp && (*envp)[j])
+        {
+            env2[j] = ft_strdup((*envp)[j]);
+            j++;
+        }
+        env2[j] = ft_strdup(c->arg[1]);
+        env2[j + 1] = NULL;
+        return (p);
+     //   exit(0);
     }
-    else
-    {
-        ft_execve(c, envp);
-        ft_putchar('\n');
-    }
-    return (0);
+    return (NULL);
 }
 
-int fork_exec_cmd(t_list *t, t_command *c, char *line, char **envp)
+char    ***fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
 {
     pid_t   pidf;
+    char    ***p;
     
-    pidf = fork();
-    if (pidf == 0)
+    p = ft_exec_cmd(t, t->content, line, envp);
+    if (p == NULL)
     {
-        ft_exec_cmd(t, t->content, line, envp);
+        pidf = fork();
+        if (pidf == 0)
+            ft_execve(c, *envp);
+        else
+            (void)wait(NULL);
+        return (envp);
     }
-    else
-    {
-        (void)wait(NULL);
-    }
-    return(0);
+    return (p);
 }

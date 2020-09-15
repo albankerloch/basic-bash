@@ -50,41 +50,45 @@ char	**ft_realloc_arg(char **arg)
 	return (new);
 }
 
-char	**ft_set_env(char **envp, int len)
+char	***ft_set_env(char ***envp, int len)
 {
-	char	**env;
+	char	***env;
 
-	env = malloc(sizeof(char **) * len + 1);
-	env[len] = NULL;
+	*env = malloc(sizeof(char **) * len + 1);
+	(*env)[len] = NULL;
 	len = 0;
-	while (envp && envp[len])
+	while (*envp && (*envp)[len])
 	{
-		env[len] = ft_strdup(envp[len]);
+		(*env)[len] = ft_strdup((*envp)[len]);
 		len++;
 	}
 	return (env);
 }
 
-void	ft_swap_env(char **envp, int len)
+void	swap_envir(t_list *t, char *line, char ***envp, char ***p)
 {
-	char	***p;
-	char	**env;
-	
-	env = ft_set_env(envp, len);
-	p = &envp;
-	int	i = 0;
-	while (envp && envp[i])
+    char    **env2;
+
+	if (p != NULL && p != envp)
 	{
-		free(envp[i]);
-		i++;
+		env2 = *p;
+		int	i = 0;
+		while (*envp && (*envp)[i])
+		{
+			free((*envp)[i]);
+			i++;
+		}
+		free(*envp);
+		i = 0;
+		while (env2 && env2[i])
+			i++;
+		*envp = malloc(sizeof(char**) * i + 1);
+		i = 0;
+		while (env2 && env2[i])
+		{
+			(*envp)[i] = ft_strdup(env2[i]);
+			i++;
+		}
+		(*envp)[i] = NULL;
 	}
-	free(envp);
-	*p = ft_set_env(env, len);
-	i = 0;
-	while (env && env[i])
-	{
-		free(env[i]);
-		i++;
-	}
-	free(env);
 }

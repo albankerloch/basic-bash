@@ -32,9 +32,11 @@ typedef struct s_command
 }       t_command;
 
 int ft_parser(t_list *t, char *line);
-int ft_exec(t_list *t, char *line, char **envp);
-char  **ft_set_env(char **envp, int len);
+void ft_exec(t_list *t, char *line, char ***envp);
+char  ***ft_set_env(char ***envp, int len);
 void	ft_swap_env(char **envp, int len);
+void	swap_envir(t_list *t, char *line, char ***envp, char ***p);
+
 
 char *ft_realloc_concat(char *line, char c);
 int    ft_redirection_right(t_command *c, char *line, int *i);
@@ -49,8 +51,8 @@ void    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
 void    ft_redir_echo(t_command *c);
 int    ft_name(t_command *c, char *line, int *i, int *k);
-int ft_exec_cmd(t_list *t, t_command *c, char *line, char **envp);
-int fork_exec_cmd(t_list *t, t_command *c, char *line, char **envp);
-void    ft_relative_path(t_command *c, char **envp);
+char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
+char ***fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
+int    ft_relative_path(t_command *c, char **envp);
 
 #endif
