@@ -11,6 +11,7 @@ t_command *ft_command_construct()
     c->add = 0;
     c->quote = 0;
     c->out = 1;
+    c->env = 0;
     c->n_out = malloc(1);
     c->n_out[0] = '\0';
     c->arg = malloc(sizeof(char*));

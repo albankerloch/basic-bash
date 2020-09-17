@@ -225,7 +225,6 @@ char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
         }
         else
             ft_redir_echo(c);
-     //   exit(0);
         return (envp);
     }
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
@@ -236,7 +235,6 @@ char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
             ft_putchar('\n');
             j++;
         }
-     //   exit(0);
      return (envp);
     }
     else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
@@ -250,7 +248,6 @@ char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
             }
             j++;
         }
-       // exit(envp);
        return (envp);
     }
     else if (ft_strncmp(c->arg[0], "export", ft_strlen("export")) == 0  && ft_strlen("export") == ft_strlen(c->arg[0]))
@@ -268,7 +265,6 @@ char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
         env2[j] = ft_strdup(c->arg[1]);
         env2[j + 1] = NULL;
         return (p);
-     //   exit(0);
     }
     return (NULL);
 }

@@ -50,21 +50,6 @@ char	**ft_realloc_arg(char **arg)
 	return (new);
 }
 
-char	***ft_set_env(char ***envp, int len)
-{
-	char	***env;
-
-	*env = malloc(sizeof(char **) * len + 1);
-	(*env)[len] = NULL;
-	len = 0;
-	while (*envp && (*envp)[len])
-	{
-		(*env)[len] = ft_strdup((*envp)[len]);
-		len++;
-	}
-	return (env);
-}
-
 void	swap_envir(t_list *t, char *line, char ***envp, char ***p)
 {
     char    **env2;

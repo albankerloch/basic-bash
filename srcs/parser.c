@@ -13,7 +13,7 @@
 
 #include "../includes/minishell.h"
 
-int ft_parser(t_list *t, char *line)
+int ft_parser(t_list *t, char *line, char ***env)
 {
     int         i;
     int         k;
@@ -43,6 +43,9 @@ int ft_parser(t_list *t, char *line)
         {
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
            ft_name(t->content, line, &i, &k);
+            t_command *c = t->content;
+            if (c->env == 1)
+               c->arg[k] = ft_env_var(c->arg[k], env);
          /*   k++;
             if (k != 0)
                 t->content->arg = ft_realloc_arg(t->content->arg);

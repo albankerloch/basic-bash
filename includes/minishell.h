@@ -28,15 +28,15 @@ typedef struct s_command
   int   add;
   int   quote;
   int   out;
+  int   env;
   char  *n_out;
 }       t_command;
 
-int ft_parser(t_list *t, char *line);
+int ft_parser(t_list *t, char *line, char ***env);
 void ft_exec(t_list *t, char *line, char ***envp);
-char  ***ft_set_env(char ***envp, int len);
 void	ft_swap_env(char **envp, int len);
 void	swap_envir(t_list *t, char *line, char ***envp, char ***p);
-
+char    *ft_env_var(char *arg, char ***env);
 
 char *ft_realloc_concat(char *line, char c);
 int    ft_redirection_right(t_command *c, char *line, int *i);
