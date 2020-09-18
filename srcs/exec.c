@@ -25,10 +25,7 @@ void ft_execve(t_command *c, char **envp)
         execve(c->arg[0], c->arg, envp);
     }
     else
-    {
        ft_relative_path(c, envp);
-    //    printf("relative path\n");
-    }
     if (c->add == 1 || c->add == 2)
         close(fd);
     if (c->input == 1)
@@ -153,10 +150,7 @@ void ft_exec(t_list *t, char *line, char ***envp)
 
     //aff_list(t);
     if (!t->next)
-    {
-        p = fork_exec_cmd(t, t->content, line, envp);
-        swap_envir(t, line, envp, p);
-    }
+        fork_exec_cmd(t, t->content, line, envp);
     else
     {
         pipe(pipe_fd);
@@ -168,8 +162,7 @@ void ft_exec(t_list *t, char *line, char ***envp)
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
 
-            p = fork_exec_cmd(t, t->content, line, envp);
-            swap_envir(t, line, envp, p);
+            fork_exec_cmd(t, t->content, line, envp);
     
             dup2(save_fd, 1);
             close(save_fd);
@@ -195,13 +188,12 @@ void ft_exec(t_list *t, char *line, char ***envp)
     }
 }
 
-char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
+int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
 {
     int i;
     int j = 0;
     int n = 0;
     char **env2;
-    char    ***p;
 
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
     {
@@ -225,7 +217,7 @@ char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
         }
         else
             ft_redir_echo(c);
-        return (envp);
+        return (0);
     }
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
     {
@@ -235,7 +227,7 @@ char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
             ft_putchar('\n');
             j++;
         }
-     return (envp);
+     return (0);
     }
     else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
     {
@@ -248,14 +240,13 @@ char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
             }
             j++;
         }
-       return (envp);
+       return (0);
     }
     else if (ft_strncmp(c->arg[0], "export", ft_strlen("export")) == 0  && ft_strlen("export") == ft_strlen(c->arg[0]))
     {
         while (*envp && (*envp)[j])
             j++;
         env2 = malloc(sizeof(char **) * j + 2);
-        p = &env2;
         j = 0;
         while (*envp && (*envp)[j])
         {
@@ -264,25 +255,54 @@ char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
         }
         env2[j] = ft_strdup(c->arg[1]);
         env2[j + 1] = NULL;
-        return (p);
+        *envp = env2;
+        return (0);
     }
-    return (NULL);
+    else if (ft_strncmp(c->arg[0], "unset", ft_strlen("unset")) == 0  && ft_strlen("unset") == ft_strlen(c->arg[0]))
+    {
+        while (*envp && (*envp)[j])
+            j++;
+        int l = 0; //verif pour ne pas modifier l'env inutilement
+        while (*envp && (*envp)[l])
+        {
+            if ((*envp)[l] && ft_strncmp((*envp)[l], c->arg[1], ft_strlen(c->arg[1])) == 0)
+                break;
+            l++;
+        }
+        if (j == l || c->env == 1)
+            return (0);
+        env2 = malloc(sizeof(char **) * j);
+        j = 0;
+        int i = 0;
+        while (*envp && (*envp)[j])
+        {
+            if ((*envp)[j] && ft_strncmp((*envp)[j], c->arg[1], ft_strlen(c->arg[1])) == 0 && (*envp)[j][ft_strlen(c->arg[1])] == '=')
+                i--;
+            else
+                env2[i] = ft_strdup((*envp)[j]);
+            i++;
+            j++;
+        }
+        env2[j] = NULL;
+        *envp = env2;
+        return (0);
+    }
+    return (-1);
 }
 
-char    ***fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
+void    fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
 {
     pid_t   pidf;
     char    ***p;
+    int ret;
     
-    p = ft_exec_cmd(t, t->content, line, envp);
-    if (p == NULL)
+    ret = ft_exec_cmd(t, t->content, line, envp);
+    if (ret == -1)
     {
         pidf = fork();
         if (pidf == 0)
             ft_execve(c, *envp);
         else
             (void)wait(NULL);
-        return (envp);
     }
-    return (p);
 }

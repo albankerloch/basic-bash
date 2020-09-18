@@ -42,10 +42,15 @@ int ft_parser(t_list *t, char *line, char ***env)
         else
         {
             // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
+         //  printf("début ft_name\n");
            ft_name(t->content, line, &i, &k);
             t_command *c = t->content;
-            if (c->env == 1)
-               c->arg[k] = ft_env_var(c->arg[k], env);
+          //  printf("return name ok, k =%d c->env=%d\n", k, c->env);
+           // printf("arg=%s\n", c->arg[k]);
+            if (c->env == 1 && ft_strncmp(c->arg[0], "unset", ft_strlen("unset")))
+            {
+                c->arg[k] = ft_env_var(c->arg[k], env);
+            }
          /*   k++;
             if (k != 0)
                 t->content->arg = ft_realloc_arg(t->content->arg);

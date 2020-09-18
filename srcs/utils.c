@@ -40,40 +40,12 @@ char	**ft_realloc_arg(char **arg)
 	while (arg[i])
 	{
 		new[i] = ft_strdup(arg[i]);
+	//	printf("pre free while realloc arg %s i=%d\n", arg[i], i);
 		free(arg[i]);
 		i++;
 	}
 	new[i] = malloc(1);
 	new[i + 1] = NULL;
 	free(arg);
-
 	return (new);
-}
-
-void	swap_envir(t_list *t, char *line, char ***envp, char ***p)
-{
-    char    **env2;
-
-	if (p != NULL && p != envp)
-	{
-		env2 = *p;
-		int	i = 0;
-		while (*envp && (*envp)[i])
-		{
-			free((*envp)[i]);
-			i++;
-		}
-		free(*envp);
-		i = 0;
-		while (env2 && env2[i])
-			i++;
-		*envp = malloc(sizeof(char**) * i + 1);
-		i = 0;
-		while (env2 && env2[i])
-		{
-			(*envp)[i] = ft_strdup(env2[i]);
-			i++;
-		}
-		(*envp)[i] = NULL;
-	}
 }

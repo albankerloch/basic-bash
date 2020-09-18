@@ -34,8 +34,6 @@ typedef struct s_command
 
 int ft_parser(t_list *t, char *line, char ***env);
 void ft_exec(t_list *t, char *line, char ***envp);
-void	ft_swap_env(char **envp, int len);
-void	swap_envir(t_list *t, char *line, char ***envp, char ***p);
 char    *ft_env_var(char *arg, char ***env);
 
 char *ft_realloc_concat(char *line, char c);
@@ -51,8 +49,8 @@ void    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
 void    ft_redir_echo(t_command *c);
 int    ft_name(t_command *c, char *line, int *i, int *k);
-char ***ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
-char ***fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
+int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
+void fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
 int    ft_relative_path(t_command *c, char **envp);
 
 #endif

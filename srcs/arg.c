@@ -2,6 +2,7 @@
 
 int    ft_name(t_command *c, char *line, int *i, int *k)
 {
+   // printf("line=%s k=%d i=%d\n", line, *k, *i);
     (*k)++;
     if (*k != 0)
         c->arg = ft_realloc_arg(c->arg);
@@ -29,21 +30,7 @@ int    ft_name(t_command *c, char *line, int *i, int *k)
     }
     return (0);
 }
-/*
-char    *ft_var_exist(char *arg, char ***env)
-{
-    int j = 0;
-    
-    while (*env && (*env)[j])
-    {
-        if ((*env)[j] && ft_strncmp((*env)[j], arg, ft_strlen(arg)) == 0)
-        {
-            return (j);
-        }
-        j++;
-    }
-    return (-1);
-}*/
+
 char    *ft_env_var(char *arg, char ***env)
 {
     int j = 0;
@@ -51,10 +38,11 @@ char    *ft_env_var(char *arg, char ***env)
 
     while (*env && (*env)[j])
     {
-        if ((*env)[j] && ft_strncmp((*env)[j], arg, ft_strlen(arg)) == 0)
+        if ((*env)[j] && ft_strncmp((*env)[j], arg, ft_strlen(arg)) == 0 && (*env)[j][ft_strlen(arg)] == '=')
         {
             new_arg = ft_substr((*env)[j], ft_strlen(arg) + 1, ft_strlen((*env)[j]) - ft_strlen(arg) + 1);
             free(arg);
+        //    printf("post free arg while\n");
             return (new_arg);
         }
         j++;
@@ -62,5 +50,6 @@ char    *ft_env_var(char *arg, char ***env)
     new_arg = malloc(1);
     new_arg[0] = '\0';
     free(arg);
+  //  printf("post free arg\n");
     return (new_arg);
 }
