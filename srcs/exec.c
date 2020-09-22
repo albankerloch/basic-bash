@@ -20,10 +20,7 @@ void ft_execve(t_command *c, char **envp)
         dup2(fdi, 0);
     }
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
-    {
-      //  printf("%s %s\n", c->arg[0], c->arg[1]);
         execve(c->arg[0], c->arg, envp);
-    }
     else
        ft_relative_path(c, envp);
     if (c->add == 1 || c->add == 2)

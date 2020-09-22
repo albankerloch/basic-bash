@@ -27,7 +27,6 @@ typedef struct s_command
   char  *n_input;
   int   add;
   int   quote;
-  int   out;
   int   env;
   char  *n_out;
 }       t_command;
@@ -37,9 +36,9 @@ void ft_exec(t_list *t, char *line, char ***envp);
 char    *ft_env_var(char *arg, char ***env);
 
 char *ft_realloc_concat(char *line, char c);
-int    ft_redirection_right(t_command *c, char *line, int *i);
-int    ft_redirection_left(t_command *c, char *line, int *i);
-int    ft_redir_right(t_command *c, char *line, int *i);
+int    ft_redirection_right(t_command *c, char *line, int *i, int *k);
+int    ft_redirection_left(t_command *c, char *line, int *i, int *k);
+int    ft_redir_right(t_command *c, char *line, int *i, int *k);
 int    ft_backslash(char *line, int *i, int *quote);
 char	**ft_realloc_arg(char **arg);
 void    ft_skip_quotes(char *line, int *i, int *quote);
@@ -48,9 +47,9 @@ void    ft_command_destroy(t_command *c);
 void    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
 void    ft_redir_echo(t_command *c);
-int    ft_name(t_command *c, char *line, int *i, int *k);
 int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
 void fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
 int    ft_relative_path(t_command *c, char **envp);
+int ft_name(char **arg, t_command *c, char *line, int *i);
 
 #endif

@@ -1,11 +1,7 @@
 #include "../includes/minishell.h"
 
-int    ft_name(t_command *c, char *line, int *i, int *k)
+int    ft_name(char **arg, t_command *c, char *line, int *i)
 {
-   // printf("line=%s k=%d i=%d\n", line, *k, *i);
-    (*k)++;
-    if (*k != 0)
-        c->arg = ft_realloc_arg(c->arg);
     while (line[*i])
     {
      //   printf("line[%d]=%c quote=%d k=%d\n", *i, line[*i], c->quote, *k);
@@ -17,7 +13,7 @@ int    ft_name(t_command *c, char *line, int *i, int *k)
             c->env = 1;
             (*i)++;
         }
-        c->arg[*k] = ft_realloc_concat(c->arg[*k], line[*i]);
+        *arg = ft_realloc_concat(*arg, line[*i]);
         (*i)++;
         if ((line[*i] == '\"' && c->quote == 2) || (line[*i] == '\'' && c->quote == 1))
         {
@@ -42,7 +38,6 @@ char    *ft_env_var(char *arg, char ***env)
         {
             new_arg = ft_substr((*env)[j], ft_strlen(arg) + 1, ft_strlen((*env)[j]) - ft_strlen(arg) + 1);
             free(arg);
-        //    printf("post free arg while\n");
             return (new_arg);
         }
         j++;
@@ -50,6 +45,5 @@ char    *ft_env_var(char *arg, char ***env)
     new_arg = malloc(1);
     new_arg[0] = '\0';
     free(arg);
-  //  printf("post free arg\n");
     return (new_arg);
 }

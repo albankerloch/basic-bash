@@ -1,52 +1,34 @@
 #include "../includes/minishell.h"
 
-int    ft_redirection_right(t_command *c, char *line, int *i)
+int    ft_redirection_right(t_command *c, char *line, int *i, int *k)
 {
-    if (line[*i + 1] && line[*i + 1]== '>')
+    if (line[*i + 1] && line[*i + 1] == '>')
     {
         *i = *i + 2;
         c->add = 2;
-        return (ft_redir_right(c, line, i));
+        return (ft_redir_right(c, line, i, k));
     }
     else
     {
         *i = *i + 1;
         c->add = 1;
-        return (ft_redir_right(c, line, i));
+        return (ft_redir_right(c, line, i, k));
     }
     return (0);
 }
 
-int    ft_redir_right(t_command *c, char *line, int *i)
+int    ft_redir_right(t_command *c, char *line, int *i, int *k)
 {
-    int quote;
-
-    quote = 0;
-    //printf("fd output = %c | i = %d | line[i] = '%c' \n", output, *i, line[*i]);
     while (line[*i] == ' ')
-        *i = *i + 1;
-    if (c->n_out[0] != '\0')
+        (*i)++;
+   /* if (c->n_out[0] != '\0')
     {
         free(c->n_out);
         c->n_out = malloc(1);
         c->n_out[0] = '\0';
-    }
-    while (line[*i])
-    {
-        ft_skip_quotes(line, i, &quote);
-        ft_backslash(line, i, &quote);
-        c->n_out = ft_realloc_concat(c->n_out, line[*i]);
-        (*i)++;
-        if ((line[*i] == '\"' && quote == 2) || (line[*i] == '\'' && quote == 1))
-        {
-            quote = 0;
-            (*i)++;
-        }
-        if (quote == 0 && (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || line[*i] == '|'))
-            break;
-        //printf("fin boucle line[%d]=%c quote=%d t=%d\n", i, line[i], c.quote, t);
-    }
-    if (quote != 0)
+    }*/
+    ft_name(&(c->n_out), c, line, i);
+    if (c->quote != 0)
     {
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
@@ -58,7 +40,6 @@ int    ft_redir_right(t_command *c, char *line, int *i)
 void    ft_touch(t_command *c)
 {
     int fd;
-
     if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | \
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
@@ -68,7 +49,7 @@ void    ft_touch(t_command *c)
     close(fd);
 }
 
-int    ft_redirection_left(t_command *c, char *line, int *i)
+int    ft_redirection_left(t_command *c, char *line, int *i, int *k)
 {
     *i = *i + 1;
     c->input = 1;
@@ -80,7 +61,6 @@ int    ft_redirection_left(t_command *c, char *line, int *i)
         c->n_input = malloc(1);
         c->n_input[0] = '\0';
     }
-    //printf("--> i = %d | line[i] = '%c' \n", *i, line[*i]);
     while (line[*i] != ' ' && line[*i] != '\0')
     {
         c->n_input = ft_realloc_concat(c->n_input, line[*i]);
