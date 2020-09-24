@@ -46,7 +46,7 @@ t_command *    ft_command_construct();
 void    ft_command_destroy(t_command *c);
 void    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
-void    ft_redir_echo(t_command *c);
+int    ft_redir(t_command *c);
 int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
 void fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
 int    ft_relative_path(t_command *c, char **envp);

@@ -71,11 +71,9 @@ int    ft_relative_path(t_command *c, char **envp)
     return (0);
 }
 
-void ft_redir_echo(t_command *c)
+int ft_redir(t_command *c)
 {
     int fd;
-    int i;
-    char ch;
 
     if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
@@ -83,18 +81,7 @@ void ft_redir_echo(t_command *c)
     else
         fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    i = 1;
-    while(c->arg[i])
-    {
-        write(fd, c->arg[i], ft_strlen(c->arg[i]));
-        if (c->arg[i + 1])
-            write(fd, " ", 1);
-        //printf("%d --> %s\n", i, c->arg[i]);
-        i++;
-    }
-    ch = '\n';
-    write(fd, &ch, 1);
-    close(fd);
+    return (fd);
 }
 
 void aff_arg(t_list *begin)
@@ -191,29 +178,31 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
     int j = 0;
     int n = 0;
     char **env2;
+    int fd;
 
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
     {
-        if (c->add == 0)
-        {
-            i = 1;
-            if (ft_strncmp(c->arg[1], "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(c->arg[1]))
-            {
-                n = 1;
-                i++;
-            }
-            while(c->arg[i])
-            {
-                ft_putstr(c->arg[i]);
-                if (c->arg[i + 1])
-                    ft_putchar(' ');
-                i++;
-            }
-            if (n == 0)
-                ft_putchar('\n');
-        }
+        if (c->add != 0)
+            fd = ft_redir(c);
         else
-            ft_redir_echo(c);
+            fd = 1;
+        i = 1;
+        if (ft_strncmp(c->arg[1], "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(c->arg[1]))
+        {
+            n = 1;
+            i++;
+        }
+        while(c->arg[i])
+        {
+            ft_putstr_fd(c->arg[i], fd);
+            if (c->arg[i + 1])
+                ft_putchar_fd(' ', fd);
+            i++;
+        }
+        if (n == 0)
+            ft_putchar_fd('\n', fd);
+        if (c->add != 0)
+            close(fd);
         return (0);
     }
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
@@ -224,7 +213,7 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
             ft_putchar('\n');
             j++;
         }
-     return (0);
+        return (0);
     }
     else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
     {
@@ -282,6 +271,19 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
         }
         env2[j] = NULL;
         *envp = env2;
+        return (0);
+    }
+    else if (ft_strncmp(c->arg[0], "cd", ft_strlen("cd")) == 0  && ft_strlen("cd") == ft_strlen(c->arg[0]))
+    {
+        chdir(c->arg[1]);
+        char *buf;
+        buf = malloc(sizeof(char *) * ft_strlen(c->arg[1]));
+        while (*envp && (*envp)[j])
+        {
+            if ((*envp)[j] && ft_strncmp((*envp)[j], "PWD", ft_strlen("PWD")) == 0)
+                (*envp)[j] = ft_strdup(ft_strjoin("PWD=", buf));
+            j++;
+        }
         return (0);
     }
     return (-1);
