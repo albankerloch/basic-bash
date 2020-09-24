@@ -43,7 +43,7 @@ int    ft_backslash(char *line, int *i, int *quote);
 char	**ft_realloc_arg(char **arg);
 void    ft_skip_quotes(char *line, int *i, int *quote);
 t_command *    ft_command_construct();
-void    ft_command_destroy(t_command *c);
+void    ft_command_destroy(void *c);
 void    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
 int    ft_redir(t_command *c);
@@ -51,5 +51,6 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
 void fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp);
 int    ft_relative_path(t_command *c, char **envp);
 int ft_name(char **arg, t_command *c, char *line, int *i);
+void    ft_env_destroy(char **env);
 
 #endif

@@ -32,7 +32,7 @@ int		ft_get_2_squeeze(char *buf, char **line, int *i, int *lus)
 
 	temp = *i;
 	car = ft_strlen(*line);
-	while (buf[*i] != '\n' && buf[*i] != '\0')
+	while (buf[*i] != '\n' && buf[*i] != '\0' && buf[*i] != ';')
 		*i = *i + 1;
 	if ((*line = ft_realloc((*i - temp), *line, car)) == NULL)
 		return (-1);
@@ -43,11 +43,14 @@ int		ft_get_2_squeeze(char *buf, char **line, int *i, int *lus)
 		car++;
 		*lus = *lus - 1;
 	}
-	if (buf[*i] == '\n')
+	if (buf[*i] == '\n' || buf[*i] == ';')
 	{
 		*lus = *lus - 1;
 		*i = *i + 1;
-		return (1);
+		if (buf[*i - 1] == '\n')
+			return (1);
+		else if (buf[*i - 1] == ';')
+			return (2);		
 	}
 	return (0);
 }

@@ -19,20 +19,33 @@ t_command *ft_command_construct()
     return(c);
 }
 
-void    ft_command_destroy(t_command *c)
+void    ft_command_destroy(void *c)
 {
     int     i;
-
+    t_command *c_bis;
+    
+    c_bis = c;
     i = 0;
-    free(c->n_input);
-    free(c->n_out);
-    while (c->arg[i])
+    free(c_bis->n_input);
+    free(c_bis->n_out);
+    while (c_bis->arg[i])
     {
-     //   printf("c->arg[%d]=%s\n", i, c->arg[i]);
-        free(c->arg[i]);
-        c->arg[i] = NULL;
+        free(c_bis->arg[i]);
         i++;
     }
-    free(c->arg);
-    c->arg = NULL;
+    free(c_bis->arg);
+    free(c_bis);
+}
+
+void    ft_env_destroy(char **env)
+{
+    int i;
+
+    i = 0;
+    while (env && env[i])
+    {
+        free(env[i]);
+        i++;
+    }
+    free(env);
 }

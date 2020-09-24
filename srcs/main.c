@@ -19,6 +19,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_list *t;
 	char **env;
 	int	len;
+	int	ret;
 
 	len = 0;
 	while (envp && envp[len])
@@ -32,20 +33,21 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	env[len] = NULL;
 
+	ret = 1;
 	line = NULL;
 	while (1)
 	{
-		//prompt
-		ft_putstr("<minishell> ");
-		get_next_line(0, &line);
-		//c = ft_command_construct();
+		if (ret == 1)
+			ft_putstr("<minishell> ");
+		ret = get_next_line(0, &line);
 		t = ft_lstnew(ft_command_construct());
 		if (!ft_parser(t, line, &env))
 			ft_exec(t, line, &env);
 		int i = 0;
         while (env && env[i])
 			i++;
-	//	ft_command_destroy(&c);
+		ft_lstdelone(t, &ft_command_destroy);
 	}
+	//ft_env_destroy(env); //utilité ??
 	return (0);
 }
