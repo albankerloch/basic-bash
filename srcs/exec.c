@@ -75,7 +75,9 @@ int ft_redir(t_command *c)
 {
     int fd;
 
-    if (c->add == 1)
+    if (c->add == 0)
+        return (1);
+    else if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     else
@@ -180,12 +182,10 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
     char **env2;
     int fd;
 
+    fd = ft_redir(c);
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
     {
-        if (c->add != 0)
-            fd = ft_redir(c);
-        else
-            fd = 1;
+       
         i = 1;
         if (ft_strncmp(c->arg[1], "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(c->arg[1]))
         {
@@ -209,10 +209,12 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
     {
         while (*envp && (*envp)[j])
         {
-            ft_putstr((*envp)[j]);
-            ft_putchar('\n');
+            ft_putstr_fd((*envp)[j], fd);
+            ft_putchar_fd('\n', fd);
             j++;
         }
+        if (c->add != 0)
+            close(fd);
         return (0);
     }
     else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
@@ -221,12 +223,14 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
         {
             if ((*envp)[j] && ft_strncmp((*envp)[j], "PWD", ft_strlen("PWD")) == 0)
             {
-                ft_putstr(ft_substr((*envp)[j], 4, ft_strlen((*envp)[j]) - 4));
-                ft_putchar('\n');
+                ft_putstr_fd(ft_substr((*envp)[j], 4, ft_strlen((*envp)[j]) - 4), fd);
+                ft_putchar_fd('\n', fd);
             }
             j++;
         }
-       return (0);
+        if (c->add != 0)
+            close(fd);
+        return (0);
     }
     else if (ft_strncmp(c->arg[0], "export", ft_strlen("export")) == 0  && ft_strlen("export") == ft_strlen(c->arg[0]))
     {
@@ -286,6 +290,8 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
         }
         return (0);
     }
+    else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
+        exit(0);
     return (-1);
 }
 
