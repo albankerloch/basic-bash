@@ -43,10 +43,15 @@ int	main(int argc, char *argv[], char *envp[])
 		t = ft_lstnew(ft_command_construct());
 		if (!ft_parser(t, line, &env))
 			ft_exec(t, line, &env);
-		int i = 0;
-        while (env && env[i])
-			i++;
-		ft_lstdelone(t, &ft_command_destroy);
+		int j = 0;
+        while (env && env[j])
+        {
+            ft_putstr(env[j]);
+            ft_putchar('\n');
+            j++;
+        }
+
+		ft_lstclear(&t, &ft_command_destroy);
 	}
 	//ft_env_destroy(env); //utilité ??
 	return (0);

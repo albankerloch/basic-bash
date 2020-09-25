@@ -281,7 +281,8 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
     {
         chdir(c->arg[1]);
         char *buf;
-        buf = malloc(sizeof(char *) * ft_strlen(c->arg[1]));
+        buf = malloc(sizeof(char *) * PATH_MAX);
+        getcwd(buf, PATH_MAX);
         while (*envp && (*envp)[j])
         {
             if ((*envp)[j] && ft_strncmp((*envp)[j], "PWD", ft_strlen("PWD")) == 0)
