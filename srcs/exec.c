@@ -136,7 +136,7 @@ void ft_exec(t_list *t, char *line, char ***envp)
 
     //aff_list(t);
     if (!t->next)
-        fork_exec_cmd(t, t->content, line, envp);
+        fork_exec_cmd(t->content, line, envp);
     else
     {
         pipe(pipe_fd);
@@ -148,7 +148,7 @@ void ft_exec(t_list *t, char *line, char ***envp)
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
 
-            fork_exec_cmd(t, t->content, line, envp);
+            fork_exec_cmd(t->content, line, envp);
     
             dup2(save_fd, 1);
             close(save_fd);
@@ -174,7 +174,7 @@ void ft_exec(t_list *t, char *line, char ***envp)
     }
 }
 
-int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
+int ft_exec_cmd(t_command *c, char *line, char ***envp)
 {
     int i;
     int j = 0;
@@ -207,6 +207,7 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
     }
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
     {
+        printf("ok debut env\n");
         while (*envp && (*envp)[j])
         {
             ft_putstr_fd((*envp)[j], fd);
@@ -215,6 +216,7 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
         }
         if (c->add != 0)
             close(fd);
+        printf("ok fin env\n");
         return (0);
     }
     else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
@@ -279,16 +281,28 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
     }
     else if (ft_strncmp(c->arg[0], "cd", ft_strlen("cd")) == 0  && ft_strlen("cd") == ft_strlen(c->arg[0]))
     {
-        chdir(c->arg[1]);
+        int ret = chdir(c->arg[1]);
         char *buf;
-        buf = malloc(sizeof(char *) * PATH_MAX);
+        buf = malloc(sizeof(char) * PATH_MAX);
         getcwd(buf, PATH_MAX);
+        while (*envp && (*envp)[j])
+            j++;
+        env2 = malloc(sizeof(char **) * j + 1);
+        j = 0;
         while (*envp && (*envp)[j])
         {
             if ((*envp)[j] && ft_strncmp((*envp)[j], "PWD", ft_strlen("PWD")) == 0)
-                (*envp)[j] = ft_strdup(ft_strjoin("PWD=", buf));
+            {
+                env2[j] = ft_strjoin("PWD=", buf);
+            }
+            else
+                env2[j] = ft_strdup((*envp)[j]);
+            
             j++;
         }
+        env2[j] = NULL;
+//        ft_env_destroy(*envp);
+        *envp = env2;
         return (0);
     }
     else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
@@ -296,13 +310,13 @@ int ft_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
     return (-1);
 }
 
-void    fork_exec_cmd(t_list *t, t_command *c, char *line, char ***envp)
+void    fork_exec_cmd(t_command *c, char *line, char ***envp)
 {
     pid_t   pidf;
     char    ***p;
     int ret;
     
-    ret = ft_exec_cmd(t, t->content, line, envp);
+    ret = ft_exec_cmd(c, line, envp);
     if (ret == -1)
     {
         pidf = fork();
