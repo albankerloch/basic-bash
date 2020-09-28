@@ -37,6 +37,7 @@ int	main(int argc, char *argv[], char *envp[])
 	line = NULL;
 	while (1)
 	{
+		signal(SIGINT, ft_sig_handler);
 		if (ret == 1)
 			ft_putstr("<minishell> ");
 		ret = get_next_line(0, &line);

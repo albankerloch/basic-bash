@@ -4,6 +4,7 @@ SRCS_NAME	= 	main.c \
 					utils.c \
 					quotes.c \
 					construct.c \
+					signal.c \
 					redirections.c \
 					arg.c
 

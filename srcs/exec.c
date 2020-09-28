@@ -314,10 +314,13 @@ void    fork_exec_cmd(t_command *c, char *line, char ***envp)
     char    ***p;
     int ret;
     
+    if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
+        exit (0);
     ret = ft_exec_cmd(c, line, envp);
     if (ret == -1)
     {
         pidf = fork();
+        signal(SIGINT, ft_sig_handler_process);
         if (pidf == 0)
             ft_execve(c, *envp);
         else

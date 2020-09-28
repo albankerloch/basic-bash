@@ -20,6 +20,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
+# include <signal.h>
 
 typedef struct s_command
 {
@@ -53,5 +54,8 @@ void fork_exec_cmd(t_command *c, char *line, char ***envp);
 int    ft_relative_path(t_command *c, char **envp);
 int ft_name(char **arg, t_command *c, char *line, int *i);
 void    ft_env_destroy(char **env);
+void    ft_sig_handler(int signum);
+void    ft_sig_handler_process(int signum);
+void    ft_init_signal(int nb);
 
 #endif
