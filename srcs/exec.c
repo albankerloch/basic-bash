@@ -207,7 +207,6 @@ int ft_exec_cmd(t_command *c, char *line, char ***envp)
     }
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
     {
-        printf("ok debut env\n");
         while (*envp && (*envp)[j])
         {
             ft_putstr_fd((*envp)[j], fd);
@@ -216,7 +215,6 @@ int ft_exec_cmd(t_command *c, char *line, char ***envp)
         }
         if (c->add != 0)
             close(fd);
-        printf("ok fin env\n");
         return (0);
     }
     else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
@@ -301,7 +299,7 @@ int ft_exec_cmd(t_command *c, char *line, char ***envp)
             j++;
         }
         env2[j] = NULL;
-//        ft_env_destroy(*envp);
+  //      ft_env_destroy(*envp);
         *envp = env2;
         return (0);
     }
