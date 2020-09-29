@@ -41,6 +41,11 @@ int	main(int argc, char *argv[], char *envp[])
 		if (ret == 1)
 			ft_putstr("<minishell> ");
 		ret = get_next_line(0, &line);
+		if (!ret)
+		{
+			ft_putstr("exit\n");
+			exit (0);
+		}
 		t = ft_lstnew(ft_command_construct());
 		if (!ft_parser(t, line, &env))
 			ft_exec(t, line, &env);
