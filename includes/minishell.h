@@ -56,6 +56,6 @@ int ft_name(char **arg, t_command *c, char *line, int *i);
 void    ft_env_destroy(char **env);
 void    ft_sig_handler(int signum);
 void    ft_sig_handler_process(int signum);
-void    ft_init_signal(int nb);
+void ft_sig_handler_quit(int signum);
 
 #endif
