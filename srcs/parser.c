@@ -13,7 +13,7 @@
 
 #include "../includes/minishell.h"
 
-int ft_parser(t_list *t, char *line, char ***env)
+int ft_parser(t_list *t, char *line, t_fix *fix)
 {
     int         i;
     int         k;
@@ -49,7 +49,7 @@ int ft_parser(t_list *t, char *line, char ***env)
                 c->arg = ft_realloc_arg(c->arg);
            ft_name(&(c->arg[k]), c, line, &i);
             if (c->env == 1 && ft_strncmp(c->arg[0], "unset", ft_strlen("unset")))
-                c->arg[k] = ft_env_var(c->arg[k], env);
+                c->arg[k] = ft_env_var(c->arg[k], fix);
         }
     }
     if (c->quote != 0)

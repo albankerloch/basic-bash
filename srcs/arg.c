@@ -27,16 +27,16 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
     return (0);
 }
 
-char    *ft_env_var(char *arg, char ***env)
+char    *ft_env_var(char *arg, t_fix *fix)
 {
     int j = 0;
     char    *new_arg;
 
-    while (*env && (*env)[j])
+    while (fix->env && fix->env[j])
     {
-        if ((*env)[j] && ft_strncmp((*env)[j], arg, ft_strlen(arg)) == 0 && (*env)[j][ft_strlen(arg)] == '=')
+        if (fix->env[j] && ft_strncmp(fix->env[j], arg, ft_strlen(arg)) == 0 && fix->env[j][ft_strlen(arg)] == '=')
         {
-            new_arg = ft_substr((*env)[j], ft_strlen(arg) + 1, ft_strlen((*env)[j]) - ft_strlen(arg) + 1);
+            new_arg = ft_substr(fix->env[j], ft_strlen(arg) + 1, ft_strlen(fix->env[j]) - ft_strlen(arg) + 1);
             free(arg);
             return (new_arg);
         }

@@ -19,6 +19,25 @@ t_command *ft_command_construct()
     return(c);
 }
 
+void   ft_fix_construct(t_fix **fix, char **envp)
+{
+    *fix = malloc(sizeof(t_fix));
+	int	len;
+
+    len = 0;
+	while (envp && envp[len])
+		len++;
+    len = 0;
+	(*fix)->env = malloc(sizeof(char **) * len + 1);
+	while (envp && envp[len])
+	{
+		(*fix)->env[len] = ft_strdup(envp[len]);
+		len++;
+	}
+	(*fix)->env[len] = NULL;
+    (*fix)->error = 1;
+}
+
 void    ft_command_destroy(void *c)
 {
     int     i;

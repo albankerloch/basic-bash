@@ -17,22 +17,10 @@ int	main(int argc, char *argv[], char *envp[])
 	char *line;
     t_command   *c;
 	t_list *t;
-	char **env;
-	int	len;
+	t_fix	*fix;
 	int	ret;
 
-	len = 0;
-	while (envp && envp[len])
-		len++;
-	env = malloc(sizeof(char **) * len + 1);
-	len = 0;
-	while (envp && envp[len])
-	{
-		env[len] = ft_strdup(envp[len]);
-		len++;
-	}
-	env[len] = NULL;
-
+	ft_fix_construct(&fix, envp);
 	ret = 1;
 	line = NULL;
 	while (1)
@@ -48,19 +36,8 @@ int	main(int argc, char *argv[], char *envp[])
 			exit (0);
 		}
 		t = ft_lstnew(ft_command_construct());
-		if (!ft_parser(t, line, &env))
-			ft_exec(t, line, &env);
-	/*	int j = 0;
-        while (env && env[j])
-        {
-            if (env[j] && ft_strncmp(env[j], "PWD", ft_strlen("PWD")) == 0)
-            {
-				ft_putstr(env[j]);
-            	ft_putchar('\n');
-			}
-            j++;
-        }*/
-
+		if (!ft_parser(t, line, fix))
+			ft_exec(t, line, fix);
 	//	ft_lstclear(&t, &ft_command_destroy);
 	}
 	//ft_env_destroy(env); //utilité ??

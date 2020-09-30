@@ -33,9 +33,16 @@ typedef struct s_command
   char  *n_out;
 }       t_command;
 
-int ft_parser(t_list *t, char *line, char ***env);
-void ft_exec(t_list *t, char *line, char ***envp);
-char    *ft_env_var(char *arg, char ***env);
+typedef struct s_fix
+{
+  int   error;
+  char **env;
+}       t_fix;
+
+int ft_parser(t_list *t, char *line, t_fix *fix);
+void ft_exec(t_list *t, char *line, t_fix *fix);
+char    *ft_env_var(char *arg, t_fix *fix);
+void   ft_fix_construct(t_fix **fix, char **envp);
 
 char *ft_realloc_concat(char *line, char c);
 int    ft_redirection_right(t_command *c, char *line, int *i, int *k);
@@ -49,9 +56,9 @@ void    ft_command_destroy(void *c);
 void    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
 int    ft_redir(t_command *c);
-int ft_exec_cmd(t_command *c, char *line, char ***envp);
-void fork_exec_cmd(t_command *c, char *line, char ***envp);
-int    ft_relative_path(t_command *c, char **envp);
+int ft_exec_cmd(t_command *c, char *line, t_fix *fix);
+void fork_exec_cmd(t_command *c, char *line, t_fix *fix);
+int    ft_relative_path(t_command *c, t_fix *fix);
 int ft_name(char **arg, t_command *c, char *line, int *i);
 void    ft_env_destroy(char **env);
 void    ft_sig_handler(int signum);
