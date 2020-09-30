@@ -2,16 +2,8 @@
 
 void ft_sig_handler(int signum)
 {
-	if (signum == SIGINT)
-	{
-		ft_putchar('\n');
-		ft_putstr("<minishell> ");
-		signal(SIGINT, ft_sig_handler);
-	}
-	if (signum == SIGQUIT)
-	{
-		//ft_putchar('A');
-	}
+	ft_putchar('\n');
+	ft_putstr("<minishell> ");
 }
 
 void ft_sig_handler_quit(int signum)

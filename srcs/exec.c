@@ -4,6 +4,7 @@ void ft_execve(t_command *c, char **envp)
 {
     int fd;
     int fdi;
+    int ret;
     
     if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
@@ -20,7 +21,11 @@ void ft_execve(t_command *c, char **envp)
         dup2(fdi, 0);
     }
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
-        execve(c->arg[0], c->arg, envp);
+    {
+        ret = execve(c->arg[0], c->arg, envp);
+        if (ret == -1)
+            exit(0);
+    }
     else
        ft_relative_path(c, envp);
     if (c->add == 1 || c->add == 2)
@@ -54,6 +59,8 @@ int    ft_relative_path(t_command *c, char **envp)
                     try_path = ft_realloc_concat(try_path, '/');
                     new = ft_strjoin(try_path, c->arg[0]);
                     ret = execve(new, c->arg, envp);
+                    if (ret == -1)
+                        exit(0);
                     //si pas d'exit, c'est que execve return -1 -> alors cherche le chemin suivant de la variable PATH
                     free(try_path);
                     try_path = malloc(1);
@@ -304,7 +311,10 @@ int ft_exec_cmd(t_command *c, char *line, char ***envp)
         return (0);
     }
     else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
+    {
+        ft_putstr("exit\n");
         exit(0);
+    }
     return (-1);
 }
 
@@ -314,11 +324,6 @@ void    fork_exec_cmd(t_command *c, char *line, char ***envp)
     char    ***p;
     int ret;
     
-    if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
-    {
-        ft_putstr("exit\n");
-        exit (0);
-    }
     ret = ft_exec_cmd(c, line, envp);
     if (ret == -1)
     {
