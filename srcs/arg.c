@@ -8,7 +8,7 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
         ft_skip_quotes(line, i, &(c->quote));
         ft_backslash(line, i, &(c->quote));
         
-        if (line[*i] == '$' && c->quote != 1)
+        if (line[*i] == '$' && line[*i + 1] != '?' && c->quote != 1)
         {
             c->env = 1;
             (*i)++;

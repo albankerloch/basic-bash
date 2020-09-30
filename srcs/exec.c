@@ -197,17 +197,22 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
     {
        
         i = 1;
-        if (ft_strncmp(c->arg[1], "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(c->arg[1]))
+        if (ft_strncmp(c->arg[i], "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(c->arg[i]))
         {
             n = 1;
             i++;
         }
-        while(c->arg[i])
+        if (ft_strncmp(c->arg[i], "$?", ft_strlen("$?")) == 0 && ft_strlen("$?") == ft_strlen(c->arg[i]))
+            ft_putnbr_fd(fix->error, fd);
+        else
         {
-            ft_putstr_fd(c->arg[i], fd);
-            if (c->arg[i + 1])
-                ft_putchar_fd(' ', fd);
-            i++;
+            while(c->arg[i])
+            {
+                ft_putstr_fd(c->arg[i], fd);
+                if (c->arg[i + 1])
+                    ft_putchar_fd(' ', fd);
+                i++;
+            }
         }
         if (n == 0)
             ft_putchar_fd('\n', fd);
