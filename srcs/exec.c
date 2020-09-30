@@ -6,6 +6,7 @@ void ft_execve(t_command *c, char **envp)
     int fdi;
     int ret;
     
+    ret = 0;
     if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
@@ -42,6 +43,7 @@ int    ft_relative_path(t_command *c, char **envp)
     char *new;
     int ret;
 
+    ret = 0;
     try_path = malloc(1);
     try_path[0] = '\0';
     j = 0;
@@ -59,22 +61,23 @@ int    ft_relative_path(t_command *c, char **envp)
                     try_path = ft_realloc_concat(try_path, '/');
                     new = ft_strjoin(try_path, c->arg[0]);
                     ret = execve(new, c->arg, envp);
-                    if (ret == -1)
-                        exit(0);
+                    
                     //si pas d'exit, c'est que execve return -1 -> alors cherche le chemin suivant de la variable PATH
                     free(try_path);
                     try_path = malloc(1);
                     try_path[0] = '\0';
                     free(new);
-                 //   printf("relative ret = %d\n", ret);
                     if (ret == 0)
                         return (0);
+                 //   printf("relative ret = %d\n", ret);
                 }
                 k++;
             }
         }
         j++;
     }
+    if (ret == -1)
+        exit(0);
     return (0);
 }
 
