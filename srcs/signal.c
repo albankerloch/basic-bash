@@ -6,23 +6,10 @@ void ft_sig_handler(int signum)
 	ft_putstr("<minishell> ");
 }
 
-void ft_sig_handler_quit(int signum)
-{
-	ft_putstr("AA\n");
-	printf("signum : %d\n", signum);
-}
-
 void ft_sig_handler_process(int signum)
 {
-  if (signum == SIGINT)
-	{
-		ft_putchar('\n');
-		signal(SIGINT, ft_sig_handler_process);
-	}
-	if (signum == SIGQUIT)
-	{
-		ft_putchar('\n');
-	}
+	ft_putchar('\n');
+	signal(SIGINT, ft_sig_handler_process);
 }
 
 /*
