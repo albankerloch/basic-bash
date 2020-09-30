@@ -23,9 +23,9 @@ void ft_execve(t_command *c, t_fix *fix)
     }
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
     {
-        ret = execve(c->arg[0], c->arg, fix->env);
+        fix->error = execve(c->arg[0], c->arg, fix->env);
         if (ret == -1)
-            exit(0);
+            exit(-1);
     }
     else
        ft_relative_path(c, fix);
@@ -61,7 +61,6 @@ int    ft_relative_path(t_command *c, t_fix *fix)
                     try_path = ft_realloc_concat(try_path, '/');
                     new = ft_strjoin(try_path, c->arg[0]);
                     ret = execve(new, c->arg, fix->env);
-                    
                     //si pas d'exit, c'est que execve return -1 -> alors cherche le chemin suivant de la variable PATH
                     free(try_path);
                     try_path = malloc(1);
@@ -77,7 +76,7 @@ int    ft_relative_path(t_command *c, t_fix *fix)
         j++;
     }
     if (ret == -1)
-        exit(0);
+        exit(-1);
     return (0);
 }
 
@@ -341,6 +340,6 @@ void    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         if (pidf == 0)
             ft_execve(c, fix);
         else
-            (void)wait(NULL);
+            wait(&(fix->error));
     }
 }
