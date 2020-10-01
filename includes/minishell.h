@@ -41,7 +41,8 @@ typedef struct s_fix
 
 int     ft_parser(t_list *t, char *line, t_fix *fix);
 void    ft_exec(t_list *t, char *line, t_fix *fix);
-char    *ft_env_var(char *arg, t_fix *fix);
+//char    *ft_env_var(char *arg, t_fix *fix);
+char    *ft_env_var(char **arg, int i, t_fix *fix);
 void    ft_fix_construct(t_fix *fix, char **envp);
 char    *ft_realloc_concat(char *line, char c);
 int     ft_redirection_right(t_command *c, char *line, int *i, int *k);

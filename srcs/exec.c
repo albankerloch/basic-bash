@@ -207,6 +207,12 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
         {
             while(c->arg[i])
             {
+              //  printf("arg=%s env=%d\n", c->arg[i], c->env);
+                if (c->arg[i][0] == '$')
+                {
+                    c->arg[i] = ft_env_var(c->arg, i, fix);
+                    
+                }
                 ft_putstr_fd(c->arg[i], fd);
                 if (c->arg[i + 1])
                     ft_putchar_fd(' ', fd);

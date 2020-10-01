@@ -8,11 +8,11 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
         ft_skip_quotes(line, i, &(c->quote));
         ft_backslash(line, i, &(c->quote));
         
-        if (line[*i] == '$' && line[*i + 1] != '?' && c->quote != 1)
+     /*   if (line[*i] == '$' && line[*i + 1] != '?' && c->quote != 1)
         {
             c->env = 1;
-            (*i)++;
-        }
+           // (*i)++;
+        }*/
         *arg = ft_realloc_concat(*arg, line[*i]);
         (*i)++;
         if ((line[*i] == '\"' && c->quote == 2) || (line[*i] == '\'' && c->quote == 1))
@@ -27,16 +27,21 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
     return (0);
 }
 
-char    *ft_env_var(char *arg, t_fix *fix)
+char    *ft_env_var(char **arg, int i, t_fix *fix)
 {
     int j = 0;
     char    *new_arg;
+    char    *temp;
 
+   // printf("ENV VAR arg 0 =%s\n", arg[0]);
+    temp = ft_substr(arg[i], 1, ft_strlen(arg[i]));
+ //   printf("temp =%s\n", temp);
     while (fix->env && fix->env[j])
     {
-        if (fix->env[j] && ft_strncmp(fix->env[j], arg, ft_strlen(arg)) == 0 && fix->env[j][ft_strlen(arg)] == '=')
+     //   printf("%s ret strncmp=%d car=%c\n", fix->env[j], ft_strncmp(fix->env[j], temp, ft_strlen(temp)), fix->env[j][ft_strlen(temp)]);
+        if (fix->env[j] && ft_strncmp(fix->env[j], temp, ft_strlen(temp)) == 0 && fix->env[j][ft_strlen(temp)] == '=')
         {
-            new_arg = ft_substr(fix->env[j], ft_strlen(arg) + 1, ft_strlen(fix->env[j]) - ft_strlen(arg) + 1);
+            new_arg = ft_substr(fix->env[j], ft_strlen(temp) + 1, ft_strlen(fix->env[j]) - ft_strlen(temp) + 1);
             free(arg);
             return (new_arg);
         }
