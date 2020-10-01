@@ -43,7 +43,7 @@ int	main(int argc, char *argv[], char *envp[])
 			r = ft_exec(t, line, &fix);
 			if (r != 0)
 			{
-				printf(" return : %d\n", r);
+				//printf(" return : %d\n", r);
 				if (r == -1)
 					r = EXIT_FAILURE;
 				ft_exit(&fix, t, line, r);

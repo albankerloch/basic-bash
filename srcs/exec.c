@@ -324,8 +324,8 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
     else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
     {
         ft_putstr("exit\n");
-        //a remplacer par ft_atoi
-        return (3);
+        //erreur si arg 1 n'est pas un nombre ou s'il y a trop d'arguments
+        return (ft_atoi(c->arg[1]));
     }
     return (1);
 }
