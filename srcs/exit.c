@@ -1,5 +1,12 @@
 #include "../includes/minishell.h"
 
+void    ft_exit(t_fix *fix, t_list *t, char *line, int e)
+{
+    free(line);
+	ft_lstclear(&t, &ft_del_command);
+    ft_exit_fix(fix, -2, e);
+}
+
 t_command  *ft_free_part_command(t_command *c, int i)
 {    
     if (i >= 1)

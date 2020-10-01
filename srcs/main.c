@@ -31,17 +31,17 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_putstr("<minishell> ");
 		line = NULL;
 		ret = get_next_line(0, &line);
-		if (ret == 0 || ret == -1)
+		if (ret == 0)
 		{
-			ft_putstr("exit\n");
-			free(line);
-			ft_lstclear(&t, &ft_del_command);
-			if (ret == 0)
-				ft_exit_fix(&fix, -2, EXIT_SUCCESS);
-			ft_exit_fix(&fix, -2, EXIT_FAILURE);
+			ft_putstr("exit Ctrl+D\n");
+			ft_exit(&fix, t, line, EXIT_SUCCESS);
 		}
+		if (ret == -1)
+			ft_exit(&fix, t, line, EXIT_FAILURE);
 		if (!(r = ft_parser(t, line, &fix)))
 			ft_exec(t, line, &fix);
+		else
+			ft_exit(&fix, t, line, EXIT_FAILURE);
 		//printf(" return parser : %d\n", r);
 		//(void)r;
 		free(line);

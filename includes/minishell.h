@@ -69,5 +69,6 @@ t_command  *ft_free_part_command(t_command *c, int i);
 t_list  *ft_init_list(t_fix *fix);
 t_list  *ft_add_list(t_list *t, t_fix *fix);
 void    ft_del_command(void *c);
+void    ft_exit(t_fix *fix, t_list *t, char *line, int e);
 
 #endif
