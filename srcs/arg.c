@@ -12,6 +12,7 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
             c->env = 1;
             (*i)++;
         }
+        //printf(" ft_name : |%s| |%c|\n", *arg, line[*i]);
         if(!(*arg = ft_realloc_concat(*arg, line[*i])))
             return (-1);
         (*i)++;

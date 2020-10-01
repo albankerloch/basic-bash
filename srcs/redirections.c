@@ -21,7 +21,7 @@ int    ft_redir_right(t_command *c, char *line, int *i, int *k)
 {
     while (line[*i] == ' ')
         (*i)++;
-    if(!(ft_name(&(c->n_out), c, line, i)))
+    if(ft_name(&(c->n_out), c, line, i))
         return (-1);
     if (c->quote != 0)
     {
@@ -59,7 +59,8 @@ int    ft_redirection_left(t_command *c, char *line, int *i, int *k)
     }
     while (line[*i] != ' ' && line[*i] != '\0')
     {
-        c->n_input = ft_realloc_concat(c->n_input, line[*i]);
+        if(!(c->n_input = ft_realloc_concat(c->n_input, line[*i])))
+            return (-1);
         *i = *i + 1;
     }
     return (ft_checkfile(c));

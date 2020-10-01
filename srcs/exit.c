@@ -52,5 +52,7 @@ void    ft_exit_fix(t_fix *fix, int i, int e)
         t++;
     }
     free(fix->env);
+    if (e == EXIT_FAILURE)
+        ft_putstr("malloc error\n");
     exit(e);
 }

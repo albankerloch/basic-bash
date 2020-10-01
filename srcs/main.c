@@ -18,6 +18,7 @@ int	main(int argc, char *argv[], char *envp[])
 	char *line;
 	t_list *t;
 	int	ret;
+	int r;
 
 	ft_fix_construct(&fix, envp);
 	ret = 1;
@@ -39,8 +40,10 @@ int	main(int argc, char *argv[], char *envp[])
 				ft_exit_fix(&fix, -2, EXIT_SUCCESS);
 			ft_exit_fix(&fix, -2, EXIT_FAILURE);
 		}
-		if (!ft_parser(t, line, &fix))
+		if (!(r = ft_parser(t, line, &fix)))
 			ft_exec(t, line, &fix);
+		//printf(" return parser : %d\n", r);
+		//(void)r;
 		free(line);
 		ft_lstclear(&t, &ft_del_command);
 	}

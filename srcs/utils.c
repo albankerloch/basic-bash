@@ -11,6 +11,7 @@ char	*ft_realloc_concat(char *line, char c)
 	new[ft_strlen(line)] = c;
 	new[ft_strlen(line) + 1] = '\0';
 	free(line);
+	//printf(" new = |%s|\n", new);
 	return (new);
 }
 
@@ -45,6 +46,7 @@ char	**ft_realloc_arg(char **arg)
 		i++;
 	}
 	new[i] = malloc(1);
+	new[i][0] = '\0';
 	new[i + 1] = NULL;
 	free(arg);
 	return (new);

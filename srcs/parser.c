@@ -28,13 +28,13 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
             // si on est au début d'une redirection
         else if (line[i] == '>')
         {
-            if(!(ft_redirection_right(t->content, line, &i, &k)))
-                return (1);
+            if(ft_redirection_right(t->content, line, &i, &k))
+                return (-1);
         }
         else if (line[i] == '<')
         {
-            if (ft_redirection_left(t->content, line, &i, &k))
-                return (1);
+            if(ft_redirection_left(t->content, line, &i, &k))
+                return (-1);
         }
         else if (line[i] == '|')
         {
@@ -53,12 +53,11 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
                 if(!(c->arg = ft_realloc_arg(c->arg)))
                     return (-1);
             }
-            if (!(ft_name(&(c->arg[k]), c, line, &i)))
+            if(ft_name(&(c->arg[k]), c, line, &i))
                 return (-1);
             if (c->env == 1 && ft_strncmp(c->arg[0], "unset", ft_strlen("unset")))
             {
-                if(!(c->arg[k] = ft_env_var(c->arg[k], fix)))
-                    return (-1);
+                c->arg[k] = ft_env_var(c->arg[k], fix);
             }
         }
     }
