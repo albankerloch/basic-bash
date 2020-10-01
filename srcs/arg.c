@@ -30,9 +30,10 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
 
 char    *ft_env_var(char *arg, t_fix *fix)
 {
-    int j = 0;
+    int     j;
     char    *new_arg;
 
+    j = 0;
     while (fix->env && fix->env[j])
     {
         if (fix->env[j] && ft_strncmp(fix->env[j], arg, ft_strlen(arg)) == 0 && fix->env[j][ft_strlen(arg)] == '=')
