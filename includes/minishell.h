@@ -63,9 +63,11 @@ void    ft_env_destroy(char **env);
 void    ft_sig_handler(int signum);
 void    ft_sig_handler_process(int signum);
 void    ft_sig_handler_quit(int signum);
-void    ft_exit_fix(t_fix *fix, int i);
+void    ft_exit_fix(t_fix *fix, int i, int e);
 void    ft_free_command(t_command *c);
 t_command  *ft_free_part_command(t_command *c, int i);
 t_list  *ft_init_list(t_fix *fix);
+t_list  *ft_add_list(t_list *t, t_fix *fix);
+void    ft_del_command(void *c);
 
 #endif

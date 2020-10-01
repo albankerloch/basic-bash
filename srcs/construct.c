@@ -1,17 +1,35 @@
 #include "../includes/minishell.h"
 
+t_list *ft_add_list(t_list *t, t_fix *fix)
+{
+    t_command   *c;
+
+    if(!(c = ft_command_construct()))
+    {
+        ft_lstclear(&t, &ft_del_command);
+		ft_exit_fix(fix, -2, EXIT_FAILURE);
+    }
+	if(!(t = ft_lstnew(c)))
+	{
+		ft_free_command(c);
+		ft_lstclear(&t, &ft_del_command);
+		ft_exit_fix(fix, -2, EXIT_FAILURE);
+	}
+    return(t);
+}
+
 t_list *ft_init_list(t_fix *fix)
 {
     t_list *t;
     t_command   *c;
 
     if(!(c = ft_command_construct()))
-		ft_exit_fix(fix, -2);
+		ft_exit_fix(fix, -2, EXIT_FAILURE);
 	if(!(t = ft_lstnew(c)))
 	{
 		ft_free_command(c);
 		free(t);
-		ft_exit_fix(fix, -2);
+		ft_exit_fix(fix, -2, EXIT_FAILURE);
 	}
     return(t);
 }
@@ -53,12 +71,12 @@ void   ft_fix_construct(t_fix *fix, char **envp)
 	while (envp && envp[len])
 		len++;
 	if(!(fix->env = malloc(sizeof(char **) * len + 1)))
-        ft_exit_fix(fix, -1);
+        ft_exit_fix(fix, -1, EXIT_FAILURE);
     len = 0;
 	while (envp && envp[len])
 	{
 		if(!(fix->env[len] = ft_strdup(envp[len])))
-            ft_exit_fix(fix, len);
+            ft_exit_fix(fix, len, EXIT_FAILURE);
 		len++;
 	}
 	fix->env[len] = NULL;

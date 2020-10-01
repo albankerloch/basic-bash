@@ -14,6 +14,11 @@ t_command  *ft_free_part_command(t_command *c, int i)
     return (NULL);
 }
 
+void    ft_del_command(void *c)
+{
+    ft_free_command(c);
+}
+
 void    ft_free_command(t_command *c)
 {
     int i;
@@ -30,7 +35,7 @@ void    ft_free_command(t_command *c)
 	free(c);
 }
 
-void    ft_exit_fix(t_fix *fix, int i)
+void    ft_exit_fix(t_fix *fix, int i, int e)
 {
     int t;
 
@@ -47,5 +52,5 @@ void    ft_exit_fix(t_fix *fix, int i)
         t++;
     }
     free(fix->env);
-    exit(EXIT_FAILURE);
+    exit(e);
 }
