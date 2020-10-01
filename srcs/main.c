@@ -14,10 +14,10 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
+	t_fix	fix;
 	char *line;
     t_command   *c;
 	t_list *t;
-	t_fix	*fix;
 	int	ret;
 
 	ft_fix_construct(&fix, envp);
@@ -36,10 +36,11 @@ int	main(int argc, char *argv[], char *envp[])
 			exit (0);
 		}
 		t = ft_lstnew(ft_command_construct());
-		if (!ft_parser(t, line, fix))
-			ft_exec(t, line, fix);
+		if (!ft_parser(t, line, &fix))
+			ft_exec(t, line, &fix);
 	//	ft_lstclear(&t, &ft_command_destroy);
 	}
 	//ft_env_destroy(env); //utilité ??
+	ft_exit_fix(&fix, -2);
 	return (0);
 }

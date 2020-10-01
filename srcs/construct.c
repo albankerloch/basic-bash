@@ -19,23 +19,29 @@ t_command *ft_command_construct()
     return(c);
 }
 
-void   ft_fix_construct(t_fix **fix, char **envp)
+void   ft_fix_construct(t_fix *fix, char **envp)
 {
-    *fix = malloc(sizeof(t_fix));
 	int	len;
-
+    
+    /*if(!(*fix = malloc(sizeof(t_fix))))
+    {
+        free(*fix);
+        //exit(EXIT_FAILURE);
+    }*/
     len = 0;
 	while (envp && envp[len])
 		len++;
+	if(!(fix->env = malloc(sizeof(char **) * len + 1)))
+        ft_exit_fix(fix, -1);
     len = 0;
-	(*fix)->env = malloc(sizeof(char **) * len + 1);
 	while (envp && envp[len])
 	{
-		(*fix)->env[len] = ft_strdup(envp[len]);
+		if(!(fix->env[len] = ft_strdup(envp[len])))
+            ft_exit_fix(fix, len);
 		len++;
 	}
-	(*fix)->env[len] = NULL;
-    (*fix)->error = 1;
+	fix->env[len] = NULL;
+    fix->error = 1;
 }
 
 void    ft_command_destroy(void *c)
