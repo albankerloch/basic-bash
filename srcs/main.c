@@ -39,10 +39,18 @@ int	main(int argc, char *argv[], char *envp[])
 		if (ret == -1)
 			ft_exit(&fix, t, line, EXIT_FAILURE);
 		if (!(r = ft_parser(t, line, &fix)))
-			ft_exec(t, line, &fix);
+		{
+			r = ft_exec(t, line, &fix);
+			if (r != 0)
+			{
+				printf(" return : %d\n", r);
+				if (r == -1)
+					r = EXIT_FAILURE;
+				ft_exit(&fix, t, line, r);
+			}
+		}
 		else
 			ft_exit(&fix, t, line, EXIT_FAILURE);
-		//printf(" return parser : %d\n", r);
 		//(void)r;
 		free(line);
 		ft_lstclear(&t, &ft_del_command);

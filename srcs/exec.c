@@ -324,7 +324,8 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
     else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
     {
         ft_putstr("exit\n");
-        exit(0);
+        //a remplacer par ft_atoi
+        return (3);
     }
     return (1);
 }
@@ -338,6 +339,7 @@ int    ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     ret = ft_exec_cmd(c, line, fix);
     if (ret == 1)
     {
+        ret = 0;
         pidf = fork();
         signal(SIGINT, ft_sig_handler_process);
 		signal(SIGQUIT, SIG_DFL);
