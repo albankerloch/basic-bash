@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-void ft_execve(t_command *c, t_fix *fix)
+int ft_execve(t_command *c, t_fix *fix)
 {
     int fd;
     int fdi;
@@ -33,6 +33,7 @@ void ft_execve(t_command *c, t_fix *fix)
         close(fd);
     if (c->input == 1)
         close(fdi);
+    return (0);
 }
 
 int    ft_relative_path(t_command *c, t_fix *fix)
@@ -134,7 +135,7 @@ void aff_list(t_list *begin)
     }
 }
 
-void ft_exec(t_list *t, char *line, t_fix *fix)
+int ft_exec(t_list *t, char *line, t_fix *fix)
 {
     pid_t   pid;
     pid_t   pid2;
@@ -145,7 +146,7 @@ void ft_exec(t_list *t, char *line, t_fix *fix)
 
     //aff_list(t);
     if (!t->next)
-        fork_exec_cmd(t->content, line, fix);
+        ft_fork_exec_cmd(t->content, line, fix);
     else
     {
         pipe(pipe_fd);
@@ -157,7 +158,7 @@ void ft_exec(t_list *t, char *line, t_fix *fix)
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
 
-            fork_exec_cmd(t->content, line, fix);
+            ft_fork_exec_cmd(t->content, line, fix);
     
             dup2(save_fd, 1);
             close(save_fd);
@@ -181,6 +182,7 @@ void ft_exec(t_list *t, char *line, t_fix *fix)
             (void)wait(NULL);
         }
     }
+    return (0);
 }
 
 int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
@@ -322,17 +324,17 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
         ft_putstr("exit\n");
         exit(0);
     }
-    return (-1);
+    return (1);
 }
 
-void    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
+int    ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix)
 {
     pid_t   pidf;
     char    ***p;
     int ret;
     
     ret = ft_exec_cmd(c, line, fix);
-    if (ret == -1)
+    if (ret == 1)
     {
         pidf = fork();
         signal(SIGINT, ft_sig_handler_process);
@@ -342,4 +344,5 @@ void    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         else
             wait(&(fix->error));
     }
+    return (0);
 }
