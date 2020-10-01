@@ -146,7 +146,7 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
 
     //aff_list(t);
     if (!t->next)
-        ft_fork_exec_cmd(t->content, line, fix);
+        return(ft_fork_exec_cmd(t->content, line, fix));
     else
     {
         pipe(pipe_fd);
@@ -157,9 +157,7 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             close(pipe_fd[0]);
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
-
             ft_fork_exec_cmd(t->content, line, fix);
-    
             dup2(save_fd, 1);
             close(save_fd);
            
@@ -252,7 +250,8 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
     {
         while (fix->env && fix->env[j])
             j++;
-        env2 = malloc(sizeof(char **) * j + 2);
+        if (!(env2 = malloc(sizeof(char **) * j + 2)))
+            return (-1);
         j = 0;
         while (fix->env && fix->env[j])
         {
@@ -277,7 +276,8 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
         }
         if (j == l || c->env == 1)
             return (0);
-        env2 = malloc(sizeof(char **) * j);
+        if (!(env2 = malloc(sizeof(char **) * j)))
+            return (-1);
         j = 0;
         int i = 0;
         while (fix->env && fix->env[j])
@@ -297,11 +297,13 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
     {
         int ret = chdir(c->arg[1]);
         char *buf;
-        buf = malloc(sizeof(char) * PATH_MAX);
+        if (!(buf = malloc(sizeof(char) * PATH_MAX)))
+            return (-1);
         getcwd(buf, PATH_MAX);
         while (fix->env && fix->env[j])
             j++;
-        env2 = malloc(sizeof(char **) * j + 1);
+        if (!(env2 = malloc(sizeof(char **) * j + 1)))
+            return (-1);
         j = 0;
         while (fix->env && fix->env[j])
         {
@@ -331,7 +333,7 @@ int    ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix)
 {
     pid_t   pidf;
     char    ***p;
-    int ret;
+    int     ret;
     
     ret = ft_exec_cmd(c, line, fix);
     if (ret == 1)
@@ -344,5 +346,5 @@ int    ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         else
             wait(&(fix->error));
     }
-    return (0);
+    return (ret);
 }
