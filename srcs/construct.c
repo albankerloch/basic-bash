@@ -1,20 +1,41 @@
 #include "../includes/minishell.h"
 
+t_list *ft_init_list(t_fix *fix)
+{
+    t_list *t;
+    t_command   *c;
+
+    if(!(c = ft_command_construct()))
+		ft_exit_fix(fix, -2);
+	if(!(t = ft_lstnew(c)))
+	{
+		ft_free_command(c);
+		free(t);
+		ft_exit_fix(fix, -2);
+	}
+    return(t);
+}
+
 t_command *ft_command_construct()
 {
     t_command *c;
 
-    c = malloc(sizeof(t_command));
+    if(!(c = malloc(sizeof(t_command))))
+        return (ft_free_part_command(c, 0));
     c->input = 0;
-    c->n_input = malloc(1);
+    if(!(c->n_input = malloc(1)))
+        return (ft_free_part_command(c, 1));
     c->n_input[0] = '\0';
     c->add = 0;
     c->quote = 0;
     c->env = 0;
-    c->n_out = malloc(1);
+    if(!(c->n_out = malloc(1)))
+        return (ft_free_part_command(c, 2));
     c->n_out[0] = '\0';
-    c->arg = malloc(sizeof(char*));
-    c->arg[0] = malloc(1);
+    if(!(c->arg = malloc(sizeof(char*))))
+        return (ft_free_part_command(c, 3));
+    if(!(c->arg[0] = malloc(1)))
+        return (ft_free_part_command(c, 4));
     c->arg[0][0] = '\0';
     return(c);
 }
