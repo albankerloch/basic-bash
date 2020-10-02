@@ -11,6 +11,7 @@ char	*ft_realloc_concat(char *line, char c)
 	new[ft_strlen(line)] = c;
 	new[ft_strlen(line) + 1] = '\0';
 	free(line);
+	//printf(" new = |%s|\n", new);
 	return (new);
 }
 
@@ -26,10 +27,25 @@ void ft_check(char **new)
     }
 }
 
+static char **ft_realloc_arg_free(char **new, int i)
+{
+	int k;
+
+	k = 0;
+	while (k < i)
+	{
+		free(new[k]);
+		k++;
+	}
+	free(new);
+	return (NULL);
+}
+
 char	**ft_realloc_arg(char **arg)
 {
 	char	**new;
 	int		i;
+	int		k;
 
 	i = 0;
 	while (arg[i])
@@ -39,12 +55,15 @@ char	**ft_realloc_arg(char **arg)
 	i = 0;
 	while (arg[i])
 	{
-		new[i] = ft_strdup(arg[i]);
+		if(!(new[i] = ft_strdup(arg[i])))
+			return (ft_realloc_arg_free(new, i));
 	//	printf("pre free while realloc arg %s i=%d\n", arg[i], i);
 		free(arg[i]);
 		i++;
 	}
-	new[i] = malloc(1);
+	if(!(new[i] = malloc(1)))
+		return (ft_realloc_arg_free(new, i));
+	new[i][0] = '\0';
 	new[i + 1] = NULL;
 	free(arg);
 	return (new);

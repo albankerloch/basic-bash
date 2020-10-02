@@ -5,6 +5,8 @@ SRCS_NAME	= 	main.c \
 					quotes.c \
 					construct.c \
 					signal.c \
+					exit.c \
+					ft_atoi.c \
 					redirections.c \
 					arg.c
 
