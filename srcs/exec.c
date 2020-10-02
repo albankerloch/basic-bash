@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int ft_execve(t_command *c, t_fix *fix)
+void ft_execve(t_command *c, t_fix *fix)
 {
     int fd;
     int fdi;
@@ -33,7 +33,6 @@ int ft_execve(t_command *c, t_fix *fix)
         close(fd);
     if (c->input == 1)
         close(fdi);
-    return (0);
 }
 
 int    ft_relative_path(t_command *c, t_fix *fix)
@@ -135,7 +134,7 @@ void aff_list(t_list *begin)
     }
 }
 
-int ft_exec(t_list *t, char *line, t_fix *fix)
+void ft_exec(t_list *t, char *line, t_fix *fix)
 {
     pid_t   pid;
     pid_t   pid2;
@@ -146,7 +145,7 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
 
     //aff_list(t);
     if (!t->next)
-        return(ft_fork_exec_cmd(t->content, line, fix));
+        fork_exec_cmd(t->content, line, fix);
     else
     {
         pipe(pipe_fd);
@@ -157,7 +156,9 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             close(pipe_fd[0]);
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
-            ft_fork_exec_cmd(t->content, line, fix);
+
+            fork_exec_cmd(t->content, line, fix);
+    
             dup2(save_fd, 1);
             close(save_fd);
            
@@ -180,7 +181,6 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             (void)wait(NULL);
         }
     }
-    return (0);
 }
 
 int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
@@ -250,8 +250,7 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
     {
         while (fix->env && fix->env[j])
             j++;
-        if (!(env2 = malloc(sizeof(char **) * j + 2)))
-            return (-1);
+        env2 = malloc(sizeof(char **) * j + 2);
         j = 0;
         while (fix->env && fix->env[j])
         {
@@ -276,8 +275,7 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
         }
         if (j == l || c->env == 1)
             return (0);
-        if (!(env2 = malloc(sizeof(char **) * j)))
-            return (-1);
+        env2 = malloc(sizeof(char **) * j);
         j = 0;
         int i = 0;
         while (fix->env && fix->env[j])
@@ -297,13 +295,11 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
     {
         int ret = chdir(c->arg[1]);
         char *buf;
-        if (!(buf = malloc(sizeof(char) * PATH_MAX)))
-            return (-1);
+        buf = malloc(sizeof(char) * PATH_MAX);
         getcwd(buf, PATH_MAX);
         while (fix->env && fix->env[j])
             j++;
-        if (!(env2 = malloc(sizeof(char **) * j + 1)))
-            return (-1);
+        env2 = malloc(sizeof(char **) * j + 1);
         j = 0;
         while (fix->env && fix->env[j])
         {
@@ -324,22 +320,20 @@ int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
     else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
     {
         ft_putstr("exit\n");
-        //erreur si arg 1 n'est pas un nombre ou s'il y a trop d'arguments
-        return (ft_atoi(c->arg[1]));
+        exit(0);
     }
-    return (1);
+    return (-1);
 }
 
-int    ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix)
+void    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
 {
     pid_t   pidf;
     char    ***p;
-    int     ret;
+    int ret;
     
     ret = ft_exec_cmd(c, line, fix);
-    if (ret == 1)
+    if (ret == -1)
     {
-        ret = 0;
         pidf = fork();
         signal(SIGINT, ft_sig_handler_process);
 		signal(SIGQUIT, SIG_DFL);
@@ -348,5 +342,4 @@ int    ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         else
             wait(&(fix->error));
     }
-    return (ret);
 }

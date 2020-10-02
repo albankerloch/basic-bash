@@ -14,51 +14,32 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	t_fix	fix;
 	char *line;
+    t_command   *c;
 	t_list *t;
+	t_fix	*fix;
 	int	ret;
-	int r;
 
 	ft_fix_construct(&fix, envp);
 	ret = 1;
+	line = NULL;
 	while (1)
 	{
-		t = ft_init_list(&fix);
 		signal(SIGINT, ft_sig_handler);
 		signal(SIGQUIT, SIG_IGN);
 		if (ret == 1)
 			ft_putstr("<minishell> ");
-		line = NULL;
 		ret = get_next_line(0, &line);
-		if (ret == 0)
+		if (!ret)
 		{
-			ft_putstr("exit Ctrl+D\n");
-			ft_exit(&fix, t, line, EXIT_SUCCESS);
+			ft_putstr("exit\n");
+			exit (0);
 		}
-		if (ret == -1)
-			ft_exit(&fix, t, line, EXIT_FAILURE);
-		if (!(r = ft_parser(t, line, &fix)))
-		{
-			r = ft_exec(t, line, &fix);
-			if (r != 0)
-			{
-				//printf(" return : %d\n", r);
-				if (r == -1)
-					r = EXIT_FAILURE;
-				ft_exit(&fix, t, line, r);
-			}
-		}
-		else
-			ft_exit(&fix, t, line, EXIT_FAILURE);
-		//(void)r;
-		free(line);
-		ft_lstclear(&t, &ft_del_command);
+		t = ft_lstnew(ft_command_construct());
+		if (!ft_parser(t, line, fix))
+			ft_exec(t, line, fix);
+	//	ft_lstclear(&t, &ft_command_destroy);
 	}
-	/*
-	ft_free_command(t->content);
-	free(t);
-	ft_exit_fix(&fix, -2, 0);
-	*/
+	//ft_env_destroy(env); //utilité ??
 	return (0);
 }

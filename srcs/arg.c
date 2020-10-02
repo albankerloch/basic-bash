@@ -7,14 +7,13 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
      //   printf("line[%d]=%c quote=%d k=%d\n", *i, line[*i], c->quote, *k);
         ft_skip_quotes(line, i, &(c->quote));
         ft_backslash(line, i, &(c->quote));
+        
         if (line[*i] == '$' && line[*i + 1] != '?' && c->quote != 1)
         {
             c->env = 1;
             (*i)++;
         }
-        //printf(" ft_name : |%s| |%c|\n", *arg, line[*i]);
-        if(!(*arg = ft_realloc_concat(*arg, line[*i])))
-            return (-1);
+        *arg = ft_realloc_concat(*arg, line[*i]);
         (*i)++;
         if ((line[*i] == '\"' && c->quote == 2) || (line[*i] == '\'' && c->quote == 1))
         {
@@ -30,23 +29,20 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
 
 char    *ft_env_var(char *arg, t_fix *fix)
 {
-    int     j;
+    int j = 0;
     char    *new_arg;
 
-    j = 0;
     while (fix->env && fix->env[j])
     {
         if (fix->env[j] && ft_strncmp(fix->env[j], arg, ft_strlen(arg)) == 0 && fix->env[j][ft_strlen(arg)] == '=')
         {
-            if(!(new_arg = ft_substr(fix->env[j], ft_strlen(arg) + 1, ft_strlen(fix->env[j]) - ft_strlen(arg) + 1)))
-                return (NULL);
+            new_arg = ft_substr(fix->env[j], ft_strlen(arg) + 1, ft_strlen(fix->env[j]) - ft_strlen(arg) + 1);
             free(arg);
             return (new_arg);
         }
         j++;
     }
-    if(!(new_arg = malloc(1)))
-        return (NULL);
+    new_arg = malloc(1);
     new_arg[0] = '\0';
     free(arg);
     return (new_arg);

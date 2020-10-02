@@ -21,8 +21,13 @@ int    ft_redir_right(t_command *c, char *line, int *i, int *k)
 {
     while (line[*i] == ' ')
         (*i)++;
-    if(ft_name(&(c->n_out), c, line, i))
-        return (-1);
+   /* if (c->n_out[0] != '\0')
+    {
+        free(c->n_out);
+        c->n_out = malloc(1);
+        c->n_out[0] = '\0';
+    }*/
+    ft_name(&(c->n_out), c, line, i);
     if (c->quote != 0)
     {
         ft_putstr("WARNING : Quotes automatically closed");
@@ -53,14 +58,12 @@ int    ft_redirection_left(t_command *c, char *line, int *i, int *k)
     if (c->n_input[0] != '\0')
     {
         free(c->n_input);
-        if(!(c->n_input = malloc(1)))
-            return (-1);
+        c->n_input = malloc(1);
         c->n_input[0] = '\0';
     }
     while (line[*i] != ' ' && line[*i] != '\0')
     {
-        if(!(c->n_input = ft_realloc_concat(c->n_input, line[*i])))
-            return (-1);
+        c->n_input = ft_realloc_concat(c->n_input, line[*i]);
         *i = *i + 1;
     }
     return (ft_checkfile(c));
@@ -73,7 +76,7 @@ int ft_checkfile(t_command *c)
     if (stat(c->n_input, &buffer) != 0)
     {
         ft_putstr("Error : file or directory doesn't exist\n");
-        //a faire ; changer fix->error et empecher exec
+        return (1);
     }
     return (0);
 }
