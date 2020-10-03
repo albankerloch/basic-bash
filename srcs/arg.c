@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int    ft_name(char **arg, t_command *c, char *line, int *i)
+int    ft_new_arg(char **arg, t_command *c, char *line, int *i)
 {
     while (line[*i])
     {
@@ -24,7 +24,6 @@ int    ft_name(char **arg, t_command *c, char *line, int *i)
 void    ft_arg_var(char **arg, t_fix *fix)
 {
     int j;
-    int tmp;
     char    *new_arg;
 
     new_arg = NULL;
@@ -33,54 +32,55 @@ void    ft_arg_var(char **arg, t_fix *fix)
     {
         if ((*arg)[j] == '$' && (*arg)[j + 1])
         {
-            tmp = j;
             j++;
-            new_arg = ft_env_var(*arg, &j, fix);
-          //  printf("arg=%s new_arg=%s\n\n", *arg, new_arg);
-            *arg = ft_strjoin(ft_substr(*arg, 0, tmp), new_arg);
+            new_arg = ft_env_var(*arg, j, fix);
+            *arg = ft_strjoin(ft_substr(*arg, 0, j - 1), new_arg);
             free(new_arg);
-            j = tmp + 1;
         }
         j++;
     }
 }
 
-char   *ft_env_var(char *arg, int *h, t_fix *fix)
+char   *ft_env_var(char *arg, int h, t_fix *fix)
 {
-    char    *temp;
+    char    *nom_var;
     char    *val_var;
-    char    *val_var2;
     int j;
     int i;
     
-    j = *h;
-    while (arg[j] && arg[j] != '$')
+    j = h;
+    while (arg[j] && arg[j] != '$' && arg[j] != '=')
         j++;
-   // printf("%d h=%d j=%d len=%lu\n", j - h - 1, h, j, ft_strlen(arg));
-    temp = ft_substr(arg, *h, j - *h);
-    val_var = malloc(sizeof(char));
-    val_var[0] = '\0';
+    nom_var = ft_substr(arg, h, j - h);
+    ft_valeur_variable(fix, &nom_var, &val_var);
+    if (val_var != NULL && j != ft_strlen(arg))
+        return(ft_join_end_var(&val_var, arg, j));
+    return (val_var);
+}
+
+void    ft_valeur_variable(t_fix *fix, char **nom_var, char **val_var)
+{
+    int i;
+
+    *val_var = malloc(sizeof(char));
+    (*val_var)[0] = '\0';
     i = 0;
     while (fix->env && fix->env[i])
     {
-        if (fix->env[i] && ft_strncmp(fix->env[i], temp, ft_strlen(temp)) == 0 && fix->env[i][ft_strlen(temp)] == '=')
-            val_var = ft_substr(fix->env[i], ft_strlen(temp) + 1, ft_strlen(fix->env[i]) - ft_strlen(temp) + 1);
+        if (fix->env[i] && ft_strncmp(fix->env[i], *nom_var, ft_strlen(*nom_var)) == 0 && fix->env[i][ft_strlen(*nom_var)] == '=')
+            *val_var = ft_substr(fix->env[i], ft_strlen(*nom_var) + 1, ft_strlen(fix->env[i]) - ft_strlen(*nom_var) + 1);
         i++;
     }
-    if (val_var != NULL && j != ft_strlen(arg) && arg[j] == '$')
-    {
-        val_var2 = malloc(sizeof(char));
-        val_var2[0] = '\0';
-        val_var2 = ft_strjoin(val_var, ft_substr(arg, j, ft_strlen(arg) - j));
-        free(temp);
-        free(val_var);
-        *h = *h + ft_strlen(val_var2) - 1;
-        return (val_var2);
-    }
-    if (val_var)
-        *h = *h + ft_strlen(val_var) - 1;
-    else
-        *h = *h + ft_strlen(temp) - 1;
-    free(temp);
-    return (val_var);
+    free(*nom_var);
+}
+
+char    *ft_join_end_var(char **val_var, char *arg, int j)
+{
+    char    *val_var2;
+
+    val_var2 = malloc(sizeof(char));
+    val_var2[0] = '\0';
+    val_var2 = ft_strjoin(*val_var, ft_substr(arg, j, ft_strlen(arg) - j));
+    free(*val_var);
+    return (val_var2);
 }

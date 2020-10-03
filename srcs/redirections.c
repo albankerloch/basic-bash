@@ -21,7 +21,7 @@ int    ft_redir_right(t_command *c, char *line, int *i, int *k)
 {
     while (line[*i] == ' ')
         (*i)++;
-    ft_name(&(c->n_out), c, line, i);
+    ft_new_arg(&(c->n_out), c, line, i);
     if (c->quote != 0)
     {
         ft_putstr("WARNING : Quotes automatically closed");
