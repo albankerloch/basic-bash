@@ -3,28 +3,23 @@
 int ft_echo(t_command *c, t_fix *fix, int fd)
 {
     int i;
-    int j;
     int n;
-    char    *val_var;
-    char    *arg;
 
-    i = 1;
     n = 0;
-    if (ft_strncmp(c->arg[i], "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(c->arg[i]))
+    if (c->arg[1])
     {
-        n = 1;
-        i++;
-    }
-    if (ft_strncmp(c->arg[i], "$?", ft_strlen("$?")) == 0 && ft_strlen("$?") == ft_strlen(c->arg[i]))
-        ft_putnbr_fd(fix->error, fd);
-    else
-    {
-        while(c->arg[i])
+        ft_echo_n(&n, c->arg[1], &i);
+        if (ft_strncmp(c->arg[i], "$?", ft_strlen("$?")) == 0 && ft_strlen("$?") == ft_strlen(c->arg[i]))
+            ft_putnbr_fd(fix->error, fd);
+        else
         {
-            ft_putstr_fd(c->arg[i], fd);
-            if (c->arg[i][j + 1] == '\0' && c->arg[i + 1])
-                ft_putchar_fd(' ', fd);
-            i++;
+            while(c->arg[i])
+            {
+                ft_putstr_fd(c->arg[i], fd);
+                if (c->arg[i + 1])
+                    ft_putchar_fd(' ', fd);
+                i++;
+            }
         }
     }
     if (n == 0)
@@ -91,18 +86,21 @@ int ft_unset(t_command *c, t_fix *fix, int fd)
     int l;
     char **env2;
 
-    len = ft_env_len(fix);
-    l = 0;
-    while (fix->env && fix->env[l])
+    if (c->arg[1])
     {
-        if (fix->env[l] && ft_strncmp(fix->env[l], c->arg[1], ft_strlen(c->arg[1])) == 0)
-            break;
-        l++;
+        len = ft_env_len(fix);
+        l = 0;
+        while (fix->env && fix->env[l])
+        {
+            if (fix->env[l] && ft_strncmp(fix->env[l], c->arg[1], ft_strlen(c->arg[1])) == 0)
+                break;
+            l++;
+        }
+        if (len == l)
+            return (0);
+        env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]));
+        env2[len] = NULL;
     }
-    if (len == l)
-        return (0);
-    env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]));
-    env2[len] = NULL;
     ft_close_redir(c, fd);
     return (0);
 }
@@ -114,7 +112,10 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
     int j;
     char    **env2;
     
-    ret = chdir(c->arg[1]);
+    if (!c->arg[1])
+        ret = chdir("/home/user42");
+    else
+        ret = chdir(c->arg[1]);
     buf = malloc(sizeof(char) * PATH_MAX);
     getcwd(buf, PATH_MAX);
     j = 0;

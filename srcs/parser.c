@@ -49,7 +49,7 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
                 c->arg = ft_realloc_arg(c->arg);
             ft_new_arg(&(c->arg[k]), c, line, &i);
             ft_arg_var(&(c->arg[k]), fix);
-            printf("arg %d = %s\n", k, c->arg[k]);
+         //   printf("arg %d = %s\n", k, c->arg[k]);
         }
     }
     if (c->quote != 0)

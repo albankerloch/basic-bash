@@ -1,5 +1,16 @@
 #include "../includes/minishell.h"
 
+void    ft_echo_n(int *n, char *arg, int *i)
+{
+    if (ft_strncmp(arg, "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(arg))
+    {
+        *n = 1;
+        *i = 2;
+    }
+    else
+        *i = 1;
+}
+
 int    ft_env_len(t_fix *fix)
 {
     int len;
