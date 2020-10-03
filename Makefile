@@ -7,7 +7,9 @@ SRCS_NAME	= 	main.c \
 					signal.c \
 					exit.c \
 					redirections.c \
-					arg.c
+					arg.c \
+					builtins.c \
+					builtins_utils.c
 
 SRCS_DIR	= ./srcs
 

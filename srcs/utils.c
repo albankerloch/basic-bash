@@ -40,7 +40,6 @@ char	**ft_realloc_arg(char **arg)
 	while (arg[i])
 	{
 		new[i] = ft_strdup(arg[i]);
-	//	printf("pre free while realloc arg %s i=%d\n", arg[i], i);
 		free(arg[i]);
 		i++;
 	}

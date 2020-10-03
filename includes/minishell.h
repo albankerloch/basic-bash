@@ -29,7 +29,6 @@ typedef struct s_command
   char  *n_input;
   int   add;
   int   quote;
-  int   env;
   char  *n_out;
 }       t_command;
 
@@ -41,8 +40,8 @@ typedef struct s_fix
 
 int     ft_parser(t_list *t, char *line, t_fix *fix);
 void    ft_exec(t_list *t, char *line, t_fix *fix);
-//char    *ft_env_var(char *arg, t_fix *fix);
-char    *ft_env_var(char **arg, int i, t_fix *fix);
+char    *ft_env_var(char *arg, int *h, t_fix *fix);
+void    ft_arg_var(char **arg, t_fix *fix);
 void    ft_fix_construct(t_fix *fix, char **envp);
 char    *ft_realloc_concat(char *line, char c);
 int     ft_redirection_right(t_command *c, char *line, int *i, int *k);
@@ -55,8 +54,9 @@ t_command *    ft_command_construct();
 void    ft_command_destroy(void *c);
 void    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
-int     ft_redir(t_command *c);
-int     ft_exec_cmd(t_command *c, char *line, t_fix *fix);
+int     ft_open_redir(t_command *c);
+void    ft_close_redir(t_command *c, int fd);
+int     ft_builtins(t_command *c, char *line, t_fix *fix);
 void    fork_exec_cmd(t_command *c, char *line, t_fix *fix);
 int     ft_relative_path(t_command *c, t_fix *fix);
 int     ft_name(char **arg, t_command *c, char *line, int *i);
@@ -65,5 +65,19 @@ void    ft_sig_handler(int signum);
 void    ft_sig_handler_process(int signum);
 void    ft_sig_handler_quit(int signum);
 int     ft_exit_fix(t_fix *fix, int i);
+int ft_syntax_export(t_command *c, int fd, t_fix *fix);
+int ft_export_err(int err, int fd, char *arg, t_fix *fix);
+
+int ft_echo(t_command *c, t_fix *fix, int fd);
+int ft_env(t_command *c, t_fix *fix, int fd);
+int ft_pwd(t_command *c, t_fix *fix, int fd);
+int ft_export(t_command *c, t_fix *fix, int fd);
+int ft_unset(t_command *c, t_fix *fix, int fd);
+int ft_cd(t_command *c, t_fix *fix, int fd);
+
+int    ft_env_len(t_fix *fix);
+int ft_env_compare(t_fix *fix, char *arg, int n);
+char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
+
 
 #endif

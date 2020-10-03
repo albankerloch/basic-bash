@@ -21,12 +21,6 @@ int    ft_redir_right(t_command *c, char *line, int *i, int *k)
 {
     while (line[*i] == ' ')
         (*i)++;
-   /* if (c->n_out[0] != '\0')
-    {
-        free(c->n_out);
-        c->n_out = malloc(1);
-        c->n_out[0] = '\0';
-    }*/
     ft_name(&(c->n_out), c, line, i);
     if (c->quote != 0)
     {

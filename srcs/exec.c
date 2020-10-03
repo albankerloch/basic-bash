@@ -80,7 +80,7 @@ int    ft_relative_path(t_command *c, t_fix *fix)
     return (0);
 }
 
-int ft_redir(t_command *c)
+int ft_open_redir(t_command *c)
 {
     int fd;
 
@@ -93,6 +93,12 @@ int ft_redir(t_command *c)
         fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     return (fd);
+}
+
+void    ft_close_redir(t_command *c, int fd)
+{
+    if (c->add != 0)
+        close(fd);
 }
 
 void aff_arg(t_list *begin)
@@ -183,146 +189,23 @@ void ft_exec(t_list *t, char *line, t_fix *fix)
     }
 }
 
-int ft_exec_cmd(t_command *c, char *line, t_fix *fix)
+int ft_builtins(t_command *c, char *line, t_fix *fix)
 {
-    int i;
-    int j = 0;
-    int n = 0;
-    char **env2;
     int fd;
 
-    fd = ft_redir(c);
+    fd = ft_open_redir(c);
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
-    {
-       
-        i = 1;
-        if (ft_strncmp(c->arg[i], "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(c->arg[i]))
-        {
-            n = 1;
-            i++;
-        }
-        if (ft_strncmp(c->arg[i], "$?", ft_strlen("$?")) == 0 && ft_strlen("$?") == ft_strlen(c->arg[i]))
-            ft_putnbr_fd(fix->error, fd);
-        else
-        {
-            while(c->arg[i])
-            {
-              //  printf("arg=%s env=%d\n", c->arg[i], c->env);
-                if (c->arg[i][0] == '$')
-                {
-                    c->arg[i] = ft_env_var(c->arg, i, fix);
-                    
-                }
-                ft_putstr_fd(c->arg[i], fd);
-                if (c->arg[i + 1])
-                    ft_putchar_fd(' ', fd);
-                i++;
-            }
-        }
-        if (n == 0)
-            ft_putchar_fd('\n', fd);
-        if (c->add != 0)
-            close(fd);
-        return (0);
-    }
+        return (ft_echo(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
-    {
-        while (fix->env && fix->env[j])
-        {
-            ft_putstr_fd(fix->env[j], fd);
-            ft_putchar_fd('\n', fd);
-            j++;
-        }
-        if (c->add != 0)
-            close(fd);
-        return (0);
-    }
+        return (ft_env(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
-    {
-        while (fix->env && fix->env[j])
-        {
-            if (fix->env[j] && ft_strncmp(fix->env[j], "PWD", ft_strlen("PWD")) == 0)
-            {
-                ft_putstr_fd(ft_substr(fix->env[j], 4, ft_strlen(fix->env[j]) - 4), fd);
-                ft_putchar_fd('\n', fd);
-            }
-            j++;
-        }
-        if (c->add != 0)
-            close(fd);
-        return (0);
-    }
+        return (ft_pwd(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "export", ft_strlen("export")) == 0  && ft_strlen("export") == ft_strlen(c->arg[0]))
-    {
-        while (fix->env && fix->env[j])
-            j++;
-        env2 = malloc(sizeof(char **) * j + 2);
-        j = 0;
-        while (fix->env && fix->env[j])
-        {
-            env2[j] = ft_strdup(fix->env[j]);
-            j++;
-        }
-        env2[j] = ft_strdup(c->arg[1]);
-        env2[j + 1] = NULL;
-        fix->env = env2;
-        return (0);
-    }
+        return (ft_export(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "unset", ft_strlen("unset")) == 0  && ft_strlen("unset") == ft_strlen(c->arg[0]))
-    {
-        while (fix->env && fix->env[j])
-            j++;
-        int l = 0; //verif pour ne pas modifier l'env inutilement
-        while (fix->env && fix->env[l])
-        {
-            if (fix->env[l] && ft_strncmp(fix->env[l], c->arg[1], ft_strlen(c->arg[1])) == 0)
-                break;
-            l++;
-        }
-        if (j == l || c->env == 1)
-            return (0);
-        env2 = malloc(sizeof(char **) * j);
-        j = 0;
-        int i = 0;
-        while (fix->env && fix->env[j])
-        {
-            if (fix->env[j] && ft_strncmp(fix->env[j], c->arg[1], ft_strlen(c->arg[1])) == 0 && fix->env[j][ft_strlen(c->arg[1])] == '=')
-                i--;
-            else
-                env2[i] = ft_strdup(fix->env[j]);
-            i++;
-            j++;
-        }
-        env2[j] = NULL;
-        fix->env = env2;
-        return (0);
-    }
+        return (ft_unset(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "cd", ft_strlen("cd")) == 0  && ft_strlen("cd") == ft_strlen(c->arg[0]))
-    {
-        int ret = chdir(c->arg[1]);
-        char *buf;
-        buf = malloc(sizeof(char) * PATH_MAX);
-        getcwd(buf, PATH_MAX);
-        while (fix->env && fix->env[j])
-            j++;
-        env2 = malloc(sizeof(char **) * j + 1);
-        j = 0;
-        while (fix->env && fix->env[j])
-        {
-            if (fix->env[j] && ft_strncmp(fix->env[j], "PWD", ft_strlen("PWD")) == 0)
-            {
-                env2[j] = ft_strjoin("PWD=", buf);
-            }
-            else
-                env2[j] = ft_strdup(fix->env[j]);
-            
-            j++;
-        }
-        env2[j] = NULL;
-  //      ft_env_destroy(*envp);
-        fix->env = env2;
-        return (0);
-    }
+        return (ft_cd(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
     {
         ft_putstr("exit\n");
@@ -337,7 +220,7 @@ void    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     char    ***p;
     int ret;
     
-    ret = ft_exec_cmd(c, line, fix);
+    ret = ft_builtins(c, line, fix);
     if (ret == -1)
     {
         pidf = fork();
