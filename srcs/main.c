@@ -25,6 +25,7 @@ int	main(int argc, char *argv[], char *envp[])
 	line = NULL;
 	while (1)
 	{
+		t = ft_lstnew(ft_command_construct());
 		signal(SIGINT, ft_sig_handler);
 		signal(SIGQUIT, SIG_IGN);
 		if (ret == 1)
@@ -32,15 +33,16 @@ int	main(int argc, char *argv[], char *envp[])
 		ret = get_next_line(0, &line);
 		if (!ret)
 		{
-			ft_putstr("exit\n");
-			exit (0);
+			free(line);
+			ft_exit_fix(&fix, -2, EXIT_SUCCESS);
 		}
-		t = ft_lstnew(ft_command_construct());
 		if (!ft_parser(t, line, &fix))
 			ft_exec(t, line, &fix);
+		free(line);
+		ft_del_command(t->content);
+		free(t);
+	//	ft_lstclear(&t, &ft_del_command);
 	//	ft_lstclear(&t, &ft_command_destroy);
 	}
-	//ft_env_destroy(env); //utilité ??
-	ft_exit_fix(&fix, -2);
 	return (0);
 }

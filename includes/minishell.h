@@ -64,9 +64,8 @@ void    ft_env_destroy(char **env);
 void    ft_sig_handler(int signum);
 void    ft_sig_handler_process(int signum);
 void    ft_sig_handler_quit(int signum);
-int     ft_exit_fix(t_fix *fix, int i);
-int ft_syntax_export(t_command *c, int fd, t_fix *fix);
-int ft_export_err(int err, int fd, char *arg, t_fix *fix);
+int     ft_syntax_export(t_command *c, int fd, t_fix *fix);
+int     ft_export_err(int err, int fd, char *arg, t_fix *fix);
 
 int ft_echo(t_command *c, t_fix *fix, int fd);
 int ft_env(t_command *c, t_fix *fix, int fd);
@@ -75,12 +74,18 @@ int ft_export(t_command *c, t_fix *fix, int fd);
 int ft_unset(t_command *c, t_fix *fix, int fd);
 int ft_cd(t_command *c, t_fix *fix, int fd);
 
-int    ft_env_len(t_fix *fix);
-int ft_env_compare(t_fix *fix, char *arg, int n);
-char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
+int     ft_env_len(t_fix *fix);
+int     ft_env_compare(t_fix *fix, char *arg, int n);
+char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
 char    *ft_join_end_var(char **val_var, char *arg, int j);
 void    ft_valeur_variable(t_fix *fix, char **nom_var, char **val_var);
 void    ft_echo_n(int *n, char *arg, int *i);
 
+
+int     ft_exit_fix(t_fix *fix, int i, int e);
+void    ft_exit(t_fix *fix, t_list *t, char *line, int e);
+t_command  *ft_free_part_command(t_command *c, int i);
+void    ft_del_command(void *c);
+void    ft_free_command(t_command *c);
 
 #endif

@@ -12,9 +12,10 @@ t_command *ft_command_construct()
     c->quote = 0;
     c->n_out = malloc(1);
     c->n_out[0] = '\0';
-    c->arg = malloc(sizeof(char*));
+    c->arg = malloc(sizeof(char*) * 2);
     c->arg[0] = malloc(1);
     c->arg[0][0] = '\0';
+    c->arg[1] = NULL;
     return(c);
 }
 
@@ -31,12 +32,12 @@ void   ft_fix_construct(t_fix *fix, char **envp)
 	while (envp && envp[len])
 		len++;
 	if(!(fix->env = malloc(sizeof(char **) * len + 1)))
-        ft_exit_fix(fix, -1);
+        ft_exit_fix(fix, -1, EXIT_FAILURE);
     len = 0;
 	while (envp && envp[len])
 	{
 		if(!(fix->env[len] = ft_strdup(envp[len])))
-            ft_exit_fix(fix, len);
+            ft_exit_fix(fix, len, EXIT_FAILURE);
 		len++;
 	}
 	fix->env[len] = NULL;

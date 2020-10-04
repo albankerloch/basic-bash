@@ -209,7 +209,8 @@ int ft_builtins(t_command *c, char *line, t_fix *fix)
     else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
     {
         ft_putstr("exit\n");
-        exit(0);
+		free(line);
+		ft_exit_fix(fix, -2, EXIT_SUCCESS);
     }
     return (-1);
 }

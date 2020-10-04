@@ -9,7 +9,6 @@ void ft_sig_handler(int signum)
 void ft_sig_handler_process(int signum)
 {
 	ft_putchar('\n');
-	signal(SIGINT, ft_sig_handler_process);
 }
 
 /*
