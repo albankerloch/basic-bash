@@ -1,5 +1,39 @@
 #include "../includes/minishell.h"
 
+t_list *ft_add_list(t_list *t, t_fix *fix)
+{
+    t_command   *c;
+
+    if(!(c = ft_command_construct()))
+    {
+        ft_lstclear(&t, &ft_del_command);
+		ft_exit_fix(fix, -2, EXIT_FAILURE);
+    }
+	if(!(t = ft_lstnew(c)))
+	{
+		ft_free_command(c);
+		ft_lstclear(&t, &ft_del_command);
+		ft_exit_fix(fix, -2, EXIT_FAILURE);
+	}
+    return(t);
+}
+
+t_list *ft_init_list(t_fix *fix)
+{
+    t_list *t;
+    t_command   *c;
+
+    if(!(c = ft_command_construct()))
+		ft_exit_fix(fix, -2, EXIT_FAILURE);
+	if(!(t = ft_lstnew(c)))
+	{
+		ft_free_command(c);
+		free(t);
+		ft_exit_fix(fix, -2, EXIT_FAILURE);
+	}
+    return(t);
+}
+
 t_command *ft_command_construct()
 {
     t_command *c;
@@ -23,11 +57,6 @@ void   ft_fix_construct(t_fix *fix, char **envp)
 {
 	int	len;
     
-    /*if(!(*fix = malloc(sizeof(t_fix))))
-    {
-        free(*fix);
-        //exit(EXIT_FAILURE);
-    }*/
     len = 0;
 	while (envp && envp[len])
 		len++;
