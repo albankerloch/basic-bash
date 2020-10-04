@@ -41,7 +41,7 @@ typedef struct s_fix
 int     ft_parser(t_list *t, char *line, t_fix *fix);
 int     ft_exec(t_list *t, char *line, t_fix *fix);
 char    *ft_env_var(char *arg, int h, t_fix *fix);
-void    ft_arg_var(char **arg, t_fix *fix);
+int     ft_arg_var(char **arg, t_fix *fix);
 void    ft_fix_construct(t_fix *fix, char **envp);
 char    *ft_realloc_concat(char *line, char c);
 int     ft_redirection_right(t_command *c, char *line, int *i, int *k);
@@ -78,7 +78,7 @@ int     ft_env_len(t_fix *fix);
 int     ft_env_compare(t_fix *fix, char *arg, int n);
 char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
 char    *ft_join_end_var(char **val_var, char *arg, int j);
-void    ft_valeur_variable(t_fix *fix, char **nom_var, char **val_var);
+int    ft_valeur_variable(t_fix *fix, char **nom_var, char **val_var);
 void    ft_echo_n(int *n, char *arg, int *i);
 
 
@@ -90,5 +90,6 @@ void    ft_free_command(t_command *c);
 t_list  *ft_init_list(t_fix *fix);
 int     ft_add_list(t_list *t, t_fix *fix);
 char    **ft_free_tab(char **new, int i);
+char    *ft_realloc_substr(t_fix *fix, char **nom_var, char **val_var, int i);
 
 #endif
