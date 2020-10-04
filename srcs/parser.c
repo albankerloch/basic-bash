@@ -35,7 +35,7 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
         }
         else if (line[i] == '|')
         {
-            ft_lstadd_back(&t, ft_lstnew(ft_command_construct()));
+            ft_lstadd_back(&t, ft_add_list(t, fix));
             t = t->next;
             k = -1;
             i++;
