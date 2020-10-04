@@ -77,8 +77,8 @@ int ft_cd(t_command *c, t_fix *fix, int fd);
 int     ft_env_len(t_fix *fix);
 int     ft_env_compare(t_fix *fix, char *arg, int n);
 char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
-char    *ft_join_end_var(char **val_var, char *arg, int j);
-int    ft_valeur_variable(t_fix *fix, char **nom_var, char **val_var);
+char    *ft_join_end_var(char *val_var, char *arg, int j);
+char    *ft_valeur_variable(t_fix *fix, char *nom_var);
 void    ft_echo_n(int *n, char *arg, int *i);
 
 
@@ -90,6 +90,7 @@ void    ft_free_command(t_command *c);
 t_list  *ft_init_list(t_fix *fix);
 int     ft_add_list(t_list *t, t_fix *fix);
 char    **ft_free_tab(char **new, int i);
-char    *ft_realloc_substr(t_fix *fix, char **nom_var, char **val_var, int i);
+char *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char const *s2);
+char *ft_strjoin_substr(char const *s1, char const *s, unsigned int start, size_t len);
 
 #endif
