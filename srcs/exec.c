@@ -87,18 +87,26 @@ int ft_open_redir(t_command *c)
     if (c->add == 0)
         return (1);
     else if (c->add == 1)
-        fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    {
+        return (open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
+        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH));
+    }
     else
-        fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    {
+        return (open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
+        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH));
+    }
     return (fd);
 }
 
-void    ft_close_redir(t_command *c, int fd)
+int    ft_close_redir(t_command *c, int fd)
 {
     if (c->add != 0)
-        close(fd);
+    {
+        if (close(fd) == -1)
+            return (0);
+    }
+    return (1);
 }
 
 void aff_arg(t_list *begin)
@@ -162,6 +170,7 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             close(pipe_fd[0]);
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
+            //gérer err return du fork exec cmd
             fork_exec_cmd(t->content, line, fix);
             dup2(save_fd, 1);
             close(save_fd);
@@ -191,7 +200,8 @@ int ft_builtins(t_command *c, char *line, t_fix *fix)
 {
     int fd;
 
-    fd = ft_open_redir(c);
+    if ((fd = ft_open_redir(c)) == -1)
+        return (0);
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
         return (ft_echo(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
@@ -217,7 +227,8 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     char    ***p;
     int ret;
     
-    ret = ft_builtins(c, line, fix);
+    if ((ret = ft_builtins(c, line, fix)) == 0)
+        return (0);
     if (ret == -1)
     {
         pidf = fork();

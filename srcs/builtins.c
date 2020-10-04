@@ -24,8 +24,7 @@ int ft_echo(t_command *c, t_fix *fix, int fd)
     }
     if (n == 0)
         ft_putchar_fd('\n', fd);
-    ft_close_redir(c, fd);
-    return (0);
+    return (ft_close_redir(c, fd));
 }
 
 int ft_env(t_command *c, t_fix *fix, int fd)
@@ -39,26 +38,28 @@ int ft_env(t_command *c, t_fix *fix, int fd)
         ft_putchar_fd('\n', fd);
         j++;
     }
-    ft_close_redir(c, fd);
-    return (0);
+    return (ft_close_redir(c, fd));
 }
 
 int ft_pwd(t_command *c, t_fix *fix, int fd)
 {
     int j;
+    char    *sub_str;
 
     j = 0;
     while (fix->env && fix->env[j])
     {
         if (fix->env[j] && ft_strncmp(fix->env[j], "PWD", ft_strlen("PWD")) == 0)
         {
-            ft_putstr_fd(ft_substr(fix->env[j], 4, ft_strlen(fix->env[j]) - 4), fd);
+            if (!(sub_str = ft_substr(fix->env[j], 4, ft_strlen(fix->env[j]) - 4)))
+                return (0);
+            ft_putstr_fd(sub_str, fd);
+            free(sub_str);
             ft_putchar_fd('\n', fd);
         }
         j++;
     }
-    ft_close_redir(c, fd);
-    return (0);
+    return (ft_close_redir(c, fd));
 }
 
 int ft_export(t_command *c, t_fix *fix, int fd)
@@ -68,16 +69,19 @@ int ft_export(t_command *c, t_fix *fix, int fd)
     char **env2;
 
     if ((n = ft_syntax_export(c, fd, fix)) == -1)
+        return (ft_close_redir(c, fd));
+    else if (n == 0)
     {
         ft_close_redir(c, fd);
-        return (1);
+        return (0);
     }
     i = ft_env_compare(fix, c->arg[1], n);
-    env2 = ft_env_cpy(fix, c->arg[1], i + 2, n);
-    env2[i] = ft_strdup(c->arg[1]);
+    if (!(env2 = ft_env_cpy(fix, c->arg[1], i + 2, n)))
+        return (0);
+    if (!(env2[i] = ft_strdup(c->arg[1])))
+        return (0);
     env2[i + 1] = NULL;
-    ft_close_redir(c, fd);
-    return (0);
+    return (ft_close_redir(c, fd));
 }
 
 int ft_unset(t_command *c, t_fix *fix, int fd)
@@ -98,17 +102,17 @@ int ft_unset(t_command *c, t_fix *fix, int fd)
         }
         if (len == l)
             return (0);
-        env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]));
+        if (!(env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]))))
+            return (0);
         env2[len] = NULL;
     }
-    ft_close_redir(c, fd);
-    return (0);
+    return (ft_close_redir(c, fd));
 }
 
 int ft_cd(t_command *c, t_fix *fix, int fd)
 {
     int ret;
-    char    *buf;
+    char    buf[PATH_MAX];
     int j;
     char    **env2;
     
@@ -116,25 +120,30 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
         ret = chdir("/home/user42");
     else
         ret = chdir(c->arg[1]);
-    buf = malloc(sizeof(char) * PATH_MAX);
+   // if (!(buf = malloc(sizeof(char) * PATH_MAX)))
+     //   return (0);
     getcwd(buf, PATH_MAX);
     j = 0;
     while (fix->env && fix->env[j])
         j++;
-    env2 = malloc(sizeof(char **) * j + 1);
+    if (!(env2 = malloc(sizeof(char **) * j + 1)))
+        return (0);
     j = 0;
     while (fix->env && fix->env[j])
     {
         if (fix->env[j] && ft_strncmp(fix->env[j], "PWD", ft_strlen("PWD")) == 0)
         {
-            env2[j] = ft_strjoin("PWD=", buf);
+            if (!(env2[j] = ft_strjoin("PWD=", buf)))
+                return (0);
         }
         else
-            env2[j] = ft_strdup(fix->env[j]);
+        {
+            if (!(env2[j] = ft_strdup(fix->env[j])))
+                return (0);
+        }
         j++;
     }
     env2[j] = NULL;
     fix->env = env2;
-    ft_close_redir(c, fd);
-    return (0);
+    return (ft_close_redir(c, fd));
 }

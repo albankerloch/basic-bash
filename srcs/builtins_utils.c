@@ -44,7 +44,8 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
     int i;
     int j;
 
-    env2 = malloc(sizeof(char **) * len);
+    if (!(env2 = malloc(sizeof(char **) * len)))
+        return (NULL);
     len = 0;
     i = 0;
     j = 0;
@@ -53,7 +54,10 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
         if (fix->env[j] && ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
             i--;
         else
-            env2[i] = ft_strdup(fix->env[j]);
+        {
+            if (!(env2[i] = ft_strdup(fix->env[j])))
+                return (NULL);
+        }
         i++;
         j++;
     }
@@ -86,9 +90,9 @@ int ft_syntax_export(t_command *c, int fd, t_fix *fix)
 int ft_export_err(int err, int fd, char *arg, t_fix *fix)
 {
     int j;
+    char    *sub_str;
 
     j = 0;
-    printf("err=%d\n", err);
     if (err == 2)
     {
         while (fix->env && fix->env[j])
@@ -108,7 +112,12 @@ int ft_export_err(int err, int fd, char *arg, t_fix *fix)
         }
         ft_putstr_fd("bash: export: \" ", fd);
         if (err == 4)
-            ft_putstr_fd(ft_substr(arg, j, ft_strlen(arg) - j), fd);
+        {
+            if (!(sub_str = ft_substr(arg, j, ft_strlen(arg) - j)))
+                return (0);
+            ft_putstr_fd(sub_str, fd);
+            free(sub_str);
+        }
         else
             ft_putstr_fd(arg, fd);
         ft_putstr_fd(" \" : identifiant non valable\n", fd);
