@@ -140,7 +140,7 @@ void aff_list(t_list *begin)
     }
 }
 
-void ft_exec(t_list *t, char *line, t_fix *fix)
+int ft_exec(t_list *t, char *line, t_fix *fix)
 {
     pid_t   pid;
     pid_t   pid2;
@@ -151,7 +151,7 @@ void ft_exec(t_list *t, char *line, t_fix *fix)
 
     //aff_list(t);
     if (!t->next)
-        fork_exec_cmd(t->content, line, fix);
+        return(fork_exec_cmd(t->content, line, fix));
     else
     {
         pipe(pipe_fd);
@@ -162,12 +162,9 @@ void ft_exec(t_list *t, char *line, t_fix *fix)
             close(pipe_fd[0]);
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
-
             fork_exec_cmd(t->content, line, fix);
-    
             dup2(save_fd, 1);
             close(save_fd);
-           
             exit(0);
         }
         else
@@ -187,6 +184,7 @@ void ft_exec(t_list *t, char *line, t_fix *fix)
             (void)wait(NULL);
         }
     }
+    return (1);
 }
 
 int ft_builtins(t_command *c, char *line, t_fix *fix)
@@ -213,7 +211,7 @@ int ft_builtins(t_command *c, char *line, t_fix *fix)
     return (-1);
 }
 
-void    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
+int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
 {
     pid_t   pidf;
     char    ***p;
@@ -230,4 +228,5 @@ void    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         else
             wait(&(fix->error));
     }
+    return (1);
 }

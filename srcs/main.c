@@ -30,6 +30,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (ret == 1)
 			ft_putstr("<minishell> ");
 		ret = get_next_line(0, &line);
+		printf("line |%s|\n", line);
 		if (ret == 0)
 		{
 			ft_putstr("exit Ctrl+D\n");
@@ -39,7 +40,8 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_exit(&fix, t, line, EXIT_FAILURE);
 		if (!(ft_parser(t, line, &fix)))
 			ft_exit(&fix, t, line, EXIT_FAILURE);
-		ft_exec(t, line, &fix);
+		if (!(ft_exec(t, line, &fix)))
+			ft_exit(&fix, t, line, EXIT_FAILURE);
 		free(line);
 		ft_lstclear(&t, &ft_del_command);
 	}

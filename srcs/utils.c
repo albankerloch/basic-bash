@@ -59,6 +59,7 @@ char	**ft_realloc_arg(char **arg)
 	}
 	if(!(new[i] = malloc(1)))
 		return (ft_free_tab(new, i));
+	new[i][0] = '\0';
 	new[i + 1] = NULL;
 	ft_free_tab(arg, i);
 	return (new);

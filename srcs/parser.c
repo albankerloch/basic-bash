@@ -51,13 +51,10 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
             k++;
             if (k != 0)
             {
-                if (!(c->arg = ft_realloc_arg(c->arg)))  
-                    return (0);
+                c->arg = ft_realloc_arg(c->arg);
             }
-            if (!(ft_new_arg(&(c->arg[k]), c, line, &i)))
-                return (0);
+            ft_new_arg(&(c->arg[k]), c, line, &i);
             ft_arg_var(&(c->arg[k]), fix);
-         //   printf("arg %d = %s\n", k, c->arg[k]);
         }
     }
     if (c->quote != 0)
