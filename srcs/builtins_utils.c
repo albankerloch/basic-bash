@@ -88,6 +88,7 @@ int ft_export_err(int err, int fd, char *arg, t_fix *fix)
     int j;
 
     j = 0;
+    printf("err=%d\n", err);
     if (err == 2)
     {
         while (fix->env && fix->env[j])
@@ -112,5 +113,5 @@ int ft_export_err(int err, int fd, char *arg, t_fix *fix)
             ft_putstr_fd(arg, fd);
         ft_putstr_fd(" \" : identifiant non valable\n", fd);
     }
-    return (1);
+    return (-1);
 }

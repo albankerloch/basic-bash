@@ -67,7 +67,7 @@ int ft_export(t_command *c, t_fix *fix, int fd)
     int i;
     char **env2;
 
-    if ((n = ft_syntax_export(c, fd, fix)) == 1)
+    if ((n = ft_syntax_export(c, fd, fix)) == -1)
     {
         ft_close_redir(c, fd);
         return (1);
