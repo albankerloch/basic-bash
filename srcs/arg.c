@@ -7,7 +7,8 @@ int    ft_new_arg(char **arg, t_command *c, char *line, int *i)
      //   printf("line[%d]=%c quote=%d k=%d\n", *i, line[*i], c->quote, *k);
         ft_skip_quotes(line, i, &(c->quote));
         ft_backslash(line, i, &(c->quote));
-        *arg = ft_realloc_concat(*arg, line[*i]);
+        if (!(*arg = ft_realloc_concat(*arg, line[*i])))
+            return (0);
         (*i)++;
         if ((line[*i] == '\"' && c->quote == 2) || (line[*i] == '\'' && c->quote == 1))
         {
@@ -18,7 +19,7 @@ int    ft_new_arg(char **arg, t_command *c, char *line, int *i)
             break;
        // printf("argk = %s\n", c->arg[*k]);
     }
-    return (0);
+    return (1);
 }
 
 void    ft_arg_var(char **arg, t_fix *fix)

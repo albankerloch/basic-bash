@@ -3,7 +3,7 @@
 char	*ft_realloc_concat(char *line, char c)
 {
 	char	*new;
-//	printf("char c =%c %d\n", c, c);
+
 	if (!(new = malloc(sizeof(*new) * (ft_strlen(line) + 1))))
 		return (NULL);
 	if (ft_strlen(line) > 0)
@@ -26,6 +26,20 @@ void ft_check(char **new)
     }
 }
 
+char **ft_free_tab(char **new, int i)
+{
+	int k;
+
+	k = 0;
+	while (k <= i)
+	{
+		free(new[k]);
+		k++;
+	}
+	free(new);
+	return (NULL);
+}
+
 char	**ft_realloc_arg(char **arg)
 {
 	char	**new;
@@ -39,12 +53,13 @@ char	**ft_realloc_arg(char **arg)
 	i = 0;
 	while (arg[i])
 	{
-		new[i] = ft_strdup(arg[i]);
-		free(arg[i]);
+		if(!(new[i] = ft_strdup(arg[i])))
+			return (ft_free_tab(new, i));
 		i++;
 	}
-	new[i] = malloc(1);
+	if(!(new[i] = malloc(1)))
+		return (ft_free_tab(new, i));
 	new[i + 1] = NULL;
-	free(arg);
+	ft_free_tab(arg, i);
 	return (new);
 }

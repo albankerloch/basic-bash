@@ -37,7 +37,7 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 		if (ret == -1)
 			ft_exit(&fix, t, line, EXIT_FAILURE);
-		if (!( ret = ft_parser(t, line, &fix)))
+		if (!(ft_parser(t, line, &fix)))
 			ft_exit(&fix, t, line, EXIT_FAILURE);
 		ft_exec(t, line, &fix);
 		free(line);

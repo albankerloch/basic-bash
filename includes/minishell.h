@@ -89,5 +89,6 @@ void    ft_del_command(void *c);
 void    ft_free_command(t_command *c);
 t_list  *ft_init_list(t_fix *fix);
 int     ft_add_list(t_list *t, t_fix *fix);
+char    **ft_free_tab(char **new, int i);
 
 #endif
