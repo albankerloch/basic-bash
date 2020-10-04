@@ -14,7 +14,7 @@ int    ft_redirection_right(t_command *c, char *line, int *i, int *k)
         c->add = 1;
         return (ft_redir_right(c, line, i, k));
     }
-    return (0);
+    return (1);
 }
 
 int    ft_redir_right(t_command *c, char *line, int *i, int *k)
@@ -28,7 +28,7 @@ int    ft_redir_right(t_command *c, char *line, int *i, int *k)
         ft_putchar('\n');
     }
     ft_touch(c);
-    return (0);
+    return (1);
 }
 
 void    ft_touch(t_command *c)
@@ -70,7 +70,7 @@ int ft_checkfile(t_command *c)
     if (stat(c->n_input, &buffer) != 0)
     {
         ft_putstr("Error : file or directory doesn't exist\n");
-        return (1);
+        return (0);
     }
-    return (0);
+    return (1);
 }

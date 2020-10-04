@@ -27,15 +27,19 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
             i++;
             // si on est au début d'une redirection
         else if (line[i] == '>')
-            ft_redirection_right(t->content, line, &i, &k);
+        {
+            if(!(ft_redirection_right(t->content, line, &i, &k)))
+                return (0);
+        }
         else if (line[i] == '<')
         {
-            if (ft_redirection_left(t->content, line, &i, &k))
-                return (1);
+            if(!(ft_redirection_left(t->content, line, &i, &k)))
+                return (0);
         }
         else if (line[i] == '|')
         {
-            ft_lstadd_back(&t, ft_add_list(t, fix));
+            if(!(ft_add_list(t, fix)))
+                return (0);
             t = t->next;
             k = -1;
             i++;
@@ -57,5 +61,5 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
         ft_putstr("WARNING : Quotes automatically closed");
         ft_putchar('\n');
     }
-    return (0);
+    return (1);
 }

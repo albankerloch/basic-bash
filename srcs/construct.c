@@ -1,21 +1,19 @@
 #include "../includes/minishell.h"
 
-t_list *ft_add_list(t_list *t, t_fix *fix)
+int ft_add_list(t_list *t, t_fix *fix)
 {
     t_command   *c;
+    t_list      *new;
 
     if(!(c = ft_command_construct()))
-    {
-        ft_lstclear(&t, &ft_del_command);
-		ft_exit_fix(fix, -2, EXIT_FAILURE);
-    }
-	if(!(t = ft_lstnew(c)))
+        return (0);
+	if(!(new = ft_lstnew(c)))
 	{
 		ft_free_command(c);
-		ft_lstclear(&t, &ft_del_command);
-		ft_exit_fix(fix, -2, EXIT_FAILURE);
+		return (0);
 	}
-    return(t);
+    ft_lstadd_back(&t, new);
+    return(1);
 }
 
 t_list *ft_init_list(t_fix *fix)
