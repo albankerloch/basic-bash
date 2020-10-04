@@ -21,7 +21,8 @@ int    ft_redir_right(t_command *c, char *line, int *i, int *k)
 {
     while (line[*i] == ' ')
         (*i)++;
-    ft_new_arg(&(c->n_out), c, line, i);
+    if (!(ft_new_arg(&(c->n_out), c, line, i)))
+        return (0);
     if (c->quote != 0)
     {
         ft_putstr("WARNING : Quotes automatically closed");
@@ -52,12 +53,14 @@ int    ft_redirection_left(t_command *c, char *line, int *i, int *k)
     if (c->n_input[0] != '\0')
     {
         free(c->n_input);
-        c->n_input = malloc(1);
+        if (!(c->n_input = malloc(1)))
+            return (0);
         c->n_input[0] = '\0';
     }
     while (line[*i] != ' ' && line[*i] != '\0')
     {
-        c->n_input = ft_realloc_concat(c->n_input, line[*i]);
+        if(!(c->n_input = ft_realloc_concat(c->n_input, line[*i])))
+            return (0);
         *i = *i + 1;
     }
     return (ft_checkfile(c));
@@ -70,7 +73,6 @@ int ft_checkfile(t_command *c)
     if (stat(c->n_input, &buffer) != 0)
     {
         ft_putstr("Error : file or directory doesn't exist\n");
-        return (0);
     }
     return (1);
 }

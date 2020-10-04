@@ -54,7 +54,8 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
                 if (!(c->arg = ft_realloc_arg(c->arg)))
                     return (0);
             }
-            ft_new_arg(&(c->arg[k]), c, line, &i);
+            if (!(ft_new_arg(&(c->arg[k]), c, line, &i)))
+                return (0);
             ft_arg_var(&(c->arg[k]), fix);
         }
     }
