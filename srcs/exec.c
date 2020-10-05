@@ -5,6 +5,7 @@ void ft_execve(t_command *c, t_fix *fix)
     int fd;
     int fdi;
     int ret;
+    int j;
     
     ret = 0;
     fd = 1;
@@ -25,7 +26,11 @@ void ft_execve(t_command *c, t_fix *fix)
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
         fix->error = execve(c->arg[0], c->arg, fix->env);
     else
-       ft_relative_path(c, fix);
+    {
+        j = ft_relative_path(c, fix);
+        if (j == ft_env_len(fix))
+            fix->error = -1;
+    }
     if (fix->error == -1)
     {
         ft_putstr_fd(c->arg[0], fd);
@@ -38,7 +43,7 @@ void ft_execve(t_command *c, t_fix *fix)
     exit(-1);
 }
 
-void   ft_relative_path(t_command *c, t_fix *fix)
+int   ft_relative_path(t_command *c, t_fix *fix)
 {
     int j;
     int k;
@@ -50,12 +55,12 @@ void   ft_relative_path(t_command *c, t_fix *fix)
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (fix->env[j] && ft_strncmp(fix->env[j], "PATH", ft_strlen("PATH")) == 0)
+        if (ft_strncmp(fix->env[j], "PATH", ft_strlen("PATH")) == 0)
         {
             k = 5;
-            while (fix->env[j] && fix->env[j][k])
+            while (fix->env[j])
             {
-                if (fix->env[j][k] != ':')
+                if (fix->env[j][k] != ':' && fix->env[j][k])
                     try_path = ft_realloc_concat(try_path, fix->env[j][k]);
                 else
                 {
@@ -66,14 +71,15 @@ void   ft_relative_path(t_command *c, t_fix *fix)
                     try_path = malloc(1);
                     try_path[0] = '\0';
                     free(new);
+                    if (!fix->env[j][k])
+                        return (j);
                 }
                 k++;
             }
         }
         j++;
     }
-    if (j == ft_env_len(fix))
-        fix->error = -1;
+    return (j);
 }
 
 int ft_open_redir(t_command *c)
