@@ -7,6 +7,7 @@ void ft_execve(t_command *c, t_fix *fix)
     int ret;
     
     ret = 0;
+    fd = 1;
     if (c->add == 1)
         fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
@@ -22,28 +23,28 @@ void ft_execve(t_command *c, t_fix *fix)
         dup2(fdi, 0);
     }
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
-    {
         fix->error = execve(c->arg[0], c->arg, fix->env);
-        if (ret == -1)
-            exit(-1);
-    }
     else
        ft_relative_path(c, fix);
+    if (fix->error == -1)
+    {
+        ft_putstr_fd(c->arg[0], fd);
+        ft_putstr_fd(" : commande introuvable\n", fd);
+    }
     if (c->add == 1 || c->add == 2)
         close(fd);
     if (c->input == 1)
         close(fdi);
+    exit(-1);
 }
 
-int    ft_relative_path(t_command *c, t_fix *fix)
+void   ft_relative_path(t_command *c, t_fix *fix)
 {
     int j;
     int k;
     char *try_path;
     char *new;
-    int ret;
 
-    ret = 0;
     try_path = malloc(1);
     try_path[0] = '\0';
     j = 0;
@@ -60,24 +61,17 @@ int    ft_relative_path(t_command *c, t_fix *fix)
                 {
                     try_path = ft_realloc_concat(try_path, '/');
                     new = ft_strjoin(try_path, c->arg[0]);
-                    ret = execve(new, c->arg, fix->env);
-                    //si pas d'exit, c'est que execve return -1 -> alors cherche le chemin suivant de la variable PATH
+                    fix->error = execve(new, c->arg, fix->env);
                     free(try_path);
                     try_path = malloc(1);
                     try_path[0] = '\0';
                     free(new);
-                    if (ret == 0)
-                        return (0);
-                 //   printf("relative ret = %d\n", ret);
                 }
                 k++;
             }
         }
         j++;
     }
-    if (ret == -1)
-        exit(-1);
-    return (0);
 }
 
 int ft_open_redir(t_command *c)
