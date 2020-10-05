@@ -70,6 +70,8 @@ int     ft_export_err(int err, int fd, char *arg, t_fix *fix);
 int     ft_env_err(t_command *c, int fd, t_fix *fix);
 void    ft_execve(t_command *c, t_fix *fix);
 char    **ft_realloc_env(t_fix *fix, char buf[PATH_MAX]);
+void    ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX]);
+void    ft_realloc_concat_buff(char line[PATH_MAX], char c);
 
 int ft_echo(t_command *c, t_fix *fix, int fd);
 int ft_env(t_command *c, t_fix *fix, int fd);

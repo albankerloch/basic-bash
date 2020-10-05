@@ -47,10 +47,8 @@ int   ft_relative_path(t_command *c, t_fix *fix)
 {
     int j;
     int k;
-    char *try_path;
-    char *new;
-
-    try_path = malloc(1);
+    char try_path[PATH_MAX];
+    
     try_path[0] = '\0';
     j = 0;
     while (fix->env && fix->env[j])
@@ -58,19 +56,16 @@ int   ft_relative_path(t_command *c, t_fix *fix)
         if (ft_strncmp(fix->env[j], "PATH", ft_strlen("PATH")) == 0)
         {
             k = 5;
-            while (fix->env[j])
+            while (1)
             {
                 if (fix->env[j][k] != ':' && fix->env[j][k])
-                    try_path = ft_realloc_concat(try_path, fix->env[j][k]);
+                    ft_realloc_concat_buff(try_path, fix->env[j][k]);
                 else
                 {
-                    try_path = ft_realloc_concat(try_path, '/');
-                    new = ft_strjoin(try_path, c->arg[0]);
-                    fix->error = execve(new, c->arg, fix->env);
-                    free(try_path);
-                    try_path = malloc(1);
-                    try_path[0] = '\0';
-                    free(new);
+                    ft_realloc_concat_buff(try_path, '/');
+                    ft_strjoin_buff(try_path, c->arg[0]);
+                    fix->error = execve(try_path, c->arg, fix->env);
+                    ft_memset(try_path, '\0', ft_strlen(try_path));
                     if (!fix->env[j][k])
                         return (j);
                 }
