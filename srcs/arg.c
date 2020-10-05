@@ -61,7 +61,8 @@ int    ft_arg_var(char **arg, t_fix *fix)
             }
             free(new_arg);
         }
-        j++;
+        else
+            j++;
     }
     return (1);
 }
