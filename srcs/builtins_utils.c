@@ -29,7 +29,7 @@ int ft_env_compare(t_fix *fix, char *arg, int n)
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (ft_strncmp(arg, fix->env[j], n) == 0 && fix->env[n][j] == '=')
+        if (ft_strncmp(arg, fix->env[j], n) == 0 && fix->env[j][n] == '=')
             i--;
         j++;
         i++;
@@ -63,6 +63,20 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
     }
     fix->env = env2;
     return (env2);
+}
+
+int ft_env_err(t_command *c, int fd, t_fix *fix)
+{
+    if (c->arg[1] && ft_strcmp(c->arg[1], "=") && ft_strcmp(c->arg[1], "-"))
+    {
+        ft_putstr_fd("env: \"", fd);
+        ft_putstr_fd(c->arg[1], fd);
+        ft_putstr_fd("\": Aucun fichier ou dossier de ce type\n", fd);
+        return (-1);
+    }
+    else if (c->arg[1] && !ft_strcmp(c->arg[1], "-"))
+        return (-1);
+    return (1);
 }
 
 int ft_syntax_export(t_command *c, int fd, t_fix *fix)

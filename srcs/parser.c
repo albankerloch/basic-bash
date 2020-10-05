@@ -17,6 +17,7 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
 {
     int         i;
     int         k;
+    int         ret;
     t_command *c;
 
     k = -1;
@@ -33,8 +34,9 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
         }
         else if (line[i] == '<')
         {
-            if (!(ft_redirection_left(t->content, line, &i, &k)))
-                return (0);
+            ret = ft_redirection_left(t->content, line, &i, &k);
+            if (ret != 1)
+                return (ret);
         }
         else if (line[i] == '|')
         {

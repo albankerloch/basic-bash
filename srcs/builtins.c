@@ -32,12 +32,16 @@ int ft_env(t_command *c, t_fix *fix, int fd)
     int     j;
     
     j = 0;
+    if (ft_env_err(c, fd, fix) == -1)
+        return (ft_close_redir(c, fd));
     while (fix->env && fix->env[j])
     {
         ft_putstr_fd(fix->env[j], fd);
         ft_putchar_fd('\n', fd);
         j++;
     }
+    if (c->arg[1] && !ft_strcmp(c->arg[1], "="))
+        ft_putstr_fd("=\n", fd);
     return (ft_close_redir(c, fd));
 }
 
@@ -92,19 +96,18 @@ int ft_unset(t_command *c, t_fix *fix, int fd)
 
     if (c->arg[1])
     {
-        len = ft_env_len(fix);
-        l = 0;
-        while (fix->env && fix->env[l])
+        if (ft_strcmp(c->arg[1], "$") == 0)
         {
-            if (fix->env[l] && ft_strncmp(fix->env[l], c->arg[1], ft_strlen(c->arg[1])) == 0)
-                break;
-            l++;
+            ft_putstr_fd("bash: unset: \" $ \" : identifiant non valable\n", fd);
+            return (ft_close_redir(c, fd));
         }
+        len = ft_env_len(fix);
+        l = ft_env_compare(fix, c->arg[1], ft_strlen(c->arg[1]));
         if (len == l)
-            return (0);
+            return (ft_close_redir(c, fd));
         if (!(env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]))))
             return (0);
-        env2[len] = NULL;
+        env2[l] = NULL;
     }
     return (ft_close_redir(c, fd));
 }
@@ -120,8 +123,6 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
         ret = chdir("/home/user42");
     else
         ret = chdir(c->arg[1]);
-   // if (!(buf = malloc(sizeof(char) * PATH_MAX)))
-     //   return (0);
     getcwd(buf, PATH_MAX);
     j = 0;
     while (fix->env && fix->env[j])
