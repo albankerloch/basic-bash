@@ -29,7 +29,7 @@ int ft_env_compare(t_fix *fix, char *arg, int n)
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (ft_strncmp(arg, fix->env[j], n) == 0)
+        if (ft_strncmp(arg, fix->env[j], n) == 0 && fix->env[n][j] == '=')
             i--;
         j++;
         i++;
