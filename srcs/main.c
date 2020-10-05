@@ -43,7 +43,12 @@ int	main(int argc, char *argv[], char *envp[])
 		if (ret2 != -1)
 		{
 			if (!(ft_exec(t, line, &fix)))
-				ft_exit(&fix, t, line, EXIT_FAILURE);
+			{
+				if (fix.exit >= 0)
+					ft_exit(&fix, t, line, fix.exit);
+				else
+					ft_exit(&fix, t, line, EXIT_FAILURE);
+			}
 		}
 		free(line);
 		ft_lstclear(&t, &ft_del_command);

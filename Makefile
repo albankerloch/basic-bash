@@ -8,6 +8,7 @@ SRCS_NAME	= 	main.c \
 					exit.c \
 					redirections.c \
 					arg.c \
+					ft_atoi.c \
 					builtins.c \
 					builtins_utils.c
 

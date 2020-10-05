@@ -35,6 +35,7 @@ typedef struct s_command
 typedef struct s_fix
 {
   int   error;
+  int   exit;
   char **env;
 }       t_fix;
 
@@ -92,7 +93,8 @@ void    ft_free_command(t_command *c);
 t_list  *ft_init_list(t_fix *fix);
 int     ft_add_list(t_list *t, t_fix *fix);
 char    **ft_free_tab(char **new, int i);
-char *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char const *s2);
-char *ft_strjoin_substr(char const *s1, char const *s, unsigned int start, size_t len);
+char    *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char const *s2);
+char    *ft_strjoin_substr(char const *s1, char const *s, unsigned int start, size_t len);
+int			ft_atoi(const char *str);
 
 #endif

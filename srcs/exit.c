@@ -45,7 +45,9 @@ void    ft_free_command(t_command *c)
 int    ft_exit_fix(t_fix *fix, int i, int e)
 {
     int t;
+    int k;
 
+    k = fix->exit;
     if (i == -2)
     {
         i = 0;
@@ -59,7 +61,7 @@ int    ft_exit_fix(t_fix *fix, int i, int e)
         t++;
     }
     free(fix->env);
-    if (e == EXIT_FAILURE)
+    if (e == EXIT_FAILURE && k == -1)
         ft_putstr("malloc error\n");
     exit(e);
 }
