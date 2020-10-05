@@ -72,6 +72,8 @@ void   ft_relative_path(t_command *c, t_fix *fix)
         }
         j++;
     }
+    if (j == ft_env_len(fix))
+        fix->error = -1;
 }
 
 int ft_open_redir(t_command *c)
@@ -223,7 +225,9 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     
     if ((ret = ft_builtins(c, line, fix)) == 0)
         return (0);
-    if (ret == -1)
+    else if (ret == 1)
+        fix->error = 0;
+    else if (ret == -1)
     {
         pidf = fork();
         signal(SIGINT, ft_sig_handler_process);

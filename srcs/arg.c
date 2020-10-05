@@ -50,6 +50,8 @@ int    ft_arg_var(char **arg, t_fix *fix)
         if ((*arg)[j] == '$' && (*arg)[j + 1])
         {
             j++;
+            if ((*arg)[j] == '?')
+                return (1);
             if (!(new_arg = ft_env_var(*arg, j, fix)))
                 return (0);
             if (!(*arg = ft_substr_strjoin(*arg, 0, j - 1, new_arg)))
