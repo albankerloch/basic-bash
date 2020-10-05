@@ -138,3 +138,33 @@ int ft_export_err(int err, int fd, char *arg, t_fix *fix)
     }
     return (-1);
 }
+
+char **ft_realloc_env(t_fix *fix, char buf[PATH_MAX])
+{
+    int j;
+    char    **env2;
+
+    j = 0;
+    while (fix->env && fix->env[j])
+        j++;
+    if (!(env2 = malloc(sizeof(char **) * j + 1)))
+        return (NULL);
+    j = 0;
+    while (fix->env && fix->env[j])
+    {
+        if (fix->env[j] && ft_strncmp(fix->env[j], "PWD", ft_strlen("PWD")) == 0)
+        {
+            if (!(env2[j] = ft_strjoin("PWD=", buf)))
+                return (ft_free_tab(env2, j));
+        }
+        else
+        {
+            if (!(env2[j] = ft_strdup(fix->env[j])))
+                return (ft_free_tab(env2, j));
+        }
+        j++;
+    }
+    env2[j] = NULL;
+    free(fix->env);
+    return (env2);
+}

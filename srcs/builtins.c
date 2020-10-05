@@ -117,34 +117,13 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
     int ret;
     char    buf[PATH_MAX];
     int j;
-    char    **env2;
     
     if (!c->arg[1])
         ret = chdir("/home/user42");
     else
         ret = chdir(c->arg[1]);
     getcwd(buf, PATH_MAX);
-    j = 0;
-    while (fix->env && fix->env[j])
-        j++;
-    if (!(env2 = malloc(sizeof(char **) * j + 1)))
+    if (!(fix->env = ft_realloc_env(fix, buf)))
         return (0);
-    j = 0;
-    while (fix->env && fix->env[j])
-    {
-        if (fix->env[j] && ft_strncmp(fix->env[j], "PWD", ft_strlen("PWD")) == 0)
-        {
-            if (!(env2[j] = ft_strjoin("PWD=", buf)))
-                return (0);
-        }
-        else
-        {
-            if (!(env2[j] = ft_strdup(fix->env[j])))
-                return (0);
-        }
-        j++;
-    }
-    env2[j] = NULL;
-    fix->env = env2;
     return (ft_close_redir(c, fd));
 }
