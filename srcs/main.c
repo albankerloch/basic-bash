@@ -40,7 +40,7 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_exit(&fix, t, line, EXIT_FAILURE);
 		if (!((parsing = ft_parser(t, line, &fix))))
 			ft_exit(&fix, t, line, EXIT_FAILURE);
-		if (parsing != -1)
+		if (parsing == 1)
 		{
 			if (!(ft_exec(t, line, &fix)))
 			{

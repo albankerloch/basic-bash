@@ -24,6 +24,7 @@ int ft_echo(t_command *c, t_fix *fix, int fd)
     }
     if (n == 0)
         ft_putchar_fd('\n', fd);
+    fix->error = 0;
     return (ft_close_redir(c, fd));
 }
 
@@ -42,6 +43,7 @@ int ft_env(t_command *c, t_fix *fix, int fd)
     }
     if (c->arg[1] && !ft_strcmp(c->arg[1], "="))
         ft_putstr_fd("=\n", fd);
+    fix->error = 0;
     return (ft_close_redir(c, fd));
 }
 
@@ -63,6 +65,7 @@ int ft_pwd(t_command *c, t_fix *fix, int fd)
         }
         j++;
     }
+    fix->error = 0;
     return (ft_close_redir(c, fd));
 }
 
@@ -80,6 +83,7 @@ int ft_export(t_command *c, t_fix *fix, int fd)
     if (!(env2[i] = ft_strdup(c->arg[1])))
         return (0);
     env2[i + 1] = NULL;
+    fix->error = 0;
     return (ft_close_redir(c, fd));
 }
 
@@ -94,16 +98,21 @@ int ft_unset(t_command *c, t_fix *fix, int fd)
         if (ft_strcmp(c->arg[1], "$") == 0)
         {
             ft_putstr_fd("bash: unset: \" $ \" : identifiant non valable\n", 2);
+            fix->error = 1;
             return (ft_close_redir(c, fd));
         }
         len = ft_env_len(fix);
         l = ft_env_compare(fix, c->arg[1], ft_strlen(c->arg[1]));
         if (len == l)
+        {
+            fix->error = 0;
             return (ft_close_redir(c, fd));
+        }
         if (!(env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]))))
             return (0);
         env2[l] = NULL;
     }
+    fix->error = 0;
     return (ft_close_redir(c, fd));
 }
 
@@ -117,8 +126,21 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
         ret = chdir("/home/user42");
     else
         ret = chdir(c->arg[1]);
-    getcwd(buf, PATH_MAX);
+    if (ret == -1)
+    {
+        fix->error = 1;
+        ft_putstr_fd("bash: cd: ", 2);
+        ft_putstr_fd(c->arg[1], 2);
+        ft_putstr_fd(": Aucun fichier ou dossier de ce type\n", 2);
+        return (ft_close_redir(c, fd));
+    }
+    if (!(getcwd(buf, PATH_MAX)))
+    {
+        ft_close_redir(c, fd);
+        return (0);
+    }
     if (!(fix->env = ft_realloc_env(fix, buf)))
         return (0);
+    fix->error = 0;
     return (ft_close_redir(c, fd));
 }

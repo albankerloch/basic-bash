@@ -41,18 +41,6 @@ char	*ft_realloc_concat(char *line, char c)
 	return (new);
 }
 
-void ft_check(char **new)
-{
-	int i;
-	
-	i = 0;
-	while (new[i])
-    {
-        printf("LLL%i\n", i);
-        i++;
-    }
-}
-
 char **ft_free_tab(char **new, int i)
 {
 	int k;

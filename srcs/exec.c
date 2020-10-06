@@ -2,8 +2,6 @@
 
 int ft_open_redir(t_command *c)
 {
-    int fd;
-
     if (c->add == 0)
         return (1);
     else if (c->add == 1)
@@ -11,12 +9,8 @@ int ft_open_redir(t_command *c)
         return (open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH));
     }
-    else
-    {
-        return (open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH));
-    }
-    return (fd);
+    return (open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
+    S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH));
 }
 
 int    ft_close_redir(t_command *c, int fd)
@@ -137,10 +131,7 @@ int ft_builtins(t_command *c, char *line, t_fix *fix)
     {
         ft_putstr("exit\n");
         if (c->arg[1])
-        {
 	        fix->exit = ft_atoi(c->arg[1]);
-          //  printf("ex=%d\n", ft_atoi(c->arg[1]));
-        }
         else
             fix->exit = 0;
         return (0);
@@ -156,8 +147,6 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     
     if ((ret = ft_builtins(c, line, fix)) == 0)
         return (0);
-    else if (ret == 1)
-        fix->error = 0;
     else if (ret == -1)
     {
         pidf = fork();

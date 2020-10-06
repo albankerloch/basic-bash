@@ -2,7 +2,7 @@
 
 void    ft_echo_n(int *n, char *arg, int *i)
 {
-    if (ft_strncmp(arg, "-n", ft_strlen("-n")) == 0 && ft_strlen("-n") == ft_strlen(arg))
+    if (!ft_strcmp(arg, "-n"))
     {
         *n = 1;
         *i = 2;
@@ -72,10 +72,14 @@ int ft_env_err(t_command *c, int fd, t_fix *fix)
         ft_putstr_fd("env: \"", 2);
         ft_putstr_fd(c->arg[1], 2);
         ft_putstr_fd("\": Aucun fichier ou dossier de ce type\n", 2);
+        fix->error = 127;
         return (-1);
     }
     else if (c->arg[1] && !ft_strcmp(c->arg[1], "-"))
+    {
+        fix->error = 0;
         return (-1);
+    }
     return (1);
 }
 
@@ -93,6 +97,7 @@ int ft_syntax_export(t_command *c, int fd, t_fix *fix)
             ft_putchar_fd('\n', 2);
             i++;
         }
+        fix->error = 0;
         return (-1);
     }
     if (c->arg[1] && c->arg[1][0] == '=')
@@ -106,6 +111,7 @@ int ft_syntax_export(t_command *c, int fd, t_fix *fix)
             return (i);
         i++;
     }
+    fix->error = 0;
     return (-1);
 }
 
@@ -116,6 +122,7 @@ int ft_export_err(int fd, char *arg, t_fix *fix)
     ft_putstr_fd("bash: export: \" ", 2);
     ft_putstr_fd(arg, 2);
     ft_putstr_fd(" \" : identifiant non valable\n", 2);
+    fix->error = 1;
     return (-1);
 }
 

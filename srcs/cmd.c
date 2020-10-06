@@ -24,15 +24,16 @@ void ft_execve(t_command *c, t_fix *fix)
         dup2(fdi, 0);
     }
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
-        fix->error = execve(c->arg[0], c->arg, fix->env);
+        ret = execve(c->arg[0], c->arg, fix->env);
     else
     {
         j = ft_relative_path(c, fix);
         if (j == ft_env_len(fix))
-            fix->error = -1;
+            ret = -1;
     }
-    if (fix->error == -1)
+    if (ret == -1)
     {
+        fix->error = 127;
         ft_putstr_fd(c->arg[0], 2);
         ft_putstr_fd(" : commande introuvable\n", 2);
     }
@@ -64,10 +65,10 @@ int   ft_relative_path(t_command *c, t_fix *fix)
                 {
                     ft_realloc_concat_buff(try_path, '/');
                     ft_strjoin_buff(try_path, c->arg[0]);
-                    fix->error = execve(try_path, c->arg, fix->env);
+                    execve(try_path, c->arg, fix->env);
                     ft_memset(try_path, '\0', ft_strlen(try_path));
                     if (!fix->env[j][k])
-                        return (j);
+                        return (ft_env_len(fix));
                 }
                 k++;
             }

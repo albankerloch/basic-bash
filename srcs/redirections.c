@@ -8,31 +8,26 @@ int    ft_redirection_right(t_command *c, char *line, int *i, int *k)
         c->add = 2;
         return (ft_redir_right(c, line, i, k));
     }
-    else
-    {
-        *i = *i + 1;
-        c->add = 1;
-        return (ft_redir_right(c, line, i, k));
-    }
-    return (1);
+    *i = *i + 1;
+    c->add = 1;
+    return (ft_redir_right(c, line, i, k));
 }
 
 int    ft_redir_right(t_command *c, char *line, int *i, int *k)
 {
     while (line[*i] == ' ')
         (*i)++;
+    if (!line[*i])
+    {
+        ft_putstr_fd("bash: erreur de syntaxe près du symbole inattendu \" newline \"\n", 2);
+        return (-1);
+    }
     if (!(ft_new_arg(&(c->n_out), c, line, i)))
         return (0);
-    if (c->quote != 0)
-    {
-        ft_putstr("WARNING : Quotes automatically closed");
-        ft_putchar('\n');
-    }
-    ft_touch(c);
-    return (1);
+    return (ft_touch(c));
 }
 
-void    ft_touch(t_command *c)
+int    ft_touch(t_command *c)
 {
     int fd;
     if (c->add == 1)
@@ -41,7 +36,9 @@ void    ft_touch(t_command *c)
     else if (c->add == 2)
         fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | \
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    close(fd);
+    if (fd == -1)
+        return (0);
+    return (ft_close_redir(c, fd));
 }
 
 int    ft_redirection_left(t_command *c, char *line, int *i, int *k)

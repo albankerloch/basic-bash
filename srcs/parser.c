@@ -1,16 +1,3 @@
-/*best parser ever*/
-
-/* while(line[i] != '\0')
-    {
-        //realloc char si diff " ' > space et pas debut d'un redic en debut mot
-        // si space realloc une fois (cmp avec malloc en cours arg)
-        // si " ', cherche second, realloc ou erreur
-        // si redir, chg struct
-        
-    i++;
-    }
-*/
-
 #include "../includes/minishell.h"
 
 int ft_parser(t_list *t, char *line, t_fix *fix)
@@ -28,15 +15,19 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
     {
         if (line[i] == ' ')
             i++;
-            // si on est au début d'une redirection
         else if (line[i] == '>')
         {
-            if (!(ft_redirection_right(t->content, line, &i, &k)))
-                return (0);
+            ret = ft_redirection_right(t->content, line, &i, &k);
+            if (ret == -1)
+                fix->error = 2;
+            if (ret != 1)
+                return (ret);
         }
         else if (line[i] == '<')
         {
             ret = ft_redirection_left(t->content, line, &i, &k);
+            if (ret == -1)
+                fix->error = 1;
             if (ret != 1)
                 return (ret);
         }
@@ -65,9 +56,6 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
         }
     }
     if (c->quote != 0)
-    {
-        ft_putstr("WARNING : Quotes automatically closed");
-        ft_putchar('\n');
-    }
+        ft_putstr_fd("WARNING : Quotes automatically closed\n", 2);
     return (1);
 }

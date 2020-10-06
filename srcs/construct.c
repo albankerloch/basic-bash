@@ -74,6 +74,7 @@ void   ft_fix_construct(t_fix *fix, char **envp)
 	}
 	fix->env[len] = NULL;
     fix->error = 0;
+    fix->exit = -1;
 }
 
 void    ft_command_destroy(void *c)

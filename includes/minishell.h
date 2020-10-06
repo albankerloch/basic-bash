@@ -53,7 +53,7 @@ char	  **ft_realloc_arg(char **arg);
 void    ft_skip_quotes(char *line, int *i, int *quote);
 t_command *    ft_command_construct();
 void    ft_command_destroy(void *c);
-void    ft_touch(t_command *c);
+int    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
 int     ft_open_redir(t_command *c);
 int    ft_close_redir(t_command *c, int fd);
