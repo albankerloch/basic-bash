@@ -1,7 +1,5 @@
 #include "../includes/minishell.h"
 
-
-
 int ft_open_redir(t_command *c)
 {
     int fd;
@@ -124,6 +122,7 @@ int ft_builtins(t_command *c, char *line, t_fix *fix)
 
     if ((fd = ft_open_redir(c)) == -1)
         return (0);
+   // printf("fd %s=%d\n", c->arg[0], fd);
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
         return (ft_echo(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))

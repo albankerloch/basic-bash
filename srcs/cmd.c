@@ -33,8 +33,8 @@ void ft_execve(t_command *c, t_fix *fix)
     }
     if (fix->error == -1)
     {
-        ft_putstr_fd(c->arg[0], fd);
-        ft_putstr_fd(" : commande introuvable\n", fd);
+        ft_putstr_fd(c->arg[0], 2);
+        ft_putstr_fd(" : commande introuvable\n", 2);
     }
     if (c->add == 1 || c->add == 2)
         close(fd);
@@ -50,7 +50,6 @@ int   ft_relative_path(t_command *c, t_fix *fix)
     char try_path[PATH_MAX];
     
     try_path[0] = '\0';
-    execve(c->arg[0], c->arg, fix->env);
     j = 0;
     while (fix->env && fix->env[j])
     {

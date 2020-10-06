@@ -69,9 +69,9 @@ int ft_env_err(t_command *c, int fd, t_fix *fix)
 {
     if (c->arg[1] && ft_strcmp(c->arg[1], "=") && ft_strcmp(c->arg[1], "-"))
     {
-        ft_putstr_fd("env: \"", fd);
-        ft_putstr_fd(c->arg[1], fd);
-        ft_putstr_fd("\": Aucun fichier ou dossier de ce type\n", fd);
+        ft_putstr_fd("env: \"", 2);
+        ft_putstr_fd(c->arg[1], 2);
+        ft_putstr_fd("\": Aucun fichier ou dossier de ce type\n", 2);
         return (-1);
     }
     else if (c->arg[1] && !ft_strcmp(c->arg[1], "-"))
@@ -82,15 +82,23 @@ int ft_env_err(t_command *c, int fd, t_fix *fix)
 int ft_syntax_export(t_command *c, int fd, t_fix *fix)
 {
     int i;
-    int eg;
     
     if (!c->arg[1])
-        return (ft_export_err(2, fd, 0, fix));
+    {
+        i = 0;
+        while (fix->env && fix->env[i])
+        {
+            ft_putstr_fd("declare -x ", 2);
+            ft_putstr_fd(fix->env[i], 2);
+            ft_putchar_fd('\n', 2);
+            i++;
+        }
+        return (-1);
+    }
     if (c->arg[1] && c->arg[1][0] == '=')
-        return (ft_export_err(3, fd, c->arg[1], fix));
+        return (ft_export_err(fd, c->arg[1], fix));
     if (c->arg[2] && c->arg[2][0] == '=')
-        return (ft_export_err(3, fd, c->arg[2], fix));
-    eg = 0;
+        return (ft_export_err(fd, c->arg[2], fix));
     i = 0;
     while (c->arg[1][i])
     {
@@ -98,44 +106,16 @@ int ft_syntax_export(t_command *c, int fd, t_fix *fix)
             return (i);
         i++;
     }
-    return (ft_export_err(1, fd, 0, fix));
+    return (-1);
 }
 
-int ft_export_err(int err, int fd, char *arg, t_fix *fix)
+int ft_export_err(int fd, char *arg, t_fix *fix)
 {
-    int j;
     char    *sub_str;
 
-    j = 0;
-    if (err == 2)
-    {
-        while (fix->env && fix->env[j])
-        {
-            ft_putstr_fd("declare -x ", fd);
-            ft_putstr_fd(fix->env[j], fd);
-            ft_putchar_fd('\n', fd);
-            j++;
-        }
-    }
-    else if (err == 3 || err == 4)
-    {
-        if (err == 4)
-        {
-            while (arg[j] != '=')
-                j++;
-        }
-        ft_putstr_fd("bash: export: \" ", fd);
-        if (err == 4)
-        {
-            if (!(sub_str = ft_substr(arg, j, ft_strlen(arg) - j)))
-                return (0);
-            ft_putstr_fd(sub_str, fd);
-            free(sub_str);
-        }
-        else
-            ft_putstr_fd(arg, fd);
-        ft_putstr_fd(" \" : identifiant non valable\n", fd);
-    }
+    ft_putstr_fd("bash: export: \" ", 2);
+    ft_putstr_fd(arg, 2);
+    ft_putstr_fd(" \" : identifiant non valable\n", 2);
     return (-1);
 }
 

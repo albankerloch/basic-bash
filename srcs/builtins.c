@@ -74,11 +74,6 @@ int ft_export(t_command *c, t_fix *fix, int fd)
 
     if ((n = ft_syntax_export(c, fd, fix)) == -1)
         return (ft_close_redir(c, fd));
-    else if (n == 0)
-    {
-        ft_close_redir(c, fd);
-        return (0);
-    }
     i = ft_env_compare(fix, c->arg[1], n);
     if (!(env2 = ft_env_cpy(fix, c->arg[1], i + 2, n)))
         return (0);
@@ -98,7 +93,7 @@ int ft_unset(t_command *c, t_fix *fix, int fd)
     {
         if (ft_strcmp(c->arg[1], "$") == 0)
         {
-            ft_putstr_fd("bash: unset: \" $ \" : identifiant non valable\n", fd);
+            ft_putstr_fd("bash: unset: \" $ \" : identifiant non valable\n", 2);
             return (ft_close_redir(c, fd));
         }
         len = ft_env_len(fix);
