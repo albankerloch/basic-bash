@@ -50,6 +50,7 @@ int   ft_relative_path(t_command *c, t_fix *fix)
     char try_path[PATH_MAX];
     
     try_path[0] = '\0';
+    execve(c->arg[0], c->arg, fix->env);
     j = 0;
     while (fix->env && fix->env[j])
     {
@@ -215,7 +216,10 @@ int ft_builtins(t_command *c, char *line, t_fix *fix)
     {
         ft_putstr("exit\n");
         if (c->arg[1])
+        {
 	        fix->exit = ft_atoi(c->arg[1]);
+          //  printf("ex=%d\n", ft_atoi(c->arg[1]));
+        }
         else
             fix->exit = 0;
         return (0);
