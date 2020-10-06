@@ -10,7 +10,8 @@ SRCS_NAME	= 	main.c \
 					arg.c \
 					ft_atoi.c \
 					builtins.c \
-					builtins_utils.c
+					builtins_utils.c \
+					cmd.c
 
 SRCS_DIR	= ./srcs
 
