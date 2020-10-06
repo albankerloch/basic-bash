@@ -53,7 +53,7 @@ int    ft_redirection_left(t_command *c, char *line, int *i, int *k)
     if (c->n_input[0] != '\0')
     {
         free(c->n_input);
-        if (!(c->n_input = malloc(1)))
+        if (!(c->n_input = malloc(sizeof(int))))
             return (0);
         c->n_input[0] = '\0';
     }
@@ -72,7 +72,7 @@ int ft_checkfile(t_command *c)
 
     if (stat(c->n_input, &buffer) != 0)
     {
-        ft_putstr("Error : file or directory doesn't exist\n");
+        ft_putstr_fd("Error : file or directory doesn't exist\n", 2);
         return (-1);
     }
     return (1);

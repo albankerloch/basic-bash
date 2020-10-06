@@ -18,6 +18,7 @@ int	main(int argc, char *argv[], char *envp[])
 	char *line;
 	t_list *t;
 	int	ret;
+	int	parsing;
 
 	ft_fix_construct(&fix, envp);
 	ret = 1;
@@ -37,9 +38,9 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 		if (ret == -1)
 			ft_exit(&fix, t, line, EXIT_FAILURE);
-		if (!((ret = ft_parser(t, line, &fix))))
+		if (!((parsing = ft_parser(t, line, &fix))))
 			ft_exit(&fix, t, line, EXIT_FAILURE);
-		if (ret != -1)
+		if (parsing != -1)
 		{
 			if (!(ft_exec(t, line, &fix)))
 			{

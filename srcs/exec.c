@@ -90,7 +90,6 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             close(pipe_fd[0]);
             dup2(pipe_fd[1], 1);
             close(pipe_fd[1]);
-            //gérer err return du fork exec cmd
             fork_exec_cmd(t->content, line, fix);
             dup2(save_fd, 1);
             close(save_fd);
@@ -122,7 +121,6 @@ int ft_builtins(t_command *c, char *line, t_fix *fix)
 
     if ((fd = ft_open_redir(c)) == -1)
         return (0);
-   // printf("fd %s=%d\n", c->arg[0], fd);
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
         return (ft_echo(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))

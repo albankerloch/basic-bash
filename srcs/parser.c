@@ -22,6 +22,8 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
 
     k = -1;
     i = 0;
+    if (!line[0])
+        return (-1);
     while(line[i])
     {
         if (line[i] == ' ')
@@ -48,7 +50,6 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
         }
         else
         {
-            // sinon on est au début d'un nouvel argument => ajout d'un char* à c.arg
             c = t->content;
             k++;
             if (k != 0)
