@@ -5,30 +5,36 @@ void ft_execve(t_command *c, t_fix *fix)
     int fd;
     int fdi;
     int ret;
-    int j;
     
     ret = 0;
-    fd = 1;
-    if (c->add == 1)
-        fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | 
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    else if (c->add == 2)
-        fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    if ((fd = ft_open_redir(c)) == -1)
+        exit (-1);
     if (c->add == 1 || c->add == 2)
-        dup2(fd, 1);
+    {
+        if (dup2(fd, 1) == -1)
+        {
+            ft_close_redir(c, fd);
+            exit (-1);
+        }
+    }
     if (c->input == 1)
     {
         fdi = open(c->n_input, O_RDONLY, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-        dup2(fdi, 0);
+        if (fdi == -1)
+            exit (-1);
+        if (dup2(fdi, 0) == -1)
+        {
+            ft_close_redir(c, fd);
+            close(fdi);
+            exit (-1);
+        }
     }
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
         ret = execve(c->arg[0], c->arg, fix->env);
     else
     {
-        j = ft_relative_path(c, fix);
-        if (j == ft_env_len(fix))
+        if (ft_relative_path(c, fix) == ft_env_len(fix))
             ret = -1;
     }
     if (ret == -1)
@@ -37,8 +43,7 @@ void ft_execve(t_command *c, t_fix *fix)
         ft_putstr_fd(c->arg[0], 2);
         ft_putstr_fd(" : commande introuvable\n", 2);
     }
-    if (c->add == 1 || c->add == 2)
-        close(fd);
+    ft_close_redir(c, fd);
     if (c->input == 1)
         close(fdi);
     exit(-1);

@@ -107,6 +107,7 @@ int ft_builtins(t_command *c, char *line, t_fix *fix, int fd)
 	        fix->exit = ft_atoi(c->arg[1]);
         else
             fix->exit = 0;
+        fix->error = fix->exit;
         return (0);
     }
     return (-1);
@@ -119,8 +120,7 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     int ret;
     int fd;
 
-    fd = ft_open_redir(c);
-    if (fd == 0)
+    if ((fd = ft_open_redir(c)) == -1)
         return (0);
     if ((ret = ft_builtins(c, line, fix, fd)) == 0)
     {
@@ -136,6 +136,8 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
             ft_execve(c, fix);
         else
             wait(&(fix->error));
+        if (fix->error != 0)
+            fix->error = 127;
     }
     return (ft_close_redir(c, fd));
 }

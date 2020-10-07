@@ -11,6 +11,7 @@ SRCS_NAME	= 	main.c \
 					builtins.c \
 					builtins_utils.c \
 					cmd.c \
+					cmd_utils.c \
 					files.c
 
 SRCS_DIR	= ./srcs
