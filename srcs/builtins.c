@@ -25,7 +25,7 @@ int ft_echo(t_command *c, t_fix *fix, int fd)
     if (n == 0)
         ft_putchar_fd('\n', fd);
     fix->error = 0;
-    return (ft_close_redir(c, fd));
+    return (1);
 }
 
 int ft_env(t_command *c, t_fix *fix, int fd)
@@ -34,7 +34,7 @@ int ft_env(t_command *c, t_fix *fix, int fd)
     
     j = 0;
     if (ft_env_err(c, fd, fix) == -1)
-        return (ft_close_redir(c, fd));
+        return (1);
     while (fix->env && fix->env[j])
     {
         ft_putstr_fd(fix->env[j], fd);
@@ -44,7 +44,7 @@ int ft_env(t_command *c, t_fix *fix, int fd)
     if (c->arg[1] && !ft_strcmp(c->arg[1], "="))
         ft_putstr_fd("=\n", fd);
     fix->error = 0;
-    return (ft_close_redir(c, fd));
+    return (1);
 }
 
 int ft_pwd(t_command *c, t_fix *fix, int fd)
@@ -66,7 +66,7 @@ int ft_pwd(t_command *c, t_fix *fix, int fd)
         j++;
     }
     fix->error = 0;
-    return (ft_close_redir(c, fd));
+    return (1);
 }
 
 int ft_export(t_command *c, t_fix *fix, int fd)
@@ -76,7 +76,7 @@ int ft_export(t_command *c, t_fix *fix, int fd)
     char **env2;
 
     if ((n = ft_syntax_export(c, fd, fix)) == -1)
-        return (ft_close_redir(c, fd));
+        return (1);
     i = ft_env_compare(fix, c->arg[1], n);
     if (!(env2 = ft_env_cpy(fix, c->arg[1], i + 2, n)))
         return (0);
@@ -84,7 +84,7 @@ int ft_export(t_command *c, t_fix *fix, int fd)
         return (0);
     env2[i + 1] = NULL;
     fix->error = 0;
-    return (ft_close_redir(c, fd));
+    return (1);
 }
 
 int ft_unset(t_command *c, t_fix *fix, int fd)
@@ -99,21 +99,21 @@ int ft_unset(t_command *c, t_fix *fix, int fd)
         {
             ft_putstr_fd("bash: unset: \" $ \" : identifiant non valable\n", 2);
             fix->error = 1;
-            return (ft_close_redir(c, fd));
+            return (1);
         }
         len = ft_env_len(fix);
         l = ft_env_compare(fix, c->arg[1], ft_strlen(c->arg[1]));
         if (len == l)
         {
             fix->error = 0;
-            return (ft_close_redir(c, fd));
+            return (1);
         }
         if (!(env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]))))
             return (0);
         env2[l] = NULL;
     }
     fix->error = 0;
-    return (ft_close_redir(c, fd));
+    return (1);
 }
 
 int ft_cd(t_command *c, t_fix *fix, int fd)
@@ -132,15 +132,12 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
         ft_putstr_fd("bash: cd: ", 2);
         ft_putstr_fd(c->arg[1], 2);
         ft_putstr_fd(": Aucun fichier ou dossier de ce type\n", 2);
-        return (ft_close_redir(c, fd));
+        return (1);
     }
     if (!(getcwd(buf, PATH_MAX)))
-    {
-        ft_close_redir(c, fd);
         return (0);
-    }
     if (!(fix->env = ft_realloc_env(fix, buf)))
         return (0);
     fix->error = 0;
-    return (ft_close_redir(c, fd));
+    return (1);
 }

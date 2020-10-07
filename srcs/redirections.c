@@ -48,15 +48,3 @@ int    ft_redirection_left(t_command *c, char *line, int *i, int *k)
     }
     return (ft_checkfile(c));
 }
-
-int ft_checkfile(t_command *c)
-{
-    struct stat   buffer;
-
-    if (stat(c->n_input, &buffer) != 0)
-    {
-        ft_putstr_fd("Error : file or directory doesn't exist\n", 2);
-        return (-1);
-    }
-    return (1);
-}

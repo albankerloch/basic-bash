@@ -57,7 +57,7 @@ int    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
 int     ft_open_redir(t_command *c);
 int    ft_close_redir(t_command *c, int fd);
-int     ft_builtins(t_command *c, char *line, t_fix *fix);
+int     ft_builtins(t_command *c, char *line, t_fix *fix, int fd);
 int    fork_exec_cmd(t_command *c, char *line, t_fix *fix);
 int     ft_relative_path(t_command *c, t_fix *fix);
 int     ft_new_arg(char **arg, t_command *c, char *line, int *i);

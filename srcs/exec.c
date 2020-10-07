@@ -86,12 +86,8 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     return (1);
 }
 
-int ft_builtins(t_command *c, char *line, t_fix *fix)
+int ft_builtins(t_command *c, char *line, t_fix *fix, int fd)
 {
-    int fd;
-
-    if ((fd = ft_open_redir(c)) == -1)
-        return (0);
     if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
         return (ft_echo(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
@@ -121,9 +117,16 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     pid_t   pidf;
     char    ***p;
     int ret;
-    
-    if ((ret = ft_builtins(c, line, fix)) == 0)
+    int fd;
+
+    fd = ft_open_redir(c);
+    if (fd == 0)
         return (0);
+    if ((ret = ft_builtins(c, line, fix, fd)) == 0)
+    {
+        ft_close_redir(c, fd);
+        return (0);
+    }
     else if (ret == -1)
     {
         pidf = fork();
@@ -134,5 +137,5 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         else
             wait(&(fix->error));
     }
-    return (1);
+    return (ft_close_redir(c, fd));
 }
