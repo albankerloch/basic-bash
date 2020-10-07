@@ -27,20 +27,6 @@ int    ft_redir_right(t_command *c, char *line, int *i, int *k)
     return (ft_touch(c));
 }
 
-int    ft_touch(t_command *c)
-{
-    int fd;
-    if (c->add == 1)
-        fd = open(c->n_out, O_TRUNC | O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | \
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    else if (c->add == 2)
-        fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | \
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    if (fd == -1)
-        return (0);
-    return (ft_close_redir(c, fd));
-}
-
 int    ft_redirection_left(t_command *c, char *line, int *i, int *k)
 {
     *i = *i + 1;
