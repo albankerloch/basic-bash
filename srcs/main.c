@@ -52,7 +52,7 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 		free(line);
 		ft_lstclear(&t, &ft_del_command);
-	//	printf("fix->error=%d\n", fix.error);
+		printf("fix->error=%d\n", fix.error);
 	}
 	ft_exit_fix(&fix, -2, EXIT_SUCCESS);
 	return (0);

@@ -44,9 +44,7 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     pid_t   pid;
     pid_t   pid2;
     int     pipe_fd[2];
-    int     ret;
     int     save_fd;
-    char    ***p;
 
     //aff_list(t);
     if (!t->next)
@@ -101,7 +99,7 @@ int ft_builtins(t_command *c, char *line, t_fix *fix, int fd)
     else if (ft_strncmp(c->arg[0], "cd", ft_strlen("cd")) == 0  && ft_strlen("cd") == ft_strlen(c->arg[0]))
         return (ft_cd(c, fix, fd));
     else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
-    return (ft_builtin_exit(c, fix, fd));
+        return (ft_builtin_exit(c, fix, fd));
     return (-1);
 }
 

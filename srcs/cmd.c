@@ -19,9 +19,8 @@ void ft_execve(t_command *c, t_fix *fix)
     }
     if (c->input == 1)
     {
-        fdi = open(c->n_input, O_RDONLY, S_IRUSR | S_IWUSR | 
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-        if (fdi == -1)
+        if ((fdi = open(c->n_input, O_RDONLY, S_IRUSR | S_IWUSR | 
+        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) == -1)
             exit (-1);
         if (dup2(fdi, 0) == -1)
         {
