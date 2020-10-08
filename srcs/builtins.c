@@ -141,3 +141,33 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
     fix->error = 0;
     return (1);
 }
+
+int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
+{
+    ft_putstr("exit\n");
+    if (!(c->arg[1]))
+        fix->exit = 0;
+    else
+    {
+        if (!(ft_isnum(c->arg[1])))
+        {
+            ft_putstr_fd("bash: exit: ",2);
+            ft_putstr_fd(c->arg[1] ,2);
+            ft_putstr_fd(": argument numérique nécessaire\n", 2);
+            fix->exit = 2;
+        }
+        else
+        {
+            if (!(c->arg[2]))
+    	        fix->exit = ft_atoi(c->arg[1]);
+            else
+            {
+                ft_putstr_fd("bash: exit: trop d'arguments\n", 2);
+                fix->error = 1;
+                return (1);
+            }
+        } 
+    }        
+    fix->error = fix->exit;
+    return (0);
+}

@@ -155,3 +155,17 @@ char **ft_realloc_env(t_fix *fix, char buf[PATH_MAX])
     free(fix->env);
     return (env2);
 }
+
+int		ft_isnum(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str[i])
+    {
+        if (!(str[i] == 45 || (str[i] >= 48 && str[i] <= 57)))
+            return (0);
+        i++;
+    }	
+	return (1);
+}

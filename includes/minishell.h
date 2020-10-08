@@ -79,6 +79,7 @@ int ft_pwd(t_command *c, t_fix *fix, int fd);
 int ft_export(t_command *c, t_fix *fix, int fd);
 int ft_unset(t_command *c, t_fix *fix, int fd);
 int ft_cd(t_command *c, t_fix *fix, int fd);
+int ft_builtin_exit(t_command *c, t_fix *fix, int fd);
 
 int     ft_env_len(t_fix *fix);
 int     ft_env_compare(t_fix *fix, char *arg, int n);
@@ -99,5 +100,6 @@ char    **ft_free_tab(char **new, int i);
 char    *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char const *s2);
 char    *ft_strjoin_substr(char const *s1, char const *s, unsigned int start, size_t len);
 int			ft_atoi(const char *str);
+int		  ft_isnum(char *str);
 
 #endif
