@@ -45,7 +45,9 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     pid_t   pid2;
     int     pipe_fd[2];
     int     save_fd;
+    int     error;
 
+    error = 1;
     //aff_list(t);
     if (!t->next)
         return(fork_exec_cmd(t->content, line, fix));
@@ -55,32 +57,47 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
         pid = fork();
         if (pid == 0)
         {
-            save_fd = dup(1);
-            close(pipe_fd[0]);
-            dup2(pipe_fd[1], 1);
-            close(pipe_fd[1]);
-            fork_exec_cmd(t->content, line, fix);
-            dup2(save_fd, 1);
-            close(save_fd);
+            if ((save_fd = dup(1)) == -1)
+                return (0);
+            if (close(pipe_fd[0]) == -1)
+                exit(-1);
+            if (dup2(pipe_fd[1], 1) == -1)
+                exit(-1);
+            if (close(pipe_fd[1]) == -1)
+                exit(-1);
+            if (fork_exec_cmd(t->content, line, fix) == 0)
+                exit(-1);
+            if (dup2(save_fd, 1) == -1)
+                exit(-1);
+            if (close(save_fd) == -1)
+                exit(-1);
             exit(0);
         }
         else
         {
             t = t->next;
-           // aff_arg(t);
-
-            save_fd = dup(0);
-            close(pipe_fd[1]);       
-            dup2(pipe_fd[0], 0);
-            close(pipe_fd[0]);
-
-            ft_exec(t, line, fix);
-
-            dup2(save_fd, 0);
-            close(save_fd);
-            (void)wait(NULL);
+            if ((save_fd = dup(0)) == -1)
+                return (0);
+            if (close(pipe_fd[1]) == -1)
+                return(0);    
+            if (dup2(pipe_fd[0], 0) == -1)
+                return(0); 
+            if (close(pipe_fd[0]) == -1)
+                return(0); 
+            if (ft_exec(t, line, fix) == 0)
+                return (0);
+            if (dup2(save_fd, 0) == -1)
+                return(0);
+            if (close(save_fd) == -1)
+                return(0);
+         //   (void)wait(NULL);
+            wait(&error);
         }
     }
+    t_command *c = t->content;
+ //   printf("error %d %s\n", error, c->arg[0]);
+    if (error != 0)
+        return (0);
     return (1);
 }
 
@@ -120,10 +137,12 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     else if (ret == -1)
     {
         pidf = fork();
-        signal(SIGINT, ft_sig_handler_process);
-		signal(SIGQUIT, SIG_DFL);
         if (pidf == 0)
+        {
+            signal(SIGINT, ft_sig_handler_process);
+		    signal(SIGQUIT, SIG_DFL);
             ft_execve(c, fix);
+        }
         else
             wait(&(fix->error));
         if (fix->error != 0)

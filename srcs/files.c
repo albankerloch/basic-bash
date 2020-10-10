@@ -31,7 +31,6 @@ int ft_open_redir(t_command *c)
 
 int    ft_close_redir(t_command *c, int fd)
 {
-    printf("fd=%d\n", fd);
     if (c->add != 0)
     {
         if (close(fd) == -1)

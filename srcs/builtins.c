@@ -159,7 +159,7 @@ int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
         else
         {
             if (!(c->arg[2]))
-    	        fix->exit = ft_atoi(c->arg[1]);
+    	        fix->exit = (unsigned char)ft_atoi(c->arg[1]);
             else
             {
                 ft_putstr_fd("bash: exit: trop d'arguments\n", 2);
