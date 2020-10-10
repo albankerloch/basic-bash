@@ -23,6 +23,8 @@ int ft_parser_exec(char *line, t_fix *fix)
         return (-1);
 	while(line[i])
     {
+		signal(SIGINT, ft_sig_handler);
+		signal(SIGQUIT, SIG_IGN);
 		if (!(t = ft_init_list(fix)))
 			return (0);
 		if (!(ft_parser(t, line, fix, &i)))

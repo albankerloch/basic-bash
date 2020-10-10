@@ -53,7 +53,6 @@ int ft_parser(t_list *t, char *line, t_fix *fix, int *i)
                 return (0);
             if (!(ft_arg_var(&(c->arg[k]), fix)))
                 return (0);
-          //  printf("arg %d = %s\n", k, c->arg[k]);
         }
     }
     if (c->quote != 0)

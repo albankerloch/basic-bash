@@ -3,4 +3,5 @@ minishell
 *~
 libft/*.o
 libft/.*.swp
+*.txt
 .gitignore

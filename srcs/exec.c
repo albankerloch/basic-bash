@@ -1,44 +1,5 @@
 #include "../includes/minishell.h"
 
-void aff_arg(t_list *begin)
-{
-    t_command *c;
-    int i;
-
-    c = begin->content;
-    i = 0;
-    while(c->arg [i])
-    {
-        printf(" ==> arg %d %s\n", i, c->arg[i]);
-        i++;
-    }
-}
-
-void aff_list(t_list *begin)
-{
-    t_command *c;
-    int i;
-    int k;
-
-    k = 0;
-    while(begin)
-    {
-        c = begin->content;
-        i = 0;
-        while(c->arg [i])
-        {
-            printf("%d arg %d %s\n", k, i, c->arg[i]);
-            i++;
-        }
-        printf("  output stdout = %s \n", c->n_out);
-        printf("  redir = %d \n", c->add);
-        printf("  input stdin = %s \n", c->n_input);
-        printf("  flag input = %d \n", c->input);
-        k++;
-        begin = begin->next;
-    }
-}
-
 int ft_exec(t_list *t, char *line, t_fix *fix)
 {
     pid_t   pid;
@@ -48,7 +9,6 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     int     error;
 
     error = 1;
-    //aff_list(t);
     if (!t->next)
         return(fork_exec_cmd(t->content, line, fix));
     else
@@ -57,32 +17,36 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
         pid = fork();
         if (pid == 0)
         {
-            save_fd = dup(1);
+            if ((save_fd = dup(1)) == -1)
+                exit(-1);
             close(pipe_fd[0]);
-            dup2(pipe_fd[1], 1);
+            if (dup2(pipe_fd[1], 1) == -1)
+                exit(-1);
             close(pipe_fd[1]);
             if (fork_exec_cmd(t->content, line, fix) == 0)
                 exit(-1);
-            dup2(save_fd, 1);
+            if (dup2(save_fd, 1) == -1)
+                exit(-1);
             close(save_fd);
             exit(0);
         }
         else
         {
             t = t->next;
-            save_fd = dup(0);
+            if ((save_fd = dup(0)) == -1)
+                return (0);
             close(pipe_fd[1]);
-            dup2(pipe_fd[0], 0);
+            if (dup2(pipe_fd[0], 0) == -1)
+                return (0);
             close(pipe_fd[0]);
             if (ft_exec(t, line, fix) == 0)
                 return (0);
-            dup2(save_fd, 0);
+            if (dup2(save_fd, 0) == -1)
+                return (0);
             close(save_fd);
             wait(&error);
         }
     }
-    t_command *c = t->content;
- //   printf("error %d %s\n", error, c->arg[0]);
     if (error != 0)
         return (0);
     return (1);
@@ -118,7 +82,8 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         return (0);
     if ((ret = ft_builtins(c, line, fix, fd)) == 0)
     {
-        ft_close_redir(c, fd);
+        if (c->add != 0)
+            close(fd);
         return (0);
     }
     else if (ret == -1)
@@ -135,5 +100,7 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         if (fix->error != 0)
             fix->error = 127;
     }
-    return (ft_close_redir(c, fd));
+    if (c->add != 0)
+        close(fd);
+    return (1);
 }
