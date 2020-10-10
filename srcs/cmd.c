@@ -27,7 +27,7 @@ void ft_execve(t_command *c, t_fix *fix)
             if (c->add != 0)
                 close(fd);
             close(fdi);
-            exit (-1);
+            exit(-1);
         }
     }
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')

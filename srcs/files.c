@@ -11,7 +11,9 @@ int    ft_touch(t_command *c)
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     if (fd == -1)
         return (0);
-    return (ft_close_redir(c, fd));
+    if (c->add != 0)
+        close(fd);
+    return (1);
 }
 
 int ft_open_redir(t_command *c)
@@ -27,16 +29,6 @@ int ft_open_redir(t_command *c)
         fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     return (fd);
-}
-
-int    ft_close_redir(t_command *c, int fd)
-{
-    if (c->add != 0)
-    {
-        if (close(fd) == -1)
-            return (0);
-    }
-    return (1);
 }
 
 int ft_checkfile(t_command *c)
