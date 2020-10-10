@@ -22,12 +22,12 @@ t_list *ft_init_list(t_fix *fix)
     t_command   *c;
 
     if(!(c = ft_command_construct()))
-		ft_exit_fix(fix, -2, EXIT_FAILURE);
+		return (NULL);
 	if(!(t = ft_lstnew(c)))
 	{
 		ft_free_command(c);
 		free(t);
-		ft_exit_fix(fix, -2, EXIT_FAILURE);
+		return (NULL);
 	}
     return(t);
 }

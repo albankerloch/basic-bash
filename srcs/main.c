@@ -12,11 +12,46 @@
 
 #include "../includes/minishell.h"
 
+int ft_parser_exec(char *line, t_fix *fix)
+{
+	t_list *t;
+    int    i;
+	int	ret;
+
+	i = 0;
+    if (!line[0])
+        return (-1);
+	while(line[i])
+    {
+		if (!(t = ft_init_list(fix)))
+			return (0);
+		if (!(ft_parser(t, line, fix, &i)))
+		{
+			ft_lstclear(&t, &ft_del_command);
+			return (0);
+		}
+		if (!(ft_exec(t, line, fix)))
+		{
+			if (fix->exit >= 0)
+			{
+				ft_lstclear(&t, &ft_del_command);
+				ft_exit(fix, line, fix->exit);
+			}
+			else
+			{
+				ft_lstclear(&t, &ft_del_command);
+				return (0);
+			}
+		}
+		ft_lstclear(&t, &ft_del_command);
+	}
+	return (1);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_fix	fix;
 	char *line;
-	t_list *t;
 	int	ret;
 	int	parsing;
 
@@ -25,35 +60,21 @@ int	main(int argc, char *argv[], char *envp[])
 	line = NULL;
 	while (1)
 	{
-		t = ft_init_list(&fix);
 		signal(SIGINT, ft_sig_handler);
 		signal(SIGQUIT, SIG_IGN);
-		if (ret == 1)
-			ft_putstr("<minishell> ");
+		ft_putstr("<minishell> ");
 		ret = get_next_line(0, &line);
 		if (ret == 0)
 		{
-			ft_putstr("exit Ctrl+D\n");
-			ft_exit(&fix, t, line, EXIT_SUCCESS);
+			ft_putstr("exit\n");
+			ft_exit(&fix, line, EXIT_SUCCESS);
 		}
 		if (ret == -1)
-			ft_exit(&fix, t, line, EXIT_FAILURE);
-		if (!((parsing = ft_parser(t, line, &fix))))
-			ft_exit(&fix, t, line, EXIT_FAILURE);
-		if (parsing == 1)
-		{
-			if (!(ft_exec(t, line, &fix)))
-			{
-				if (fix.exit >= 0)
-					ft_exit(&fix, t, line, fix.exit);
-				else
-					ft_exit(&fix, t, line, EXIT_FAILURE);
-			}
-		}
+			ft_exit(&fix, line, EXIT_FAILURE);
+		if (!(ft_parser_exec(line, &fix)))
+			ft_exit(&fix, line, EXIT_FAILURE);
 		free(line);
-		ft_lstclear(&t, &ft_del_command);
 		//printf("fix->error=%d\n", fix.error);
 	}
-	ft_exit_fix(&fix, -2, EXIT_SUCCESS);
 	return (0);
 }

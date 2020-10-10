@@ -1,10 +1,8 @@
 #include "../includes/minishell.h"
 
-void    ft_exit(t_fix *fix, t_list *t, char *line, int e)
+void    ft_exit(t_fix *fix, char *line, int e)
 {
     free(line);
-	ft_lstclear(&t, &ft_del_command);
-	printf("fix->error=%d\n", fix->error);
     ft_exit_fix(fix, -2, e);
 }
 

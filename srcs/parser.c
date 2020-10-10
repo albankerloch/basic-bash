@@ -1,43 +1,44 @@
 #include "../includes/minishell.h"
 
-int ft_parser(t_list *t, char *line, t_fix *fix)
+int ft_parser(t_list *t, char *line, t_fix *fix, int *i)
 {
-    int         i;
     int         k;
     int         ret;
-    t_command *c;
+    t_command   *c;
 
     k = -1;
-    i = 0;
-    if (!line[0])
-        return (-1);
-    while(line[i])
+    while(line[*i])
     {
-        if (line[i] == ' ')
-            i++;
-        else if (line[i] == '>')
+        if (line[*i] == ' ')
+            (*i)++;
+        else if (line[*i] == '>')
         {
-            ret = ft_redirection_right(t->content, line, &i, &k);
+            ret = ft_redirection_right(t->content, line, i, &k);
             if (ret == -1)
                 fix->error = 2;
             if (ret != 1)
                 return (ret);
         }
-        else if (line[i] == '<')
+        else if (line[*i] == ';' && c->quote == 0)
         {
-            ret = ft_redirection_left(t->content, line, &i, &k);
+            (*i)++;
+            return (1);
+        }
+        else if (line[*i] == '<')
+        {
+            ret = ft_redirection_left(t->content, line, i, &k);
             if (ret == -1)
                 fix->error = 1;
             if (ret != 1)
                 return (ret);
         }
-        else if (line[i] == '|')
+        else if (line[*i] == '|')
         {
             if(!(ft_add_list(t, fix)))
                 return (0);
             t = t->next;
             k = -1;
-            i++;
+            (*i)++;
         }
         else
         {
@@ -48,7 +49,7 @@ int ft_parser(t_list *t, char *line, t_fix *fix)
                 if (!(c->arg = ft_realloc_arg(c->arg)))
                     return (0);
             }
-            if (!(ft_new_arg(&(c->arg[k]), c, line, &i)))
+            if (!(ft_new_arg(&(c->arg[k]), c, line, i)))
                 return (0);
             if (!(ft_arg_var(&(c->arg[k]), fix)))
                 return (0);

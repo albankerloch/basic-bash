@@ -14,7 +14,7 @@ int    ft_new_arg(char **arg, t_command *c, char *line, int *i)
             c->quote = 0;
             (*i)++;
         }
-        if (c->quote == 0 && (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || line[*i] == '|'))
+        if (c->quote == 0 && (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || line[*i] == '|' || line[*i] == ';'))
             break;
     }
     return (1);

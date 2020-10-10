@@ -39,7 +39,8 @@ typedef struct s_fix
   char **env;
 }       t_fix;
 
-int     ft_parser(t_list *t, char *line, t_fix *fix);
+int     ft_parser_exec(char *line, t_fix *fix);
+int     ft_parser(t_list *t, char *line, t_fix *fix, int *i);
 int     ft_exec(t_list *t, char *line, t_fix *fix);
 char    *ft_env_var(char *arg, int h, t_fix *fix);
 int     ft_arg_var(char **arg, t_fix *fix);
@@ -90,7 +91,7 @@ void    ft_echo_n(int *n, char *arg, int *i);
 
 
 int     ft_exit_fix(t_fix *fix, int i, int e);
-void    ft_exit(t_fix *fix, t_list *t, char *line, int e);
+void    ft_exit(t_fix *fix, char *line, int e);
 t_command  *ft_free_part_command(t_command *c, int i);
 void    ft_del_command(void *c);
 void    ft_free_command(t_command *c);
