@@ -57,40 +57,27 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
         pid = fork();
         if (pid == 0)
         {
-            if ((save_fd = dup(1)) == -1)
-                return (0);
-            if (close(pipe_fd[0]) == -1)
-                exit(-1);
-            if (dup2(pipe_fd[1], 1) == -1)
-                exit(-1);
-            if (close(pipe_fd[1]) == -1)
-                exit(-1);
+            save_fd = dup(1);
+            close(pipe_fd[0]);
+            dup2(pipe_fd[1], 1);
+            close(pipe_fd[1]);
             if (fork_exec_cmd(t->content, line, fix) == 0)
                 exit(-1);
-            if (dup2(save_fd, 1) == -1)
-                exit(-1);
-            if (close(save_fd) == -1)
-                exit(-1);
+            dup2(save_fd, 1);
+            close(save_fd);
             exit(0);
         }
         else
         {
             t = t->next;
-            if ((save_fd = dup(0)) == -1)
-                return (0);
-            if (close(pipe_fd[1]) == -1)
-                return(0);    
-            if (dup2(pipe_fd[0], 0) == -1)
-                return(0); 
-            if (close(pipe_fd[0]) == -1)
-                return(0); 
+            save_fd = dup(0);
+            close(pipe_fd[1]);
+            dup2(pipe_fd[0], 0);
+            close(pipe_fd[0]);
             if (ft_exec(t, line, fix) == 0)
                 return (0);
-            if (dup2(save_fd, 0) == -1)
-                return(0);
-            if (close(save_fd) == -1)
-                return(0);
-         //   (void)wait(NULL);
+            dup2(save_fd, 0);
+            close(save_fd);
             wait(&error);
         }
     }

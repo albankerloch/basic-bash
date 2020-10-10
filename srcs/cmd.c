@@ -9,11 +9,11 @@ void ft_execve(t_command *c, t_fix *fix)
     ret = 0;
     if ((fd = ft_open_redir(c)) == -1)
         exit (-1);
-    if (c->add == 1 || c->add == 2)
+    if (c->add != 0)
     {
         if (dup2(fd, 1) == -1)
         {
-            ft_close_redir(c, fd);
+            close(fd);
             exit (-1);
         }
     }
@@ -24,7 +24,8 @@ void ft_execve(t_command *c, t_fix *fix)
             exit (-1);
         if (dup2(fdi, 0) == -1)
         {
-            ft_close_redir(c, fd);
+            if (c->add != 0)
+                close(fd);
             close(fdi);
             exit (-1);
         }
@@ -42,7 +43,8 @@ void ft_execve(t_command *c, t_fix *fix)
         ft_putstr_fd(c->arg[0], 2);
         ft_putstr_fd(" : commande introuvable\n", 2);
     }
-    ft_close_redir(c, fd);
+    if (c->add != 0)
+        close(fd);
     if (c->input == 1)
         close(fdi);
     exit(-1);
