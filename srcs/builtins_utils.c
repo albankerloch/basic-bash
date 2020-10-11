@@ -1,14 +1,17 @@
 #include "../includes/minishell.h"
 
-void    ft_echo_n(int *n, char *arg, int *i)
+void    ft_echo_n(int *n, char **arg, int *i)
 {
-    if (!ft_strcmp(arg, "-n"))
+    while(arg[*i])
     {
-        *n = 1;
-        *i = 2;
+        if (!ft_strcmp(arg[*i], "-n"))
+        {
+            *n = 1;
+            (*i)++;
+        }
+        else
+            break;
     }
-    else
-        *i = 1;
 }
 
 int    ft_env_len(t_fix *fix)

@@ -8,7 +8,8 @@ int ft_echo(t_command *c, t_fix *fix, int fd)
     n = 0;
     if (c->arg[1])
     {
-        ft_echo_n(&n, c->arg[1], &i);
+        i = 1;
+        ft_echo_n(&n, c->arg, &i);
         if (ft_strncmp(c->arg[i], "$?", ft_strlen("$?")) == 0 && ft_strlen("$?") == ft_strlen(c->arg[i]))
             ft_putnbr_fd(fix->error, fd);
         else
