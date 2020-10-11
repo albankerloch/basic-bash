@@ -23,7 +23,7 @@ int    ft_env_len(t_fix *fix)
     return (len);
 }
 
-int ft_env_compare(t_fix *fix, char *arg, int n)
+int ft_export_new_len(t_fix *fix, char *arg, int n)
 {
     int i;
     int j;
@@ -40,16 +40,14 @@ int ft_env_compare(t_fix *fix, char *arg, int n)
     return (i);
 }
 
-char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
+char **ft_replace_env(t_fix *fix, char *arg, int egal)
 {
     char    **env2;
-    char    *val_var;
     int i;
     int j;
 
-    if (!(env2 = malloc(sizeof(char **) * len)))
+    if (!(env2 = malloc(sizeof(char **) * ft_export_new_len(fix, arg, egal))))
         return (NULL);
-    len = 0;
     i = 0;
     j = 0;
     while (fix->env && fix->env[j])
@@ -59,13 +57,41 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
         else
         {
             if (!(env2[i] = ft_strdup(fix->env[j])))
-                return (NULL);
+                return (ft_free_tab(env2, i));
         }
         i++;
         j++;
     }
-    fix->env = env2;
+    if (!(env2[i] = ft_strdup(arg)))
+        return (ft_free_tab(env2, i));
+    env2[i + 1] = NULL;
+    fix->error = 0;
+    ft_free_tab(fix->env, ft_env_len(fix));
     return (env2);
+}
+
+int ft_export_without_arg(t_fix *fix, int fd)
+{
+    int i;
+
+    i = 0;
+    while (fix->env && fix->env[i])
+    {
+        ft_putstr_fd("declare -x ", fd);
+        ft_putstr_fd(fix->env[i], fd);
+        ft_putchar_fd('\n', fd);
+        i++;
+    }
+    return (1);
+}
+
+int ft_export_err(char *arg, t_fix *fix)
+{
+    ft_putstr_fd("bash: export: \" ", 2);
+    ft_putstr_fd(arg, 2);
+    ft_putstr_fd(" \" : identifiant non valable\n", 2);
+    fix->error = 1;
+    return (1);
 }
 
 int ft_env_err(t_command *c, int fd, t_fix *fix)
@@ -84,49 +110,6 @@ int ft_env_err(t_command *c, int fd, t_fix *fix)
         return (-1);
     }
     return (1);
-}
-
-int ft_syntax_export(t_command *c, int fd, t_fix *fix)
-{
-    int i;
-    
-    if (!c->arg[1])
-    {
-        i = 0;
-        while (fix->env && fix->env[i])
-        {
-            ft_putstr_fd("declare -x ", 2);
-            ft_putstr_fd(fix->env[i], 2);
-            ft_putchar_fd('\n', 2);
-            i++;
-        }
-        fix->error = 0;
-        return (-1);
-    }
-    if (c->arg[1] && c->arg[1][0] == '=')
-        return (ft_export_err(fd, c->arg[1], fix));
-    if (c->arg[2] && c->arg[2][0] == '=')
-        return (ft_export_err(fd, c->arg[2], fix));
-    i = 0;
-    while (c->arg[1][i])
-    {
-        if (c->arg[1][i] == '=')
-            return (i);
-        i++;
-    }
-    fix->error = 0;
-    return (-1);
-}
-
-int ft_export_err(int fd, char *arg, t_fix *fix)
-{
-    char    *sub_str;
-
-    ft_putstr_fd("bash: export: \" ", 2);
-    ft_putstr_fd(arg, 2);
-    ft_putstr_fd(" \" : identifiant non valable\n", 2);
-    fix->error = 1;
-    return (-1);
 }
 
 char **ft_realloc_env(t_fix *fix, char buf[PATH_MAX])

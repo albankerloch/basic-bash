@@ -61,6 +61,6 @@ int    ft_exit_fix(t_fix *fix, int i, int e)
     }
     free(fix->env);
     if (e == EXIT_FAILURE && k == -1)
-        ft_putstr_fd("malloc error\n", 2);
+        ft_putstr_fd("fatal error\n", 2);
     exit(e);
 }
