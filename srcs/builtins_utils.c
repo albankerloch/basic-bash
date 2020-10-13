@@ -86,7 +86,7 @@ int ft_env_err(t_command *c, int fd, t_fix *fix)
     return (1);
 }
 
-int ft_syntax_export(t_command *c, int fd, t_fix *fix)
+int ft_check0_export(t_command *c, int fd, t_fix *fix)
 {
     int i;
     
@@ -103,19 +103,26 @@ int ft_syntax_export(t_command *c, int fd, t_fix *fix)
         fix->error = 0;
         return (-1);
     }
-    if (c->arg[1] && !(ft_strncmp(c->arg[1], "PWD", ft_strlen("PWD"))) && c->arg[1][3] == '=')
+    return (1);
+}
+
+int ft_checkj_export(t_command *c, int fd, t_fix *fix, int j)
+{
+    int i;
+
+    if (!(ft_strncmp(c->arg[j], "PWD", ft_strlen("PWD"))) && c->arg[j][3] == '=')
     {
         fix->error = 0;
         return (-1);
     }
-    if (c->arg[1] && c->arg[1][0] == '=')
-        return (ft_export_err(fd, c->arg[1], fix));
-    if (c->arg[2] && c->arg[2][0] == '=')
-        return (ft_export_err(fd, c->arg[2], fix));
+    if (c->arg[j][0] == '=')
+        return (ft_export_err(fd, c->arg[j], fix));
+    if (!ft_isnum(c->arg[j]))
+        return (ft_export_err(fd, c->arg[j], fix));
     i = 0;
-    while (c->arg[1][i])
+    while (c->arg[j][i])
     {
-        if (c->arg[1][i] == '=')
+        if (c->arg[j][i] == '=')
             return (i);
         i++;
     }

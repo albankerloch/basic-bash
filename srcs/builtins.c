@@ -74,16 +74,24 @@ int ft_export(t_command *c, t_fix *fix, int fd)
 {
     int n;
     int i;
+    int j;
     char **env2;
 
-    if ((n = ft_syntax_export(c, fd, fix)) == -1)
+    if (ft_check0_export(c, fd, fix) == -1)
         return (1);
-    i = ft_env_compare(fix, c->arg[1], n);
-    if (!(env2 = ft_env_cpy(fix, c->arg[1], i + 2, n)))
-        return (0);
-    if (!(env2[i] = ft_strdup(c->arg[1])))
-        return (0);
-    env2[i + 1] = NULL;
+    j = 1;
+    while (c->arg[j])
+    {
+        if ((n = ft_checkj_export(c, fd, fix, j)) == -1)
+            return (1);
+        i = ft_env_compare(fix, c->arg[j], n);
+        if (!(env2 = ft_env_cpy(fix, c->arg[j], i + 2, n)))
+            return (0);
+        if (!(env2[i] = ft_strdup(c->arg[j])))
+            return (0);
+        env2[i + 1] = NULL;
+        j++;
+    }
     fix->error = 0;
     return (1);
 }
