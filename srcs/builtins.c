@@ -87,9 +87,6 @@ int ft_export(t_command *c, t_fix *fix, int fd)
         i = ft_env_compare(fix, c->arg[j], n);
         if (!(env2 = ft_env_cpy(fix, c->arg[j], i + 2, n)))
             return (0);
-        if (!(env2[i] = ft_strdup(c->arg[j])))
-            return (0);
-        env2[i + 1] = NULL;
         j++;
     }
     fix->error = 0;

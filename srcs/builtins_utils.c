@@ -59,11 +59,15 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
         else
         {
             if (!(env2[i] = ft_strdup(fix->env[j])))
-                return (NULL);
+                return (ft_free_tab(env2, i));
         }
         i++;
         j++;
     }
+    if (!(env2[i] = ft_strdup(arg)))
+        return (ft_free_tab(env2, i));
+    env2[i + 1] = NULL;
+    ft_free_tab(fix->env, ft_env_len(fix));
     fix->env = env2;
     return (env2);
 }
@@ -116,8 +120,11 @@ int ft_checkj_export(t_command *c, int fd, t_fix *fix, int j)
         return (-1);
     }
     if (c->arg[j][0] == '=')
+    {
+        printf("=\n");
         return (ft_export_err(fd, c->arg[j], fix));
-    if (!ft_isnum(c->arg[j]))
+    }
+    if (ft_isdigit(c->arg[j][0]))
         return (ft_export_err(fd, c->arg[j], fix));
     i = 0;
     while (c->arg[j][i])
@@ -132,8 +139,6 @@ int ft_checkj_export(t_command *c, int fd, t_fix *fix, int j)
 
 int ft_export_err(int fd, char *arg, t_fix *fix)
 {
-    char    *sub_str;
-
     ft_putstr_fd("bash: export: \" ", 2);
     ft_putstr_fd(arg, 2);
     ft_putstr_fd(" \" : identifiant non valable\n", 2);
