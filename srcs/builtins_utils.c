@@ -95,11 +95,16 @@ int ft_syntax_export(t_command *c, int fd, t_fix *fix)
         i = 0;
         while (fix->env && fix->env[i])
         {
-            ft_putstr_fd("declare -x ", 2);
-            ft_putstr_fd(fix->env[i], 2);
-            ft_putchar_fd('\n', 2);
+            ft_putstr_fd("declare -x ", fd);
+            ft_putstr_fd(fix->env[i], fd);
+            ft_putchar_fd('\n', fd);
             i++;
         }
+        fix->error = 0;
+        return (-1);
+    }
+    if (c->arg[1] && !(ft_strncmp(c->arg[1], "PWD", ft_strlen("PWD"))) && c->arg[1][3] == '=')
+    {
         fix->error = 0;
         return (-1);
     }
