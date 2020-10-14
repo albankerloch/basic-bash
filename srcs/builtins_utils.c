@@ -116,7 +116,6 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
     if (!(env2[i] = ft_strdup(arg)))
         return (ft_free_tab(env2, i));
     env2[i + 1] = NULL;
-    fix->error = 0;
     ft_free_tab(fix->env, ft_env_len(fix) - 1);
     return (env2);
 }
@@ -136,13 +135,34 @@ int ft_export_without_arg(t_fix *fix, int fd)
     return (1);
 }
 
+int ft_export_check_id(char *arg, int j, t_fix *fix)
+{
+    int i;
+
+    if (j == 0)
+        return (ft_export_err(arg, fix));
+    i = 0;
+    while (ft_isdigit(arg[i]))
+        i++;
+    if (i == j)
+        return (ft_export_err(arg, fix));
+    i = 0;
+    while (i < j)
+    {
+        if (!(ft_isalnum(arg[i])) && arg[i] != '_')
+            return (ft_export_err(arg, fix));
+        i++;
+    }
+    return (1);
+}
+
 int ft_export_err(char *arg, t_fix *fix)
 {
-    ft_putstr_fd("bash: export: \" ", 2);
+    ft_putstr_fd("bash: export: \'", 2);
     ft_putstr_fd(arg, 2);
-    ft_putstr_fd(" \" : identifiant non valable\n", 2);
+    ft_putstr_fd("\': not a valid identifier\n", 2);
     fix->error = 1;
-    return (1);
+    return (0);
 }
 
 int ft_env_err(t_command *c, int fd, t_fix *fix)

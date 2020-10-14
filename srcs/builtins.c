@@ -82,15 +82,16 @@ int ft_export(t_command *c, t_fix *fix, int fd)
     i = 1;
     while (c->arg[i])
     {
-        if (c->arg[i][0] == '=')
-            return (ft_export_err(c->arg[i], fix));
         j = 0;
         while (c->arg[i][j])
         {
             if (c->arg[i][j] == '=')
-                {
-                    fix->env = ft_replace_env(fix, c->arg[i], j);
-                }
+            {
+                if ((!(ft_export_check_id(c->arg[i], j, fix))) || (c->arg[i][j - 1] == '_' && j == 1))
+                    break;
+                if (!(fix->env = ft_replace_env(fix, c->arg[i], j)))
+                    return (0);
+            }
             j++;
         }
         i++;

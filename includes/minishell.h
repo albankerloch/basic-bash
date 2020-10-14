@@ -103,7 +103,8 @@ char    *ft_strjoin_substr(char const *s1, char const *s, unsigned int start, si
 int			ft_atoi(const char *str);
 int		  ft_isnum(char *str);
 
-char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
-int ft_env_compare(t_fix *fix, char *arg, int n);
+char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
+int     ft_env_compare(t_fix *fix, char *arg, int n);
+int     ft_export_check_id(char *arg, int i, t_fix *fix);
 
 #endif
