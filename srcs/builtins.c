@@ -90,7 +90,7 @@ int ft_export(t_command *c, t_fix *fix, int fd)
             if (c->arg[i][j] == '=')
                 {
                     printf("%d %s\n", i, c->arg[i]);
-                    printf("%d\n", ft_env_len(fix));
+                    printf("old malloc %d\n", ft_env_len(fix) + 1);
                     fix->env = ft_replace_env(fix, c->arg[i], j);
                     printf("AA\n");
                     printf("%d\n", ft_env_len(fix));

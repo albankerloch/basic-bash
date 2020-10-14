@@ -67,12 +67,16 @@ void   ft_fix_construct(t_fix *fix, char **envp)
 	if(!(fix->env = malloc(sizeof(char **) * len + 1)))
         ft_exit_fix(fix, -1, EXIT_FAILURE);
     len = 0;
+    fix->env[len] = ft_strdup(envp[len]);
+    len++;
+    /*
 	while (envp && envp[len])
 	{
 		if(!(fix->env[len] = ft_strdup(envp[len])))
             ft_exit_fix(fix, len, EXIT_FAILURE);
 		len++;
 	}
+    */
 	fix->env[len] = NULL;
     printf("len = %d\n", len);
     fix->error = 0;
