@@ -14,12 +14,61 @@ void    ft_echo_n(int *n, char **arg, int *i)
     }
 }
 
+int ft_env_compare(t_fix *fix, char *arg, int n)
+{
+    int i;
+    int j;
+
+    i = 0;
+    j = 0;
+    while (fix->env && fix->env[j])
+    {
+        if (ft_strncmp(arg, fix->env[j], n) == 0 && fix->env[j][n] == '=')
+            i--;
+        j++;
+        i++;
+    }
+    return (i);
+}
+
+char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
+{
+    char    **env2;
+    char    *val_var;
+    int i;
+    int j;
+
+    if (!(env2 = malloc(sizeof(char **) * len)))
+        return (NULL);
+    len = 0;
+    i = 0;
+    j = 0;
+    while (fix->env && fix->env[j])
+    {
+        if (fix->env[j] && ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
+            i--;
+        else
+        {
+            if (!(env2[i] = ft_strdup(fix->env[j])))
+                return (NULL);
+        }
+        i++;
+        j++;
+    }
+    fix->env = env2;
+    return (env2);
+}
+
 int    ft_env_len(t_fix *fix)
 {
     int len;
 
-    while (fix->env && fix->env[len])
+    len = 0;
+    while (fix->env[len])
+    {
+        //printf("%d\n", len);
         len++;
+    }
     return (len);
 }
 
@@ -46,7 +95,8 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
     int i;
     int j;
 
-    if (!(env2 = malloc(sizeof(char **) * ft_export_new_len(fix, arg, egal))))
+    //printf("new len : %d\n", ft_export_new_len(fix, arg, egal) + 2);
+    if (!(env2 = malloc(sizeof(char **) * ft_export_new_len(fix, arg, egal) + 2)))
         return (NULL);
     i = 0;
     j = 0;
@@ -66,7 +116,8 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
         return (ft_free_tab(env2, i));
     env2[i + 1] = NULL;
     fix->error = 0;
-    ft_free_tab(fix->env, ft_env_len(fix));
+    //printf("%d %d\n", i + 1, ft_env_len(fix) - 1);
+    ft_free_tab(fix->env, ft_env_len(fix) - 1);
     return (env2);
 }
 
