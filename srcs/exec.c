@@ -103,6 +103,8 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
             return (-1);
         }
     }
+    int len = ft_env_len(fix);
+    printf("len fork exec=%d\n", len);
     if (c->add != 0)
         close(fd);
     return (1);

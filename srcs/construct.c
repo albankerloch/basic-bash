@@ -36,7 +36,7 @@ t_command *ft_command_construct()
 {
     t_command *c;
 
-    if(!(c = malloc(sizeof(t_command *))))
+    if(!(c = malloc(sizeof(t_command))))
         return (ft_free_part_command(c, 0));
     c->input = 0;
     if(!(c->n_input = malloc(sizeof(char *))))
@@ -63,7 +63,7 @@ void   ft_fix_construct(t_fix *fix, char **envp)
     len = 0;
 	while (envp && envp[len])
 		len++;
-	if(!(fix->env = malloc(sizeof(char **) * len + sizeof(char *))))
+	if(!(fix->env = malloc(sizeof(char **) * (len + 1))))
         ft_exit_fix(fix, -1, EXIT_FAILURE);
     len = 0;
 	while (envp && envp[len])
@@ -73,6 +73,7 @@ void   ft_fix_construct(t_fix *fix, char **envp)
 		len++;
 	}
 	fix->env[len] = NULL;
+    printf("fix construct len =%d\n", len);
     fix->error = 0;
     fix->exit = -1;
 }

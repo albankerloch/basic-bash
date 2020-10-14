@@ -60,6 +60,8 @@ int	main(int argc, char *argv[], char *envp[])
 	ft_fix_construct(&fix, envp);
 	ret = 1;
 	line = NULL;
+	int len = ft_env_len(&fix);
+    printf("lancement=%d\n", len);
 	while (1)
 	{
 		signal(SIGINT, ft_sig_handler);

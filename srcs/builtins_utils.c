@@ -54,7 +54,7 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
     while (fix->env && fix->env[j])
     {
         if (ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
-            i--;
+            printf("lol\n");
         else
         {
             if (!(env2[i] = ft_strdup(fix->env[j])))
@@ -63,15 +63,10 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
         i++;
         j++;
     }
-    if (len > j) //export else unset
-    {
-        if (!(env2[i] = ft_strdup(arg)))
-            return (ft_free_tab(env2, i));
-        i++;
-    }
-    env2[i] = NULL;
+    if (!(env2[i] = ft_strdup(arg)))
+        return (ft_free_tab(env2, i));
+    env2[i+1] = NULL;
   //  ft_free_tab(fix->env, ft_env_len(fix));
-    fix->env = env2;
     return (env2);
 }
 

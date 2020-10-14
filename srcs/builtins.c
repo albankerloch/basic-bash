@@ -76,6 +76,9 @@ int ft_export(t_command *c, t_fix *fix, int fd)
     int i;
     int j;
     char **env2;
+    int len;
+
+    len = ft_env_len(fix);
 
     if (ft_check0_export(c, fd, fix) == -1)
         return (1);
@@ -85,10 +88,23 @@ int ft_export(t_command *c, t_fix *fix, int fd)
         if ((egal = ft_checkj_export(c, fd, fix, j)) == -1)
             return (1);
         i = ft_env_compare(fix, c->arg[j], egal);
-        if (!(env2 = ft_env_cpy(fix, c->arg[j], i + 2, egal)))
+        printf("i=%d\n", i+1);
+      //  if (!(env2 = ft_env_cpy(fix, c->arg[j], i + 2, egal)))
+        if (!(env2 = ft_env_cpy(fix, c->arg[j], i + 1, egal)))
             return (0);
         j++;
     }
+    j = 0;
+    while (fix->env[j])
+    {
+        free(fix->env[j]);
+        j++;
+    }
+    printf("free env export=%d len init=%d\n", j, len);
+    fix->env = NULL;
+    fix->env = env2;
+    len = ft_env_len(fix);
+    printf("len fin=%d\n", len);
     fix->error = 0;
     return (1);
 }
@@ -117,6 +133,8 @@ int ft_unset(t_command *c, t_fix *fix, int fd)
         if (!(env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]))))
             return (0);
     }
+    env2[l] = NULL;
+    fix->env = env2;
     fix->error = 0;
     return (1);
 }
