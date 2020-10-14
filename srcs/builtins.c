@@ -88,9 +88,9 @@ int ft_export(t_command *c, t_fix *fix, int fd)
         if ((egal = ft_checkj_export(c, fd, fix, j)) == -1)
             return (1);
         i = ft_env_compare(fix, c->arg[j], egal);
-        printf("i=%d\n", i+1);
+        printf("i=%d\n", i);
       //  if (!(env2 = ft_env_cpy(fix, c->arg[j], i + 2, egal)))
-        if (!(env2 = ft_env_cpy(fix, c->arg[j], i + 1, egal)))
+        if (!(env2 = ft_env_cpy(fix, c->arg[j], i, egal)))
             return (0);
         j++;
     }

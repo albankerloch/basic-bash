@@ -47,7 +47,7 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
     int i;
     int j;
 
-    if (!(env2 = malloc(sizeof(char **) * len)))
+    if (!(env2 = malloc(sizeof(char **) * (len + 1))))
         return (NULL);
     i = 0;
     j = 0;
@@ -66,6 +66,7 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
     if (!(env2[i] = ft_strdup(arg)))
         return (ft_free_tab(env2, i));
     env2[i+1] = NULL;
+    printf("cpy inull=%d\n", i+1);
   //  ft_free_tab(fix->env, ft_env_len(fix));
     return (env2);
 }
@@ -152,7 +153,7 @@ char **ft_realloc_env(t_fix *fix, char buf[PATH_MAX])
     j = 0;
     while (fix->env && fix->env[j])
         j++;
-    if (!(env2 = malloc(sizeof(char **) * j + 1)))
+    if (!(env2 = malloc(sizeof(char **) * (j + 1))))
         return (NULL);
     j = 0;
     while (fix->env && fix->env[j])
