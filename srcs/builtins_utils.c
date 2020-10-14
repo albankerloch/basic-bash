@@ -96,7 +96,8 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
     int j;
 
     //printf("new len : %d\n", ft_export_new_len(fix, arg, egal) + 2);
-    if (!(env2 = malloc(sizeof(char **) * ft_export_new_len(fix, arg, egal) + 2)))
+    env2 = NULL;
+    if (!(env2 = malloc(sizeof(char **) * ft_export_new_len(fix, arg, egal) + 20)))
         return (NULL);
     i = 0;
     j = 0;
@@ -106,6 +107,7 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
             i--;
         else
         {
+            env2[i] = NULL;
             if (!(env2[i] = ft_strdup(fix->env[j])))
                 return (ft_free_tab(env2, i));
         }
