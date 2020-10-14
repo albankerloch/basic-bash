@@ -63,8 +63,7 @@ void   ft_fix_construct(t_fix *fix, char **envp)
     len = 0;
 	while (envp && envp[len])
 		len++;
-    printf("len = %d\n", len);
-	if(!(fix->env = malloc(sizeof(char **) * len + 1)))
+	if(!(fix->env = malloc(sizeof(char **) * (len + 1))))
         ft_exit_fix(fix, -1, EXIT_FAILURE);
     len = 0;
 	while (envp && envp[len])
@@ -74,7 +73,6 @@ void   ft_fix_construct(t_fix *fix, char **envp)
 		len++;
 	}
 	fix->env[len] = NULL;
-    printf("len = %d\n", len);
     fix->error = 0;
     fix->exit = -1;
 }

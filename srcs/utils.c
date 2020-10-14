@@ -21,15 +21,12 @@ char **ft_free_tab(char **new, int i)
 	k = 0;
 	while (k <= i)
 	{
-		//printf("free => %d\n", k);
 		free(new[k]);
 		new[k] = NULL;
 		k++;
 	}
-//	printf("free => %d\n", k);
 	free(new);
 	new = NULL;
-//	printf("free => %d\n", k);
 	return (NULL);
 }
 
