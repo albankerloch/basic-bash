@@ -83,7 +83,7 @@ int ft_cd(t_command *c, t_fix *fix, int fd);
 int ft_builtin_exit(t_command *c, t_fix *fix, int fd);
 
 int     ft_env_len(t_fix *fix);
-int     ft_env_compare(t_fix *fix, char *arg, int n);
+int     ft_env_compare(t_fix *fix, char *arg, int egal);
 char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
 char    *ft_join_end_var(char *val_var, char *arg, int j);
 char    *ft_valeur_variable(t_fix *fix, char *nom_var);

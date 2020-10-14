@@ -19,7 +19,7 @@ char **ft_free_tab(char **new, int i)
 	int k;
 
 	k = 0;
-	while (k <= i)
+	while (k < i)
 	{
 		free(new[k]);
 		k++;

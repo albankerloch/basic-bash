@@ -18,12 +18,13 @@ int    ft_env_len(t_fix *fix)
 {
     int len;
 
+    len = 0;
     while (fix->env && fix->env[len])
         len++;
     return (len);
 }
 
-int ft_env_compare(t_fix *fix, char *arg, int n)
+int ft_env_compare(t_fix *fix, char *arg, int egal)
 {
     int i;
     int j;
@@ -32,7 +33,7 @@ int ft_env_compare(t_fix *fix, char *arg, int n)
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (ft_strncmp(arg, fix->env[j], n) == 0 && fix->env[j][n] == '=')
+        if (ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
             i--;
         j++;
         i++;
@@ -43,18 +44,16 @@ int ft_env_compare(t_fix *fix, char *arg, int n)
 char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
 {
     char    **env2;
-    char    *val_var;
     int i;
     int j;
 
     if (!(env2 = malloc(sizeof(char **) * len)))
         return (NULL);
-    len = 0;
     i = 0;
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (fix->env[j] && ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
+        if (ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
             i--;
         else
         {
@@ -64,10 +63,14 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
         i++;
         j++;
     }
-    if (!(env2[i] = ft_strdup(arg)))
-        return (ft_free_tab(env2, i));
-    env2[i + 1] = NULL;
-    ft_free_tab(fix->env, ft_env_len(fix));
+    if (len > j) //export else unset
+    {
+        if (!(env2[i] = ft_strdup(arg)))
+            return (ft_free_tab(env2, i));
+        i++;
+    }
+    env2[i] = NULL;
+  //  ft_free_tab(fix->env, ft_env_len(fix));
     fix->env = env2;
     return (env2);
 }
