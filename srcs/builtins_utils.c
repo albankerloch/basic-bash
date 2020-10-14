@@ -95,35 +95,30 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
     int i;
     int j;
 
-    printf("new malloc : %d\n", ft_export_new_len(fix, arg, egal) + 2);
+    //printf("new len : %d\n", ft_export_new_len(fix, arg, egal) + 2);
     env2 = NULL;
-    if (!(env2 = malloc(sizeof(char **) * ft_export_new_len(fix, arg, egal) + 2)))
+    if (!(env2 = malloc(sizeof(char **) * ft_export_new_len(fix, arg, egal) + 20)))
         return (NULL);
     i = 0;
     j = 0;
     while (fix->env && fix->env[j])
     {
         if (fix->env[j] && ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
-        {
-            printf("-------------------\n");
             i--;
-        }
         else
         {
             env2[i] = NULL;
-            printf("alloc => %d\n", i);
             if (!(env2[i] = ft_strdup(fix->env[j])))
                 return (ft_free_tab(env2, i));
         }
         i++;
         j++;
     }
-    printf("alloc => %d\n", i);
     if (!(env2[i] = ft_strdup(arg)))
         return (ft_free_tab(env2, i));
     env2[i + 1] = NULL;
     fix->error = 0;
-    printf("element : new %d old %d\n", i + 1, ft_env_len(fix));
+    //printf("%d %d\n", i + 1, ft_env_len(fix) - 1);
     ft_free_tab(fix->env, ft_env_len(fix) - 1);
     return (env2);
 }

@@ -21,15 +21,15 @@ char **ft_free_tab(char **new, int i)
 	k = 0;
 	while (k <= i)
 	{
-		printf("free => %d\n", k);
+		//printf("free => %d\n", k);
 		free(new[k]);
 		new[k] = NULL;
 		k++;
 	}
-	printf("free => final\n");
+//	printf("free => %d\n", k);
 	free(new);
 	new = NULL;
-	printf("free => done\n");
+//	printf("free => %d\n", k);
 	return (NULL);
 }
 
@@ -41,7 +41,7 @@ char	**ft_realloc_arg(char **arg)
 	i = 0;
 	while (arg[i])
 		i++;
-	if (!(new = malloc(sizeof(char*) * (2))))
+	if (!(new = malloc(sizeof(char*) * (i + 2))))
 		return (NULL);
 	i = 0;
 	while (arg[i])
