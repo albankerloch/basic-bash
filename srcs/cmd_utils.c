@@ -20,8 +20,9 @@ void ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX])
 	s1[i] = 0;
 }
 
-void ft_realloc_concat_buff(char line[PATH_MAX], char c)
+void ft_realloc_concat_buff(char *line, char c, int *len)
 {
-	line[ft_strlen(line)] = c;
-	line[ft_strlen(line) + 1] = '\0';
+	line[*len] = c;
+	line[*len + 1] = '\0';
+	(*len)++;
 }
