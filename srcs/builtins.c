@@ -124,7 +124,9 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
     int j;
     
     if (!c->arg[1])
-        ret = chdir("/home/user42");
+    {
+        return (1);
+    }
     else
         ret = chdir(c->arg[1]);
     if (ret == -1)
