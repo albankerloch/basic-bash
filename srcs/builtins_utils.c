@@ -31,44 +31,13 @@ int ft_env_compare(t_fix *fix, char *arg, int n)
     return (i);
 }
 
-char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
-{
-    char    **env2;
-    char    *val_var;
-    int i;
-    int j;
-
-    if (!(env2 = malloc(sizeof(char **) * len)))
-        return (NULL);
-    len = 0;
-    i = 0;
-    j = 0;
-    while (fix->env && fix->env[j])
-    {
-        if (fix->env[j] && ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
-            i--;
-        else
-        {
-            if (!(env2[i] = ft_strdup(fix->env[j])))
-                return (NULL);
-        }
-        i++;
-        j++;
-    }
-    fix->env = env2;
-    return (env2);
-}
-
 int    ft_env_len(t_fix *fix)
 {
     int len;
 
     len = 0;
     while (fix->env[len])
-    {
-        //printf("%d\n", len);
         len++;
-    }
     return (len);
 }
 
@@ -89,6 +58,35 @@ int ft_export_new_len(t_fix *fix, char *arg, int n)
     return (i);
 }
 
+char **ft_unset_env(t_fix *fix, char *arg)
+{
+    char    **env2;
+    int i;
+    int j;
+
+    env2 = NULL;
+    if (!(env2 = malloc(sizeof(char **) * ft_env_len(fix))))
+        return (NULL);
+    i = 0;
+    j = 0;
+    while (fix->env && fix->env[j])
+    {
+        if (ft_strncmp(fix->env[j], arg, ft_strlen(arg)) == 0)
+            i--;
+        else
+        {
+            env2[i] = NULL;
+            if (!(env2[i] = ft_strdup(fix->env[j])))
+                return (ft_free_tab(env2, i));
+        }
+        i++;
+        j++;
+    }
+    env2[i] = NULL;
+    ft_free_tab(fix->env, ft_env_len(fix) - 1);
+    return (env2);
+}
+
 char **ft_replace_env(t_fix *fix, char *arg, int egal)
 {
     char    **env2;
@@ -102,7 +100,7 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (fix->env[j] && ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
+        if (ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
             i--;
         else
         {

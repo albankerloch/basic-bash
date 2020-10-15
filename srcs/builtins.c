@@ -72,10 +72,8 @@ int ft_pwd(t_command *c, t_fix *fix, int fd)
 
 int ft_export(t_command *c, t_fix *fix, int fd)
 {
-    int n;
     int i;
     int j;
-    char **env2;
 
     if (!c->arg[1])
         return (ft_export_without_arg(fix, fd));
@@ -101,30 +99,21 @@ int ft_export(t_command *c, t_fix *fix, int fd)
 
 int ft_unset(t_command *c, t_fix *fix, int fd)
 {
-    int len;
-    int l;
-    char **env2;
+    int i;
 
-    if (c->arg[1])
+    i = 1;
+    while (c->arg[i])
     {
-        if (ft_strcmp(c->arg[1], "$") == 0)
+        if (ft_export_check_id(c->arg[i], ft_strlen(c->arg[i]), fix) && (ft_env_len(fix) != ft_env_compare(fix, c->arg[i], ft_strlen(c->arg[i]))))
         {
-            ft_putstr_fd("bash: unset: \" $ \" : identifiant non valable\n", 2);
-            fix->error = 1;
-            return (1);
+            if (!(c->arg[i][0] == '_' && c->arg[i][1] == '\0'))
+            {
+                if (!(fix->env = ft_unset_env(fix, c->arg[i])))
+                    return (0);
+            }
         }
-        len = ft_env_len(fix);
-        l = ft_env_compare(fix, c->arg[1], ft_strlen(c->arg[1]));
-        if (len == l)
-        {
-            fix->error = 0;
-            return (1);
-        }
-        if (!(env2 = ft_env_cpy(fix, c->arg[1], len, ft_strlen(c->arg[1]))))
-            return (0);
-        env2[l] = NULL;
+        i++;
     }
-    fix->error = 0;
     return (1);
 }
 

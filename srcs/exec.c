@@ -97,13 +97,13 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         }
         else
             wait(&(fix->error));
+        if (fix->error != 0)
+        {
+            fix->error = 127;
+            return (0);
+        }
     }
     if (c->add != 0)
         close(fd);
-    /*if (fix->error != 0)
-    {
-        fix->error = 127;
-        return (0);
-    }*/
     return (1);
 }
