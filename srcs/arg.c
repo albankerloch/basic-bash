@@ -1,5 +1,63 @@
 #include "../includes/minishell.h"
 
+int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix)
+{
+    while (line[*i])
+    {
+        ft_skip_quotes(line, i, &(c->quote));
+        ft_backslash(line, i, &(c->quote));
+        if (line[*i] == '$' && line[*i + 1] && c->quote != 1)
+        {
+            (*i)++;
+            if(!(ft_realloc_var(&(c->n_input), line, i, fix)))
+                return (0);
+        }
+        else
+        {
+            if(!(c->n_input = ft_realloc_concat(c->n_input, line[*i])))
+                return (0);
+        }
+        (*i)++;
+        if ((line[*i] == '\"' && c->quote == 2) || (line[*i] == '\'' && c->quote == 1))
+        {
+            c->quote = 0;
+            (*i)++;
+        }
+        if (c->quote == 0 && (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || line[*i] == '|' || line[*i] == ';'))
+            break;
+    }
+    return (1);
+}
+
+int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix)
+{
+    while (line[*i])
+    {
+        ft_skip_quotes(line, i, &(c->quote));
+        ft_backslash(line, i, &(c->quote));
+        if (line[*i] == '$' && line[*i + 1] && c->quote != 1)
+        {
+            (*i)++;
+            if(!(ft_realloc_var(&(c->n_out), line, i, fix)))
+                return (0);
+        }
+        else
+        {
+            if(!(c->n_out = ft_realloc_concat(c->n_out, line[*i])))
+                return (0);
+        }
+        (*i)++;
+        if ((line[*i] == '\"' && c->quote == 2) || (line[*i] == '\'' && c->quote == 1))
+        {
+            c->quote = 0;
+            (*i)++;
+        }
+        if (c->quote == 0 && (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || line[*i] == '|' || line[*i] == ';'))
+            break;
+    }
+    return (1);
+}
+
 int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
 {
     int k;

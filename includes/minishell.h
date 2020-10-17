@@ -46,9 +46,9 @@ char    *ft_env_var(char *arg, int h, t_fix *fix);
 int     ft_arg_var(char **arg, t_fix *fix);
 void    ft_fix_construct(t_fix *fix, char **envp);
 char    *ft_realloc_concat(char *line, char c);
-int     ft_redirection_right(t_command *c, char *line, int *i, int *k);
-int     ft_redirection_left(t_command *c, char *line, int *i, int *k);
-int     ft_redir_right(t_command *c, char *line, int *i, int *k);
+int     ft_redirection_right(t_command *c, char *line, int *i, t_fix *fix);
+int     ft_redirection_left(t_command *c, char *line, int *i, t_fix *fix);
+int     ft_redir_right(t_command *c, char *line, int *i, t_fix *fix);
 int     ft_backslash(char *line, int *i, int *quote);
 char	  **ft_realloc_arg(char **arg);
 void    ft_skip_quotes(char *line, int *i, int *quote);
@@ -109,5 +109,7 @@ int     ft_export_check_id(char *arg, int i, t_fix *fix);
 char    **ft_unset_env(t_fix *fix, char *arg);
 int     ft_realloc_var(char **arg, char *line, int *i, t_fix *fix);
 char *ft_strjoin_free(char *s, char const *s2);
+int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix);
+int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix);
 
 #endif
