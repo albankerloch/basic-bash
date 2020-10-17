@@ -4,6 +4,8 @@ char	*ft_realloc_concat(char *line, char c)
 {
 	char	*new;
 
+/*	if (ft_strlen(line) == 1 && c == '$')
+		return (line);*/
 	if (!(new = malloc(sizeof(*new) * (ft_strlen(line) + 2))))
 		return (NULL);
 	if (ft_strlen(line) > 0)

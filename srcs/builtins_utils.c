@@ -47,14 +47,14 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
     int i;
     int j;
 
-    if (!(env2 = malloc(sizeof(char **) * (len + 1))))
+    if (!(env2 = malloc(sizeof(char **) * (len + 2))))
         return (NULL);
     i = 0;
     j = 0;
     while (fix->env && fix->env[j])
     {
         if (ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
-            printf("lol\n");
+            i--;
         else
         {
             if (!(env2[i] = ft_strdup(fix->env[j])))
@@ -63,11 +63,14 @@ char **ft_env_cpy(t_fix *fix, char *arg, int len, int egal)
         i++;
         j++;
     }
-    if (!(env2[i] = ft_strdup(arg)))
-        return (ft_free_tab(env2, i));
-    env2[i+1] = NULL;
-    printf("cpy inull=%d\n", i+1);
-  //  ft_free_tab(fix->env, ft_env_len(fix));
+    if (len <= i)
+    {
+        if (!(env2[i] = ft_strdup(arg)))
+            return (ft_free_tab(env2, i));
+        i++;
+    }
+    env2[i] = NULL;
+    ft_free_tab(fix->env, ft_env_len(fix));
     return (env2);
 }
 

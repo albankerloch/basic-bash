@@ -20,11 +20,10 @@ int    ft_new_arg(char **arg, t_command *c, char *line, int *i)
     return (1);
 }
 
-char *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char const *s2)
+char *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char *s2)
 {
     char *temp;
     char *new;
-
     if (!(temp = ft_substr(s, start, len)))
         return (NULL);
     if (!(new = ft_strjoin(temp, s2)))
@@ -52,7 +51,13 @@ int    ft_arg_var(char **arg, t_fix *fix)
                 return (1);
             if (!(new_arg = ft_env_var(*arg, j, fix)))
                 return (0);
-            if (!(*arg = ft_substr_strjoin(*arg, 0, j - 1, new_arg)))
+            if (j == 1)
+            {
+                printf("arg=%s j=%d\n", *arg, j);
+                *arg = ft_substr(*arg, 1, j - 1);
+                printf("arg=%s\n", *arg);
+            }
+            else if (!(*arg = ft_substr_strjoin(*arg, 0, j - 1, new_arg)))
             {
                 free(new_arg);
                 return (0);

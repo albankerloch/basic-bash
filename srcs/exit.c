@@ -3,14 +3,6 @@
 void    ft_exit(t_fix *fix, char *line, int e)
 {
     free(line);
-    int i = 0;
-    while (fix->env[i])
-    {
-        free(fix->env[i]);
-        i++;
-    }
-    printf("free env exit=%d\n", i);
-    free(fix->env);
     ft_exit_fix(fix, -2, e);
 }
 
@@ -55,7 +47,7 @@ int    ft_exit_fix(t_fix *fix, int i, int e)
     int k;
 
     k = fix->exit;
- /*   if (i == -2)
+    if (i == -2)
     {
         i = 0;
         while (fix->env && fix->env[i])
@@ -67,7 +59,7 @@ int    ft_exit_fix(t_fix *fix, int i, int e)
         free(fix->env[t]);
         t++;
     }
-    free(fix->env);*/
+    free(fix->env);
     if (e == EXIT_FAILURE && k == -1)
         ft_putstr_fd("malloc error\n", 2);
     exit(e);
