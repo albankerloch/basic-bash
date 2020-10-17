@@ -22,8 +22,8 @@ int    ft_redir_right(t_command *c, char *line, int *i, int *k)
         ft_putstr_fd("bash: erreur de syntaxe près du symbole inattendu \" newline \"\n", 2);
         return (-1);
     }
-    if (!(ft_new_arg(&(c->n_out), c, line, i)))
-        return (0);
+    /*if (!(ft_new_arg(&(c->n_out), c, line, i)))
+        return (0);*/
     return (ft_touch(c));
 }
 

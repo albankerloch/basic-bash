@@ -1,5 +1,41 @@
 #include "../includes/minishell.h"
 
+char *ft_strjoin_free(char *s, char const *s2)
+{
+    char *new;
+
+    if (!(new = ft_strjoin(s, s2)))
+    {
+        return (NULL);
+    }
+    free(s);
+    return (new);
+}
+
+int ft_realloc_var(char **arg, char *line, int *i, t_fix *fix)
+{
+    int j;
+    int k;
+
+    j = 0;
+    while (line[*i + j] && (ft_isalnum(line[*i + j]) || line[*i + j] == '_'))
+        j++;
+    k = 0;
+    while (fix->env && fix->env[k])
+    {
+		if (ft_strncmp(fix->env[k], &line[*i], j) == 0 && fix->env[k][j] == '=')
+        {
+			*i = *i + j - 1;
+			j++;
+			if(!(*arg = ft_strjoin_free(*arg, &(fix->env[k][j]))))
+                return (0);
+			return (1);
+		} 
+		k++;
+	}
+    return (1);
+}
+
 char	*ft_realloc_concat(char *line, char c)
 {
 	char	*new;

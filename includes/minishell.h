@@ -58,9 +58,9 @@ int    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c);
 int     ft_open_redir(t_command *c);
 int     ft_builtins(t_command *c, char *line, t_fix *fix, int fd);
-int    fork_exec_cmd(t_command *c, char *line, t_fix *fix);
+int     fork_exec_cmd(t_command *c, char *line, t_fix *fix);
 int     ft_relative_path(t_command *c, t_fix *fix);
-int     ft_new_arg(char **arg, t_command *c, char *line, int *i);
+int     ft_new_arg(t_command *c, char *line, int *i, t_fix *fix);
 void    ft_env_destroy(char **env);
 void    ft_sig_handler(int signum);
 void    ft_sig_handler_process(int signum);
@@ -107,5 +107,7 @@ char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
 int     ft_env_compare(t_fix *fix, char *arg, int n);
 int     ft_export_check_id(char *arg, int i, t_fix *fix);
 char    **ft_unset_env(t_fix *fix, char *arg);
+int     ft_realloc_var(char **arg, char *line, int *i, t_fix *fix);
+char *ft_strjoin_free(char *s, char const *s2);
 
 #endif
