@@ -68,9 +68,13 @@ int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
     k--;
     while (line[*i])
     {
-        ft_skip_quotes(line, i, &(c->quote));
+       // printf("AVANT : %c %d %d\n", line[*i], *i, c->quote);
+        ft_skip_quotes(line, i, &(c->quote));   
         ft_backslash(line, i, &(c->quote));
-        if (line[*i] == '$' && line[*i + 1] && c->quote != 1)
+        //printf("APRES : %c %d %d\n", line[*i], *i, c->quote);
+        if (!(line[*i]))
+            break;
+        if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
         {
             (*i)++;
             if(!(ft_realloc_var(&(c->arg[k]), line, i, fix)))

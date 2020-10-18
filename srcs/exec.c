@@ -1,5 +1,30 @@
 #include "../includes/minishell.h"
 
+void aff_list(t_list *begin)
+{
+    t_command *c;
+    int i;
+    int k;
+
+    k = 0;
+    while(begin)
+    {
+        c = begin->content;
+        i = 0;
+        while(c->arg [i])
+        {
+            printf("%d arg %d |%s|\n", k, i, c->arg[i]);
+            i++;
+        }
+        printf("  output stdout = %s \n", c->n_out);
+        printf("  redir = %d \n", c->add);
+        printf("  input stdin = %s \n", c->n_input);
+        printf("  flag input = %d \n", c->input);
+        k++;
+        begin = begin->next;
+    }
+}
+
 int ft_exec(t_list *t, char *line, t_fix *fix)
 {
     pid_t   pid;
@@ -8,6 +33,7 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     int     save_fd;
     int     error;
 
+    aff_list(t);
     error = 1;
     if (!t->next)
         return(fork_exec_cmd(t->content, line, fix));

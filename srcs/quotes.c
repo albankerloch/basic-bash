@@ -1,15 +1,5 @@
 #include "../includes/minishell.h"
 
-
-int    ft_backslash(char *line, int *i, int *quote)
-{
-    if (line[*i] == '\\' && *quote == 0)
-        (*i)++;
-    else if (line[*i] == '\\' && *quote == 2 && line[*i + 1] && (line[*i + 1] == '`' || line[*i + 1] == '\"'))
-        (*i)++;
-    return (0);
-}
-
 void    ft_skip_quotes(char *line, int *i, int *quote)
 {
     while ((line[*i] == '\'' && *quote != 2) || (line[*i] == '\"' && *quote != 1))
@@ -22,4 +12,13 @@ void    ft_skip_quotes(char *line, int *i, int *quote)
             *quote = 0;
         (*i)++;
     }
+}
+
+int    ft_backslash(char *line, int *i, int *quote)
+{
+    if (line[*i] && line[*i] == '\\' && *quote == 0)
+        (*i)++;
+    else if (line[*i] && line[*i] == '\\' && *quote == 2 && line[*i + 1] && (line[*i + 1] == '`' || line[*i + 1] == '\"'))
+        (*i)++;
+    return (0);
 }
