@@ -46,22 +46,15 @@ int ft_env(t_command *c, t_fix *fix, int fd)
 int ft_pwd(t_command *c, t_fix *fix, int fd)
 {
     int j;
-    char    *sub_str;
+    char    here[PATH_MAX];
 
-    j = 0;
-    while (fix->env && fix->env[j])
+    if (getcwd(here, PATH_MAX) == NULL)
     {
-        if (fix->env[j] && ft_strncmp(fix->env[j], "PWD", ft_strlen("PWD")) == 0)
-        {
-            if (!(sub_str = ft_substr(fix->env[j], 4, ft_strlen(fix->env[j]) - 4)))
-                return (0);
-            ft_putstr_fd(sub_str, fd);
-            free(sub_str);
-            ft_putchar_fd('\n', fd);
-        }
-        j++;
+        fix->error = -1;
+        return (0);
     }
-    fix->error = 0;
+    ft_putstr_fd(here, fd);
+    ft_putchar_fd('\n', fd);
     return (1);
 }
 
@@ -116,8 +109,7 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
 {
     int ret;
     char    buf[PATH_MAX];
-    int j;
-    
+
     if (!c->arg[1])
         ret = chdir("/home/user42");
     else
