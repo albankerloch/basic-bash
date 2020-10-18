@@ -51,8 +51,6 @@ int ft_parser(t_list *t, char *line, t_fix *fix, int *i)
             }
             if (!(ft_new_arg(c, line, i, fix)))
                 return (0);
-            /*if (!(ft_arg_var(&(c->arg[k]), fix)))
-                return (0);*/
         }
     }
     if (c->quote != 0)

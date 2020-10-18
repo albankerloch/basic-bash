@@ -33,6 +33,7 @@ int ft_realloc_var(char **arg, char *line, int *i, t_fix *fix)
 		} 
 		k++;
 	}
+	*i = *i + j - 1;
     return (1);
 }
 

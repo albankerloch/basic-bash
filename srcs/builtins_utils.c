@@ -71,16 +71,15 @@ char **ft_unset_env(t_fix *fix, char *arg)
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (ft_strncmp(fix->env[j], arg, ft_strlen(arg)) == 0)
-            i--;
-        else
+        if (!(ft_strncmp(fix->env[j], arg, ft_strlen(arg)) == 0))
         {
             env2[i] = NULL;
             if (!(env2[i] = ft_strdup(fix->env[j])))
                 return (ft_free_tab(env2, i));
+            i++;
         }
-        i++;
         j++;
+
     }
     env2[i] = NULL;
     ft_free_tab(fix->env, ft_env_len(fix) - 1);
