@@ -33,7 +33,7 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     int     save_fd;
     int     error;
 
-    aff_list(t);
+  //  aff_list(t);
     error = 1;
     if (!t->next)
         return(fork_exec_cmd(t->content, line, fix));
@@ -126,7 +126,7 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
         if (fix->error != 0)
         {
             fix->error = 127;
-            return (0);
+            return (-1);
         }
     }
     if (c->add != 0)

@@ -34,16 +34,11 @@ int ft_parser_exec(char *line, t_fix *fix)
 		}
 		if (!(ft_exec(t, line, fix)))
 		{
+			ft_lstclear(&t, &ft_del_command);
 			if (fix->exit >= 0)
-			{
-				ft_lstclear(&t, &ft_del_command);
 				ft_exit(fix, line, fix->exit);
-			}
 			else
-			{
-				ft_lstclear(&t, &ft_del_command);
 				return (0);
-			}
 		}
 		ft_lstclear(&t, &ft_del_command);
 	}

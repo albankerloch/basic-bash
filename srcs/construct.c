@@ -39,17 +39,17 @@ t_command *ft_command_construct()
     if(!(c = malloc(sizeof(t_command))))
         return (ft_free_part_command(c, 0));
     c->input = 0;
-    if(!(c->n_input = malloc(1)))
+    if(!(c->n_input = malloc(sizeof(char *))))
         return (ft_free_part_command(c, 1));
     c->n_input[0] = '\0';
     c->add = 0;
     c->quote = 0;
-    if(!(c->n_out = malloc(1)))
+    if(!(c->n_out = malloc(sizeof(char *))))
         return (ft_free_part_command(c, 2));
     c->n_out[0] = '\0';
-    if(!(c->arg = malloc(sizeof(char*) * 2)))
+    if(!(c->arg = malloc(sizeof(char **) * 2)))
         return (ft_free_part_command(c, 3));
-    if(!(c->arg[0] = malloc(1)))
+    if(!(c->arg[0] = malloc(sizeof(char *))))
         return (ft_free_part_command(c, 4));
     c->arg[0][0] = '\0';
     c->arg[1] = NULL;
@@ -76,7 +76,7 @@ void   ft_fix_construct(t_fix *fix, char **envp)
     fix->error = 0;
     fix->exit = -1;
 }
-
+/*
 void    ft_command_destroy(void *c)
 {
     int     i;
@@ -106,4 +106,4 @@ void    ft_env_destroy(char **env)
         i++;
     }
     free(env);
-}
+}*/

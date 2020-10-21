@@ -10,12 +10,17 @@ int ft_echo(t_command *c, t_fix *fix, int fd)
     {
         i = 1;
         ft_echo_n(&n, c->arg, &i);
-        while(c->arg[i])
+        if (ft_strcmp(c->arg[i], "$?") == 0)
+            ft_putnbr_fd(fix->error, fd);
+        else
         {
-            ft_putstr_fd(c->arg[i], fd);
-            if (c->arg[i + 1])
-                ft_putchar_fd(' ', fd);
-            i++;
+            while(c->arg[i])
+            {
+                ft_putstr_fd(c->arg[i], fd);
+                if (c->arg[i + 1])
+                    ft_putchar_fd(' ', fd);
+                i++;
+            }
         }
     }
     if (n == 0)
@@ -117,9 +122,7 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
     if (ret == -1)
     {
         fix->error = 1;
-        ft_putstr_fd("bash: cd: ", 2);
-        ft_putstr_fd(c->arg[1], 2);
-        ft_putstr_fd(": Aucun fichier ou dossier de ce type\n", 2);
+        ft_error(errno);
         return (1);
     }
     if (!(getcwd(buf, PATH_MAX)))

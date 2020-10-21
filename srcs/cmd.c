@@ -39,9 +39,10 @@ void ft_execve(t_command *c, t_fix *fix)
     }
     if (ret == -1)
     {
-        fix->error = 127;
+        ft_error(errno);
+     /*   fix->error = 127;
         ft_putstr_fd(c->arg[0], 2);
-        ft_putstr_fd(" : commande introuvable\n", 2);
+        ft_putstr_fd(" : commande introuvable\n", 2);*/
     }
     if (c->add != 0)
         close(fd);

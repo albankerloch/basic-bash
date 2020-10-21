@@ -10,7 +10,10 @@ int    ft_touch(t_command *c)
         fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | \
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     if (fd == -1)
-        return (0);
+    {
+        ft_error(errno);
+        return (-1);
+    }
     if (c->add != 0)
         close(fd);
     return (1);
@@ -28,6 +31,11 @@ int ft_open_redir(t_command *c)
     else
         fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | 
         S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    if (fd == -1)
+    {
+        ft_error(errno);
+        return (-1);
+    }
     return (fd);
 }
 

@@ -41,7 +41,7 @@ char	*ft_realloc_concat(char *line, char c)
 {
 	char	*new;
 
-	if (!(new = malloc(sizeof(*new) * (ft_strlen(line) + 1))))
+	if (!(new = malloc(sizeof(*new) * (ft_strlen(line) + 2))))
 		return (NULL);
 	if (ft_strlen(line) > 0)
 		ft_memcpy(new, line, ft_strlen(line));
@@ -90,4 +90,13 @@ char	**ft_realloc_arg(char **arg)
 	new[i + 1] = NULL;
 	ft_free_tab(arg, i);
 	return (new);
+}
+
+void	ft_error(int err)
+{
+	ft_putstr_fd("Error : ", 2);
+	ft_putnbr_fd(errno, 2);
+	ft_putchar_fd(' ', 2);
+	ft_putstr_fd(strerror(errno), 2);
+	ft_putchar_fd('\n', 2);
 }

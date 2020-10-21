@@ -14,13 +14,15 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include <stdio.h>
+# include <stdio.h>///à supprimer
 # include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
 # include <signal.h>
+# include <errno.h>
+# include <string.h>
 
 typedef struct s_command
 {
@@ -73,6 +75,7 @@ void    ft_execve(t_command *c, t_fix *fix);
 char    **ft_realloc_env(t_fix *fix, char buf[PATH_MAX]);
 void    ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX]);
 void    ft_realloc_concat_buff(char line[PATH_MAX], char c);
+void	ft_error(int err);
 
 int ft_echo(t_command *c, t_fix *fix, int fd);
 int ft_env(t_command *c, t_fix *fix, int fd);
@@ -83,7 +86,6 @@ int ft_cd(t_command *c, t_fix *fix, int fd);
 int ft_builtin_exit(t_command *c, t_fix *fix, int fd);
 
 int     ft_env_len(t_fix *fix);
-int     ft_export_new_len(t_fix *fix, char *arg, int n);
 char    **ft_replace_env(t_fix *fix, char *arg, int egal);
 char    *ft_join_end_var(char *val_var, char *arg, int j);
 char    *ft_valeur_variable(t_fix *fix, char *nom_var);

@@ -41,23 +41,6 @@ int    ft_env_len(t_fix *fix)
     return (len);
 }
 
-int ft_export_new_len(t_fix *fix, char *arg, int n)
-{
-    int i;
-    int j;
-
-    i = 0;
-    j = 0;
-    while (fix->env && fix->env[j])
-    {
-        if (ft_strncmp(arg, fix->env[j], n) == 0 && fix->env[j][n] == '=')
-            i--;
-        j++;
-        i++;
-    }
-    return (i);
-}
-
 char **ft_unset_env(t_fix *fix, char *arg)
 {
     char    **env2;
@@ -93,7 +76,7 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
     int j;
 
     env2 = NULL;
-    if (!(env2 = malloc(sizeof(char **) * (ft_export_new_len(fix, arg, egal) + 2))))
+    if (!(env2 = malloc(sizeof(char **) * (ft_env_compare(fix, arg, egal) + 2))))
         return (NULL);
     i = 0;
     j = 0;
@@ -188,7 +171,7 @@ char **ft_realloc_env(t_fix *fix, char buf[PATH_MAX])
     j = 0;
     while (fix->env && fix->env[j])
         j++;
-    if (!(env2 = malloc(sizeof(char **) * j + 1)))
+    if (!(env2 = malloc(sizeof(char **) * (j + 1))))
         return (NULL);
     j = 0;
     while (fix->env && fix->env[j])
@@ -206,7 +189,7 @@ char **ft_realloc_env(t_fix *fix, char buf[PATH_MAX])
         j++;
     }
     env2[j] = NULL;
-    free(fix->env);
+    ft_free_tab(fix->env, ft_env_len(fix) - 1);
     return (env2);
 }
 
