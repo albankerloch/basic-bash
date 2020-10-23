@@ -76,34 +76,3 @@ void   ft_fix_construct(t_fix *fix, char **envp)
     fix->error = 0;
     fix->exit = -1;
 }
-/*
-void    ft_command_destroy(void *c)
-{
-    int     i;
-    t_command *c_bis;
-    
-    c_bis = c;
-    i = 0;
-    free(c_bis->n_input);
-    free(c_bis->n_out);
-    while (c_bis->arg[i])
-    {
-        free(c_bis->arg[i]);
-        i++;
-    }
-    free(c_bis->arg);
-    free(c_bis);
-}
-
-void    ft_env_destroy(char **env)
-{
-    int i;
-
-    i = 0;
-    while (env && env[i])
-    {
-        free(env[i]);
-        i++;
-    }
-    free(env);
-}*/

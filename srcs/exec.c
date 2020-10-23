@@ -31,10 +31,10 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     pid_t   pid2;
     int     pipe_fd[2];
     int     save_fd;
-    int     error;
+  //  int     error;
 
   //  aff_list(t);
-    error = 1;
+  //  error = 1;
     if (!t->next)
         return(fork_exec_cmd(t->content, line, fix));
     else
@@ -70,29 +70,30 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             if (dup2(save_fd, 0) == -1)
                 return (0);
             close(save_fd);
-            wait(&error);
+         //   wait(&error);
+            wait(&(fix->error));
         }
     }
-    if (error != 0)
+    if (fix->error != 0)
         return (0);
     return (1);
 }
 
 int ft_builtins(t_command *c, char *line, t_fix *fix, int fd)
 {
-    if (ft_strncmp(c->arg[0], "echo", ft_strlen("echo")) == 0  && ft_strlen("echo") == ft_strlen(c->arg[0]))
+    if (ft_strcmp(c->arg[0], "echo") == 0)
         return (ft_echo(c, fix, fd));
-    else if (ft_strncmp(c->arg[0], "env", ft_strlen("env")) == 0  && ft_strlen("env") == ft_strlen(c->arg[0]))
+    else if (ft_strcmp(c->arg[0], "env") == 0)
         return (ft_env(c, fix, fd));
-    else if (ft_strncmp(c->arg[0], "pwd", ft_strlen("pwd")) == 0  && ft_strlen("pwd") == ft_strlen(c->arg[0]))
+    else if (ft_strcmp(c->arg[0], "pwd") == 0)
         return (ft_pwd(c, fix, fd));
-    else if (ft_strncmp(c->arg[0], "export", ft_strlen("export")) == 0  && ft_strlen("export") == ft_strlen(c->arg[0]))
+    else if (ft_strcmp(c->arg[0], "export") == 0)
         return (ft_export(c, fix, fd));
-    else if (ft_strncmp(c->arg[0], "unset", ft_strlen("unset")) == 0  && ft_strlen("unset") == ft_strlen(c->arg[0]))
+    else if (ft_strcmp(c->arg[0], "unset") == 0)
         return (ft_unset(c, fix, fd));
-    else if (ft_strncmp(c->arg[0], "cd", ft_strlen("cd")) == 0  && ft_strlen("cd") == ft_strlen(c->arg[0]))
+    else if (ft_strcmp(c->arg[0], "cd") == 0)
         return (ft_cd(c, fix, fd));
-    else if (ft_strncmp(c->arg[0], "exit", ft_strlen("exit")) == 0  && ft_strlen("exit") == ft_strlen(c->arg[0]))
+    else if (ft_strcmp(c->arg[0], "exit") == 0)
         return (ft_builtin_exit(c, fix, fd));
     return (-1);
 }
@@ -112,6 +113,8 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
             close(fd);
         return (0);
     }
+    else if (ret == 1)
+        fix->error = 0;
     else if (ret == -1)
     {
         pidf = fork();

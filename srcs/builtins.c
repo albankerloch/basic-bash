@@ -25,7 +25,6 @@ int ft_echo(t_command *c, t_fix *fix, int fd)
     }
     if (n == 0)
         ft_putchar_fd('\n', fd);
-    fix->error = 0;
     return (1);
 }
 
@@ -35,7 +34,7 @@ int ft_env(t_command *c, t_fix *fix, int fd)
     
     j = 0;
     if (ft_env_err(c, fd, fix) == -1)
-        return (1);
+        return (2);
     while (fix->env && fix->env[j])
     {
         ft_putstr_fd(fix->env[j], fd);
@@ -44,7 +43,6 @@ int ft_env(t_command *c, t_fix *fix, int fd)
     }
     if (c->arg[1] && !ft_strcmp(c->arg[1], "="))
         ft_putstr_fd("=\n", fd);
-    fix->error = 0;
     return (1);
 }
 
@@ -53,9 +51,9 @@ int ft_pwd(t_command *c, t_fix *fix, int fd)
     int j;
     char    here[PATH_MAX];
 
-    if (getcwd(here, PATH_MAX) == NULL)
+    if (!(getcwd(here, PATH_MAX)))
     {
-        fix->error = -1;
+        ft_error(errno);
         return (0);
     }
     ft_putstr_fd(here, fd);
@@ -79,7 +77,7 @@ int ft_export(t_command *c, t_fix *fix, int fd)
             if (c->arg[i][j] == '=')
             {
                 if ((!(ft_export_check_id(c->arg[i], j, fix))) || (c->arg[i][j - 1] == '_' && j == 1))
-                    break;
+                    return (2);
                 if (!(fix->env = ft_replace_env(fix, c->arg[i], j)))
                     return (0);
             }
@@ -123,13 +121,18 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
     {
         fix->error = 1;
         ft_error(errno);
-        return (1);
+        return (2);
     }
     if (!(getcwd(buf, PATH_MAX)))
+    {
+        ft_error(errno);
         return (0);
+    }
     if (!(fix->env = ft_realloc_env(fix, buf)))
+    {
+        ft_error(errno);
         return (0);
-    fix->error = 0;
+    }
     return (1);
 }
 
@@ -146,6 +149,7 @@ int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
             ft_putstr_fd(c->arg[1] ,2);
             ft_putstr_fd(": argument numérique nécessaire\n", 2);
             fix->exit = 2;
+         //   fix->error = 2;
         }
         else
         {
@@ -158,7 +162,6 @@ int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
                 return (1);
             }
         } 
-    }        
-    fix->error = fix->exit;
+    }
     return (0);
 }
