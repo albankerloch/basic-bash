@@ -12,6 +12,24 @@ char *ft_strjoin_free(char *s, char const *s2)
     return (new);
 }
 
+int ft_realloc_fix_error(char **arg, t_fix *fix)
+{
+	if (fix->error >= 100)
+	{
+		if(!(*arg = ft_realloc_concat(*arg, fix->error / 100 + 48)))
+			return (0);
+	}
+	if (fix->error >= 10)
+	{
+		if(!(*arg = ft_realloc_concat(*arg, fix->error % 100 / 10 + 48)))
+			return (0);
+	}
+	if(!(*arg = ft_realloc_concat(*arg, fix->error % 10 + 48)))
+        return (0);   
+    return (1);
+}
+
+
 int ft_realloc_var(char **arg, char *line, int *i, t_fix *fix)
 {
     int j;

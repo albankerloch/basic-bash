@@ -6,10 +6,16 @@ int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix)
     {
         ft_skip_quotes(line, i, &(c->quote));
         ft_backslash(line, i, &(c->quote));
-        if (line[*i] == '$' && line[*i + 1] && c->quote != 1)
+        if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
         {
             (*i)++;
             if(!(ft_realloc_var(&(c->n_input), line, i, fix)))
+                return (0);
+        }
+        else if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
+        {
+            (*i)++;
+            if(!(ft_realloc_fix_error(&(c->n_input), fix)))
                 return (0);
         }
         else
@@ -35,10 +41,16 @@ int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix)
     {
         ft_skip_quotes(line, i, &(c->quote));
         ft_backslash(line, i, &(c->quote));
-        if (line[*i] == '$' && line[*i + 1] && c->quote != 1)
+        if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
         {
             (*i)++;
             if(!(ft_realloc_var(&(c->n_out), line, i, fix)))
+                return (0);
+        }
+        else if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
+        {
+            (*i)++;
+            if(!(ft_realloc_fix_error(&(c->n_out), fix)))
                 return (0);
         }
         else
@@ -78,6 +90,12 @@ int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
         {
             (*i)++;
             if(!(ft_realloc_var(&(c->arg[k]), line, i, fix)))
+                    return (0);
+        }
+        else if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
+        {
+            (*i)++;
+            if(!(ft_realloc_fix_error(&(c->arg[k]), fix)))
                 return (0);
         }
         else

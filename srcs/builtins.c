@@ -10,17 +10,12 @@ int ft_echo(t_command *c, t_fix *fix, int fd)
     {
         i = 1;
         ft_echo_n(&n, c->arg, &i);
-        if (ft_strcmp(c->arg[i], "$?") == 0)
-            ft_putnbr_fd(fix->error, fd);
-        else
+        while(c->arg[i])
         {
-            while(c->arg[i])
-            {
-                ft_putstr_fd(c->arg[i], fd);
-                if (c->arg[i + 1])
-                    ft_putchar_fd(' ', fd);
-                i++;
-            }
+            ft_putstr_fd(c->arg[i], fd);
+            if (c->arg[i + 1])
+                ft_putchar_fd(' ', fd);
+            i++;
         }
     }
     if (n == 0)
