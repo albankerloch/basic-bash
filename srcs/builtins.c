@@ -154,7 +154,7 @@ int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
             {
                 ft_putstr_fd("bash: exit: trop d'arguments\n", 2);
                 fix->error = 1;
-                return (1);
+                return (2);
             }
         } 
     }

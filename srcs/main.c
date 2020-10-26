@@ -63,7 +63,7 @@ int	main(int argc, char *argv[], char *envp[])
 		ret = get_next_line(0, &line);
 		if (ret == 0)
 		{
-			ft_putstr("exit\n");
+			ft_putstr("\nexit\n");
 			ft_exit(&fix, line, EXIT_SUCCESS);
 		}
 		if (ret == -1)
@@ -71,7 +71,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!(ft_parser_exec(line, &fix)))
 			ft_exit(&fix, line, EXIT_FAILURE);
 		free(line);
-		//printf("fix->error=%d\n", fix.error);
+	//	printf("fix->error=%d fix->exit=%d\n", fix.error, fix.exit);
 	}
 	return (0);
 }

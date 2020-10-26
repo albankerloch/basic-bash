@@ -31,12 +31,15 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     pid_t   pid2;
     int     pipe_fd[2];
     int     save_fd;
-  //  int     error;
+    int     ret;
+    int     error;
 
   //  aff_list(t);
-  //  error = 1;
+    error = 1;
+    t_command *c = t->content;
+    ret = 0;
     if (!t->next)
-        return(fork_exec_cmd(t->content, line, fix));
+        return (fork_exec_cmd(t->content, line, fix));
     else
     {
         pipe(pipe_fd);
@@ -49,8 +52,11 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             if (dup2(pipe_fd[1], 1) == -1)
                 exit(-1);
             close(pipe_fd[1]);
-            if (fork_exec_cmd(t->content, line, fix) == 0)
+            if ((ret = fork_exec_cmd(t->content, line, fix)) == 0 || ret == -1)
+            {
+                error = -1;
                 exit(-1);
+            }    
             if (dup2(save_fd, 1) == -1)
                 exit(-1);
             close(save_fd);
@@ -70,12 +76,13 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             if (dup2(save_fd, 0) == -1)
                 return (0);
             close(save_fd);
-         //   wait(&error);
-            wait(&(fix->error));
+            wait(&error);
         }
     }
-    if (fix->error != 0)
-        return (0);
+    if (error != 0)
+        return (-1);
+ //   if (fix->error != 0)
+   //     return (0);
     return (1);
 }
 

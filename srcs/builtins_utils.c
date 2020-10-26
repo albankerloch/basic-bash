@@ -151,6 +151,7 @@ int ft_export_err(char *arg, t_fix *fix)
     ft_putstr_fd(arg, 2);
     ft_putstr_fd("\': not a valid identifier\n", 2);
     fix->error = 1;
+    fix->exit = 1; // err batterie test
     return (0);
 }
 
