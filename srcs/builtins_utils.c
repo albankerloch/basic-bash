@@ -112,13 +112,26 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
 int ft_export_without_arg(t_fix *fix, int fd)
 {
     int i;
+    int j;
 
     i = 0;
     while (fix->env && fix->env[i])
     {
         ft_putstr_fd("declare -x ", fd);
-        ft_putstr_fd(fix->env[i], fd);
-        ft_putchar_fd('\n', fd);
+        j = 0;
+        while (fix->env[i][j] != '=')
+        {
+            ft_putchar_fd(fix->env[i][j], fd);
+            j++;
+        }
+        ft_putchar_fd(fix->env[i][j++], fd);
+        ft_putchar_fd('\"', fd);
+        while (fix->env[i][j])
+        {
+            ft_putchar_fd(fix->env[i][j], fd);
+            j++;
+        }
+        ft_putstr_fd("\"\n", fd);
         i++;
     }
     return (1);
