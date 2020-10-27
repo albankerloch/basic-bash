@@ -32,8 +32,11 @@ int ft_env(t_command *c, t_fix *fix, int fd)
         return (2);
     while (fix->env && fix->env[j])
     {
-        ft_putstr_fd(fix->env[j], fd);
-        ft_putchar_fd('\n', fd);
+        if (ft_strchr(fix->env[j], '='))
+        {
+            ft_putstr_fd(fix->env[j], fd);
+            ft_putchar_fd('\n', fd);
+        }
         j++;
     }
     if (c->arg[1] && !ft_strcmp(c->arg[1], "="))
@@ -67,16 +70,27 @@ int ft_export(t_command *c, t_fix *fix, int fd)
     while (c->arg[i])
     {
         j = 0;
-        while (c->arg[i][j])
+        if (ft_strchr(c->arg[i], '='))
         {
-            if (c->arg[i][j] == '=')
+            while (c->arg[i][j])
             {
-                if ((!(ft_export_check_id(c->arg[i], j, fix))) || (c->arg[i][j - 1] == '_' && j == 1))
-                    return (2);
-                if (!(fix->env = ft_replace_env(fix, c->arg[i], j)))
+                if (c->arg[i][j] == '=')
+                {
+                    if ((!(ft_export_check_id(c->arg[i], j, fix))) || (c->arg[i][j - 1] == '_' && j == 1))
+                        return (2);
+                    if (!(fix->env = ft_replace_env(fix, c->arg[i], j)))
+                        return (0);
+                }
+                j++;
+            }
+        }
+        else
+        {
+            if (ft_env_compare(fix, c->arg[i], ft_strlen(c->arg[i])) == ft_env_len(fix))
+            {
+                if (!(fix->env = ft_replace_env(fix, c->arg[i], ft_strlen(c->arg[i]))))
                     return (0);
             }
-            j++;
         }
         i++;
     }
@@ -133,7 +147,7 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
 
 int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
 {
-  //  ft_putstr("exit\n");
+    ft_putstr("exit\n");
     if (!(c->arg[1]))
         fix->exit = 0;
     else

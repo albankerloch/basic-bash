@@ -23,7 +23,7 @@ int ft_env_compare(t_fix *fix, char *arg, int n)
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (ft_strncmp(arg, fix->env[j], n) == 0 && fix->env[j][n] == '=')
+        if (ft_strncmp(arg, fix->env[j], n) == 0 && (fix->env[j][n] == '=' || fix->env[j][n] == '\0'))
             i--;
         j++;
         i++;
@@ -85,7 +85,7 @@ char **ft_replace_env(t_fix *fix, char *arg, int egal)
     j = 0;
     while (fix->env && fix->env[j])
     {
-        if (ft_strncmp(fix->env[j], arg, egal) == 0 && fix->env[j][egal] == '=')
+        if (ft_strncmp(fix->env[j], arg, egal) == 0 && (fix->env[j][egal] == '=' || fix->env[j][egal] == '\0'))
             i--;
         else
         {
@@ -119,19 +119,23 @@ int ft_export_without_arg(t_fix *fix, int fd)
     {
         ft_putstr_fd("declare -x ", fd);
         j = 0;
-        while (fix->env[i][j] != '=')
+        while (fix->env[i][j] != '=' && fix->env[i][j] != '\0')
         {
             ft_putchar_fd(fix->env[i][j], fd);
             j++;
         }
-        ft_putchar_fd(fix->env[i][j++], fd);
-        ft_putchar_fd('\"', fd);
-        while (fix->env[i][j])
+        if (ft_strchr(fix->env[i], '='))
         {
-            ft_putchar_fd(fix->env[i][j], fd);
-            j++;
+            ft_putchar_fd(fix->env[i][j++], fd);
+            ft_putchar_fd('\"', fd);
+            while (fix->env[i][j])
+            {
+                ft_putchar_fd(fix->env[i][j], fd);
+                j++;
+            }
+            ft_putstr_fd("\"", fd);
         }
-        ft_putstr_fd("\"\n", fd);
+        ft_putstr_fd("\n", fd);
         i++;
     }
     return (1);

@@ -81,8 +81,6 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     }
     if (error != 0)
         return (-1);
- //   if (fix->error != 0)
-   //     return (0);
     return (1);
 }
 
