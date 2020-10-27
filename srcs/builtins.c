@@ -80,6 +80,7 @@ int ft_export(t_command *c, t_fix *fix, int fd)
                         return (2);
                     if (!(fix->env = ft_replace_env(fix, c->arg[i], j)))
                         return (0);
+                    break ;
                 }
                 j++;
             }
