@@ -18,6 +18,11 @@ void    ft_skip_quotes(char *line, int *i, int *quote)
 
 int    ft_backslash(char *line, int *i, int *quote)
 {
+    if (line[*i] == '\\' && line[*i + 1] == '$')
+    {
+        (*i)++;
+        return (1);
+    }
     if (line[*i] && line[*i] == '\\' && *quote == 0)
         (*i)++;
     else if (line[*i] && line[*i] == '\\' && *quote == 2 && line[*i + 1] && (line[*i + 1] == '`' || line[*i + 1] == '\"'))

@@ -73,6 +73,7 @@ int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix)
 int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
 {
     int k;
+    int ret;
 
     k = 0;
     while(c->arg[k])
@@ -82,17 +83,17 @@ int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
     {
        // printf("AVANT : %c %d %d\n", line[*i], *i, c->quote);
         ft_skip_quotes(line, i, &(c->quote));   
-        ft_backslash(line, i, &(c->quote));
+        ret = ft_backslash(line, i, &(c->quote));
         //printf("APRES : %c %d %d\n", line[*i], *i, c->quote);
         if (!(line[*i]))
             break;
-        if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
+        if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
         {
             (*i)++;
             if(!(ft_realloc_var(&(c->arg[k]), line, i, fix)))
                     return (0);
         }
-        else if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
+        else if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
         {
             (*i)++;
             if(!(ft_realloc_fix_error(&(c->arg[k]), fix)))
