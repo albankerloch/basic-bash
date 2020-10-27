@@ -155,8 +155,8 @@ int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
     {
         if (!(ft_isnum(c->arg[1])))
         {
-            ft_putstr_fd("bash: exit: ",2);
-            ft_putstr_fd(c->arg[1] ,2);
+            ft_putstr_fd("bash: exit: ", 2);
+            ft_putstr_fd(c->arg[1], 2);
             ft_putstr_fd(": argument numérique nécessaire\n", 2);
             fix->exit = 2;
             fix->error = 2;

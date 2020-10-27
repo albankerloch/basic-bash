@@ -146,19 +146,13 @@ int ft_export_check_id(char *arg, int j, t_fix *fix)
     int i;
     if (j == 0)
         return (ft_export_err(arg, fix));
-    i = 0;
-    while (ft_isdigit(arg[i]))
-        i++;
-    if (i == j)
+    if (ft_isdigit(arg[i]))
         return (ft_export_err(arg, fix));
     i = 0;
     while (i < j)
     {
         if (!(ft_isalnum(arg[i])) && arg[i] != '_')
-        {
-            printf("alnum err\n");
             return (ft_export_err(arg, fix));
-        }
         i++;
     }
     return (1);

@@ -100,13 +100,8 @@ int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
         }
         else
         {
-          // if (k > 0)
-            //    printf("ark=|%s| %zu |%c| quote=%d\n", c->arg[k], ft_strlen(c->arg[k]), line[*i], c->quote);
-        /*    if (line[*i] != ' ')
-            {*/
-                if(!(c->arg[k] = ft_realloc_concat(c->arg[k], line[*i])))
-                    return (0);
-          //  }
+            if(!(c->arg[k] = ft_realloc_concat(c->arg[k], line[*i])))
+                return (0);
         }
         (*i)++;
         if ((line[*i] == '\"' && c->quote == 2) || (line[*i] == '\'' && c->quote == 1))
