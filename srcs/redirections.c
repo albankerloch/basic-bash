@@ -20,10 +20,7 @@ int    ft_redir_right(t_command *c, char *line, int *i, t_fix *fix)
     while (line[*i] == ' ')
         (*i)++;
     if (!line[*i])
-    {
-        ft_putstr_fd("bash: erreur de syntaxe près du symbole inattendu \" newline \"\n", 2);
-        return (2);
-    }
+        return (ft_empty_redir(fix));
     if (c->n_out[0] != '\0')
     {
         free(c->n_out);
@@ -38,10 +35,14 @@ int    ft_redir_right(t_command *c, char *line, int *i, t_fix *fix)
 
 int    ft_redirection_left(t_command *c, char *line, int *i, t_fix *fix)
 {
+    int ret;
+
     *i = *i + 1;
     c->input = 1;
     while (line[*i] == ' ')
         *i = *i + 1;
+    if (!line[*i])
+        return (ft_empty_redir(fix));
     if (c->n_input[0] != '\0')
     {
         free(c->n_input);
@@ -49,12 +50,12 @@ int    ft_redirection_left(t_command *c, char *line, int *i, t_fix *fix)
             return (0);
         c->n_input[0] = '\0';
     }
-    if (!(ft_new_input(c, line, i, fix)))
-        return (0);
+    if ((ret = ft_new_input(c, line, i, fix)) != 1)
+        return (ret);
     return (ft_checkfile(c, fix));
 }
 
-void    ft_n_out_err(char *line, int i_start, int *i, t_fix *fix)
+int   ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix)
 {
     ft_putstr_fd("bash: ", 2);
     while (i_start <= *i)
@@ -62,8 +63,16 @@ void    ft_n_out_err(char *line, int i_start, int *i, t_fix *fix)
         ft_putchar_fd(line[i_start], 2);
         i_start++;
     }
-    ft_putstr_fd(" : ambiguous redirection\n", 2);
+    ft_putstr_fd(" : ambiguous redirect\n", 2);
     while (line[*i])
         (*i)++;
     fix->error = 1;
+    return (2);
+}
+
+int    ft_empty_redir(t_fix *fix)
+{
+    ft_putstr_fd("bash: syntax error near unexpected token \" newline \"\n", 2);
+    fix->error = 2;
+    return (2);
 }

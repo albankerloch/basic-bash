@@ -114,7 +114,8 @@ int     ft_realloc_fix_error(char **arg, t_fix *fix);
 char    *ft_strjoin_free(char *s, char const *s2);
 int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix);
 int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix);
-void    ft_n_out_err(char *line, int i_start, int *i, t_fix *fix);
+int    ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix);
+int    ft_empty_redir(t_fix *fix);
 
 
 #endif

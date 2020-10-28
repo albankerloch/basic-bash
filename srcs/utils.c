@@ -52,7 +52,6 @@ int ft_realloc_var(char **arg, char *line, int *i, t_fix *fix)
 		k++;
 	}
 	*i = *i + j - 1;
-	//printf("k=%d, env len=%d i=%d\n", k, ft_env_len(fix), *i);
     return (2);
 }
 

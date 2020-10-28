@@ -173,7 +173,7 @@ int ft_env_err(t_command *c, t_fix *fix)
     {
         ft_putstr_fd("env: \"", 2);
         ft_putstr_fd(c->arg[1], 2);
-        ft_putstr_fd("\": Aucun fichier ou dossier de ce type\n", 2);
+        ft_putstr_fd("\": No such file or directory\n", 2);
         fix->error = 127;
         return (-1);
     }
