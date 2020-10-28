@@ -8,8 +8,8 @@ int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix)
     while (line[*i])
     {
         ft_skip_quotes(line, i, &(c->quote));
-        ft_backslash(line, i, &(c->quote));
-        if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
+        ret = ft_backslash(line, i, &(c->quote));
+        if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
         {
             i_start = *i;
             (*i)++;
@@ -18,7 +18,7 @@ int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix)
             if (ret == 2)
                 return (ft_ambiguous_redir(line, i_start, i, fix));
         }
-        else if (line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
+        else if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
         {
             (*i)++;
             if(!(ft_realloc_fix_error(&(c->n_input), fix)))
