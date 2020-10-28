@@ -39,7 +39,7 @@ int ft_open_redir(t_command *c)
     return (fd);
 }
 
-int ft_checkfile(t_command *c)
+int ft_checkfile(t_command *c, t_fix *fix)
 {
     struct stat   buffer;
 
@@ -47,7 +47,8 @@ int ft_checkfile(t_command *c)
     {
         ft_putstr_fd("bash: ", 2);
         ft_putstr_fd(c->n_input, 2);
-        ft_putstr_fd(": Aucun fichier ou dossier de ce type\n", 2);
+        ft_putstr_fd(": No such file or directory\n", 2);
+        fix->error = 1;
         return (-1);
     }
     return (1);

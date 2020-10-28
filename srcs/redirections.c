@@ -27,7 +27,7 @@ int    ft_redir_right(t_command *c, char *line, int *i, t_fix *fix)
     if (c->n_out[0] != '\0')
     {
         free(c->n_out);
-        if (!(c->n_out = malloc(sizeof(int))))
+        if (!(c->n_out = malloc(sizeof(char *))))
             return (0);
         c->n_out[0] = '\0';
     }
@@ -45,18 +45,18 @@ int    ft_redirection_left(t_command *c, char *line, int *i, t_fix *fix)
     if (c->n_input[0] != '\0')
     {
         free(c->n_input);
-        if (!(c->n_input = malloc(sizeof(int))))
+        if (!(c->n_input = malloc(sizeof(char *))))
             return (0);
         c->n_input[0] = '\0';
     }
     if (!(ft_new_input(c, line, i, fix)))
         return (0);
-    return (ft_checkfile(c));
+    return (ft_checkfile(c, fix));
 }
 
 void    ft_n_out_err(char *line, int i_start, int *i, t_fix *fix)
 {
-    ft_putstr_fd("bash: $", 2);
+    ft_putstr_fd("bash: ", 2);
     while (i_start <= *i)
     {
         ft_putchar_fd(line[i_start], 2);

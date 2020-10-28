@@ -164,11 +164,10 @@ int ft_export_err(char *arg, t_fix *fix)
     ft_putstr_fd(arg, 2);
     ft_putstr_fd("\': not a valid identifier\n", 2);
     fix->error = 1;
-    fix->exit = 1; // err batterie test
     return (0);
 }
 
-int ft_env_err(t_command *c, int fd, t_fix *fix)
+int ft_env_err(t_command *c, t_fix *fix)
 {
     if (c->arg[1] && ft_strcmp(c->arg[1], "=") && ft_strcmp(c->arg[1], "-"))
     {

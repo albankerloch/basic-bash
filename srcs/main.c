@@ -32,7 +32,7 @@ int ft_parser_exec(char *line, t_fix *fix)
 			ft_lstclear(&t, &ft_del_command);
 			return (0);
 		}
-		if (ret == 1)
+		else if (ret == 1)
 		{
 			if (!(ft_exec(t, line, fix)))
 			{

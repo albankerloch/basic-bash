@@ -52,7 +52,12 @@ int   ft_relative_path(t_command *c, t_fix *fix)
     int k;
     char try_path[PATH_MAX];
     
-    try_path[0] = '\0';
+    j = 0;
+    while (j < PATH_MAX) // pour éviter uninitialized value (valgrind)
+    {
+        try_path[j] = 0;
+        j++;
+    }
     j = 0;
     while (fix->env && fix->env[j])
     {

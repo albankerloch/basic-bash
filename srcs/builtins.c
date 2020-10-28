@@ -28,7 +28,7 @@ int ft_env(t_command *c, t_fix *fix, int fd)
     int     j;
     
     j = 0;
-    if (ft_env_err(c, fd, fix) == -1)
+    if (ft_env_err(c, fix) == -1)
         return (2);
     while (fix->env && fix->env[j])
     {
