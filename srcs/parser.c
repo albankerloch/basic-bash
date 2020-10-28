@@ -14,8 +14,6 @@ int ft_parser(t_list *t, char *line, t_fix *fix, int *i)
         else if (line[*i] == '>')
         {
             ret = ft_redirection_right(t->content, line, i, fix);
-            if (ret == -1)
-                fix->error = 2;
             if (ret != 1)
                 return (ret);
         }
@@ -51,6 +49,8 @@ int ft_parser(t_list *t, char *line, t_fix *fix, int *i)
             }
             if (!(ft_new_arg(c, line, i, fix)))
                 return (0);
+        //    if (k > 0)
+          //      printf("arg %d=%s i=%d |%c|\n", k, c->arg[k], *i, line[*i]);
         }
     }
     if (c->quote != 0)

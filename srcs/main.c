@@ -27,18 +27,21 @@ int ft_parser_exec(char *line, t_fix *fix)
 		signal(SIGQUIT, SIG_IGN);
 		if (!(t = ft_init_list(fix)))
 			return (0);
-		if (!(ft_parser(t, line, fix, &i)))
+		if (!(ret = ft_parser(t, line, fix, &i)))
 		{
 			ft_lstclear(&t, &ft_del_command);
 			return (0);
 		}
-		if (!(ft_exec(t, line, fix)))
+		if (ret == 1)
 		{
-			ft_lstclear(&t, &ft_del_command);
-			if (fix->exit >= 0)
-				ft_exit(fix, line, fix->exit);
-			else
-				return (0);
+			if (!(ft_exec(t, line, fix)))
+			{
+				ft_lstclear(&t, &ft_del_command);
+				if (fix->exit >= 0)
+					ft_exit(fix, line, fix->exit);
+				else
+					return (0);
+			}
 		}
 		ft_lstclear(&t, &ft_del_command);
 	}
