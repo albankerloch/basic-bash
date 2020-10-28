@@ -2,7 +2,7 @@
 
 void    ft_skip_quotes(char *line, int *i, int *quote)
 {
-    if (*quote == 0 && line[*i] == '$' && line[*i + 1] && ft_isdigit(line[*i + 1]))
+    while (*quote == 0 && line[*i] == '$' && line[*i + 1] && ft_isdigit(line[*i + 1]))
         *i += 2;
     while ((line[*i] == '\'' && *quote != 2) || (line[*i] == '\"' && *quote != 1))
     {
