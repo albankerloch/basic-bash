@@ -29,7 +29,6 @@ int ft_realloc_fix_error(char **arg, t_fix *fix)
     return (1);
 }
 
-
 int ft_realloc_var(char **arg, char *line, int *i, t_fix *fix)
 {
     int j;

@@ -90,7 +90,6 @@ int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
 {
     int k;
     int ret;
-
     k = 0;
     while(c->arg[k])
         k++;
@@ -113,7 +112,7 @@ int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
             if(!(ft_realloc_fix_error(&(c->arg[k]), fix)))
                 return (0);
         }
-        else
+        else if (!(line[*i] == ' ' && c->quote == 0))
         {
             if(!(c->arg[k] = ft_realloc_concat(c->arg[k], line[*i])))
                 return (0);
