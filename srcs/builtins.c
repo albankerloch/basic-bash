@@ -148,7 +148,7 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
 
 int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
 {
-    ft_putstr("exit\n");
+ //   ft_putstr("exit\n");
     if (!(c->arg[1]))
         fix->exit = 0;
     else
