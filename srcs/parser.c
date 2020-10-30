@@ -50,6 +50,8 @@ int ft_parser(t_list *t, char *line, t_fix *fix, int *i)
             {
                 free(c->arg[k]);
                 c->arg[k] = NULL;
+                if (k == 0)
+                    return (2);
                 k--;
             }
         }
