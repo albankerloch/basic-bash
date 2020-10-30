@@ -40,15 +40,18 @@ int ft_parser(t_list *t, char *line, t_fix *fix, int *i)
             k++;
             if (k != 0)
             {
-           //     printf("k=%d\n", k);
                 if (!(c->arg = ft_realloc_arg(c->arg)))
                     return (0);
-             //   printf("realloc arg=%s len=%zu\n", c->arg[k], ft_strlen(c->arg[k]));
             }
-            if (!(ft_new_arg(c, line, i, fix)))
+            int ret;
+            if (!(ret = ft_new_arg(c, line, i, fix)))
                 return (0);
-     //       if (k > 0)
-       //         printf("len=%zu arg=%s -%c-\n", ft_strlen(c->arg[1]), c->arg[1], line[*i]);
+            if (ret == 2 && ft_strlen(c->arg[k]) == 0)
+            {
+                free(c->arg[k]);
+                c->arg[k] = NULL;
+                k--;
+            }
         }
     }
     if (c->quote != 0)

@@ -116,6 +116,7 @@ int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix);
 int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix);
 int    ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix);
 int    ft_empty_redir(t_fix *fix);
+void    ft_close_quotes(char *line, int *i, int *quote);
 
 
 #endif

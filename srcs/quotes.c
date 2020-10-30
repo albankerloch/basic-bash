@@ -2,8 +2,6 @@
 
 void    ft_skip_quotes(char *line, int *i, int *quote)
 {
-    while (*quote == 0 && line[*i] == '$' && line[*i + 1] && ft_isdigit(line[*i + 1]))
-        *i += 2;
     while ((line[*i] == '\'' && *quote != 2) || (line[*i] == '\"' && *quote != 1))
     {
         if (*quote == 0 && line[*i] == '\'')
@@ -14,11 +12,22 @@ void    ft_skip_quotes(char *line, int *i, int *quote)
             *quote = 0;
         (*i)++;
     }
+    while (*quote != 1 && line[*i] == '$' && line[*i + 1] && ft_isdigit(line[*i + 1]))
+        *i += 2;
+}   
+
+void    ft_close_quotes(char *line, int *i, int *quote)
+{
+    if ((line[*i] == '\"' && *quote == 2) || (line[*i] == '\'' && *quote == 1))
+    {
+        *quote = 0;
+        (*i)++;
+    }
 }
 
 int    ft_backslash(char *line, int *i, int *quote)
 {
-    if (*quote == 0 && line[*i] == '\\' && line[*i + 1] == '$')
+    if (*quote != 1 && line[*i] == '\\' && line[*i + 1] == '$')
     {
         (*i)++;
         return (1);
