@@ -109,6 +109,7 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     char    ***p;
     int ret;
     int fd;
+    int status;
 
     if ((fd = ft_open_redir(c)) == -1)
         return (0);
@@ -130,12 +131,9 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
             ft_execve(c, fix);
         }
         else
-            wait(&(fix->error));
-        if (fix->error != 0)
-        {
-            fix->error = 127;
-            return (-1);
-        }
+            wait(&status);
+        if (WIFEXITED(status))
+            fix->error  = WEXITSTATUS(status);
     }
     if (c->add != 0)
         close(fd);
