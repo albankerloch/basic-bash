@@ -33,7 +33,7 @@ int ft_parser_exec(char *line, t_fix *fix)
 		signal(SIGQUIT, SIG_IGN);
 		if (!(t = ft_init_list(fix)))
 			return (0);
-		if (!(ret = ft_parser(t, line, fix, &i)))
+		if (!(ret = ft_parser(t, line, &i)))
 		{
 			ft_lstclear(&t, &ft_del_command);
 			return (0);

@@ -42,7 +42,7 @@ typedef struct s_fix
 }       t_fix;
 
 int     ft_parser_exec(char *line, t_fix *fix);
-int     ft_parser(t_list *t, char *line, t_fix *fix, int *i);
+int     ft_parser(t_list *t, char *line, int *i);
 int     ft_exec(t_list *t, char *line, t_fix *fix);
 char    *ft_env_var(char *arg, int h, t_fix *fix);
 int     ft_arg_var(char **arg, t_fix *fix);
@@ -62,7 +62,8 @@ int     ft_open_redir(t_command *c);
 int     ft_builtins(t_command *c, char *line, t_fix *fix, int fd);
 int     fork_exec_cmd(t_command *c, char *line, t_fix *fix);
 int     ft_relative_path(t_command *c, t_fix *fix);
-int     ft_new_arg(t_command *c, char *line, int *i, t_fix *fix);
+int     ft_new_arg(t_command *c, char *line, int *i);
+int	ft_arg(t_command *c, char *line, int *i, int *k);
 void    ft_env_destroy(char **env);
 void    ft_sig_handler(int signum);
 void    ft_sig_handler_process(int signum);

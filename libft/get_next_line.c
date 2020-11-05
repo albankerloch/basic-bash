@@ -31,7 +31,7 @@ int		get_next_line(int fd, char **line)
 			buf[lus] = '\0';
 			i = 0;
 		}
-		if (lus == 0)
+		if (lus == 0 && (*line)[0] == '\0')
 			return (0);
 		if ((temp = ft_get_2_squeeze(buf, line, &i, &lus)) == -1)
 			return (-1);

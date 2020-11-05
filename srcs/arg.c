@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arg.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/05 22:43:15 by aduchemi          #+#    #+#             */
+/*   Updated: 2020/11/05 22:43:17 by aduchemi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix)
@@ -85,7 +97,7 @@ int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix)
     return (ret);
 }
 
-int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
+int    ft_new_arg(t_command *c, char *line, int *i)
 {
     int k;
     int var;
@@ -107,7 +119,7 @@ int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
         if (var == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
         {
             (*i)++;
-            if(!(ret = ft_realloc_var(&(c->arg[k]), line, i, fix)))
+            if(!(ret = ft_realloc_var(&(c->arg[k]), line, i, &fix)))
                     return (0);
             else if (ret == 2)
                 ft_close_quotes(line, i, &(c->quote));
@@ -115,7 +127,7 @@ int    ft_new_arg(t_command *c, char *line, int *i, t_fix *fix)
         else if (var == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
         {
             (*i)++;
-            if(!(ft_realloc_fix_error(&(c->arg[k]), fix)))
+            if(!(ft_realloc_fix_error(&(c->arg[k]), &fix)))
                 return (0);
         }
         else
