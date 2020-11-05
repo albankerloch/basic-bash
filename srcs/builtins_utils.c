@@ -120,10 +120,7 @@ int ft_export_without_arg(t_fix *fix, int fd)
     {
         j = 0;
         while (fix->env[i][j] != '=' && fix->env[i][j] != '\0')
-        {
-         //   ft_putchar_fd(fix->env[i][j], fd);
             j++;
-        }
         sub = ft_substr(fix->env[i], 0, j);
         if (ft_strcmp(sub, "_"))
         {
