@@ -11,56 +11,61 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-void aff_list(t_list *begin);
 
-int ft_parser_exec(char *line, t_fix *fix)
+int		ft_parse_line(char *line, t_fix *fix, int *i)
 {
-	t_list *t;
-    int    i;
-	int	ret;
+	t_list	*t;
+	int		ret;
+
+	if (!(t = ft_init_list(fix)))
+		return (0);
+	if (!(ret = ft_parser(t, line, i)))
+	{
+		ft_lstclear(&t, &ft_del_command);
+		return (0);
+	}
+	else if (ret == 1)
+	{
+		if (!(ft_exec(t, line, fix)))
+		{
+			ft_lstclear(&t, &ft_del_command);
+			if (fix->exit >= 0)
+				ft_exit(fix, line, fix->exit);
+			else
+				return (0);
+		}
+	}
+	ft_lstclear(&t, &ft_del_command);
+	return (1);
+}
+
+int		ft_parser_exec(char *line, t_fix *fix)
+{
 	char	c[2];
+	int		i;
 
 	c[0] = '\0';
 	c[1] = '\0';
 	i = 0;
-    if (!line[0])
-        return (-1);
+	if (!line[0])
+		return (-1);
 	if (!ft_global_parse(line, c))
 		return (ft_syntax_error(fix, c));
-	while(line[i])
-    {
+	while (line[i])
+	{
 		signal(SIGINT, ft_sig_handler);
 		signal(SIGQUIT, SIG_IGN);
-		if (!(t = ft_init_list(fix)))
+		if(!(ft_parse_line(line, fix, &i)))
 			return (0);
-		if (!(ret = ft_parser(t, line, &i)))
-		{
-			ft_lstclear(&t, &ft_del_command);
-			return (0);
-		}
-		else if (ret == 1)
-		{
-		//	printf("APPEL EXEC\n");
-			//aff_list(t);
-			if (!(ft_exec(t, line, fix)))
-			{
-				ft_lstclear(&t, &ft_del_command);
-				if (fix->exit >= 0)
-					ft_exit(fix, line, fix->exit);
-				else
-					return (0);
-			}
-		}
-		ft_lstclear(&t, &ft_del_command);
 	}
 	return (1);
 }
 
-int	main(int argc, char *argv[], char *envp[])
+int		main(int argc, char *argv[], char *envp[])
 {
-	char *line;
-	int	ret;
-	int	parsing;
+	char	*line;
+	int		ret;
+	int		parsing;
 
 	ft_fix_construct(&fix, envp);
 	ret = 1;
@@ -81,7 +86,6 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!(ft_parser_exec(line, &fix)))
 			ft_exit(&fix, line, EXIT_FAILURE);
 		free(line);
-	//	printf("fix->error=%d fix->exit=%d\n", fix.error, fix.exit);
 	}
 	return (0);
 }
