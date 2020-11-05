@@ -55,7 +55,7 @@ int		ft_parser_exec(char *line, t_fix *fix)
 	{
 		signal(SIGINT, ft_sig_handler);
 		signal(SIGQUIT, SIG_IGN);
-		if(!(ft_parse_line(line, fix, &i)))
+		if (!(ft_parse_line(line, fix, &i)))
 			return (0);
 	}
 	return (1);
