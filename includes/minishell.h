@@ -117,6 +117,9 @@ int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix);
 int    ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix);
 int    ft_empty_redir(t_fix *fix);
 void    ft_close_quotes(char *line, int *i, int *quote);
+int    ft_syntax_error(t_fix *fix, char *s);
+int		ft_global_parse(char *line, char *c);
+int	ft_cmd_parse(char *sub, char *c);
 
 t_fix	fix;
 

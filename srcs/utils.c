@@ -117,3 +117,73 @@ void	ft_error(int err)
 	ft_putstr_fd(strerror(errno), 2);
 	ft_putchar_fd('\n', 2);
 }
+
+int    ft_syntax_error(t_fix *fix, char *s)
+{
+    ft_putstr_fd("bash: syntax error near unexpected token \" ", 2);
+    ft_putstr_fd(s, 2);
+    ft_putstr_fd(" \"\n", 2);
+    fix->error = 2;
+    return (2);
+}
+
+int		ft_global_parse(char *line, char *c)
+{
+	int	i;
+	int	quote;
+	int	needle;
+	char	*sub;
+	int	ret;
+
+	quote = 0;
+	i = 0;
+	sub = NULL;
+	needle = 0;
+	while (line[i])
+	{
+		while (line[needle] && line[needle] != ';' && line[needle] != '|')
+		{
+			ft_skip_quotes(line, &needle, &quote);
+			ft_close_quotes(line, &needle, &quote);
+			needle++;
+		}
+		//printf("needle=%d |%c| quote=%d\n", needle, line[needle], quote);
+		if (quote == 0)
+		{
+			sub = ft_substr(line, i, needle - i + 1);
+		//	printf("sub=|%s| start=%d len=%d quote=%d\n", sub, i, needle - i + 1, quote);
+			ret = ft_cmd_parse(sub, c);
+			free(sub);
+			sub = NULL;
+			if (ret == 0)
+				return (0);
+		}
+		needle++;
+		i = needle;
+	}
+	return (1);
+}
+
+int	ft_cmd_parse(char *sub, char *c)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (sub[j] == ' ')
+		j++;
+	i = 0;
+	while (sub[i + j])
+	{
+		if (sub[i + j] == ';' || sub[i + j] == '|')
+		{
+			if (i == 0)
+			{	
+				c[0] = sub[i + j];
+				return (0);
+			}
+		}
+		i++;
+	}
+	return (1);
+}

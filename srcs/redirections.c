@@ -20,7 +20,7 @@ int    ft_redir_right(t_command *c, char *line, int *i, t_fix *fix)
     while (line[*i] == ' ')
         (*i)++;
     if (!line[*i])
-        return (ft_empty_redir(fix));
+        return (ft_syntax_error(fix, "newline"));
     if (c->n_out[0] != '\0')
     {
         free(c->n_out);
@@ -42,7 +42,7 @@ int    ft_redirection_left(t_command *c, char *line, int *i, t_fix *fix)
     while (line[*i] == ' ')
         *i = *i + 1;
     if (!line[*i])
-        return (ft_empty_redir(fix));
+        return (ft_syntax_error(fix, "newline"));
     if (c->n_input[0] != '\0')
     {
         free(c->n_input);
@@ -67,12 +67,5 @@ int   ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix)
         (*i)++;
     ft_putstr_fd(" : ambiguous redirect\n", 2);
     fix->error = 1;
-    return (2);
-}
-
-int    ft_empty_redir(t_fix *fix)
-{
-    ft_putstr_fd("bash: syntax error near unexpected token \" newline \"\n", 2);
-    fix->error = 2;
     return (2);
 }

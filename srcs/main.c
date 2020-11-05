@@ -11,16 +11,22 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+void aff_list(t_list *begin);
 
 int ft_parser_exec(char *line, t_fix *fix)
 {
 	t_list *t;
     int    i;
 	int	ret;
+	char	c[2];
 
+	c[0] = '\0';
+	c[1] = '\0';
 	i = 0;
     if (!line[0])
         return (-1);
+	if (!ft_global_parse(line, c))
+		return (ft_syntax_error(fix, c));
 	while(line[i])
     {
 		signal(SIGINT, ft_sig_handler);
@@ -34,6 +40,8 @@ int ft_parser_exec(char *line, t_fix *fix)
 		}
 		else if (ret == 1)
 		{
+		//	printf("APPEL EXEC\n");
+			//aff_list(t);
 			if (!(ft_exec(t, line, fix)))
 			{
 				ft_lstclear(&t, &ft_del_command);
