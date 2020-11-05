@@ -34,12 +34,11 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
     int     ret;
     int     error;
 
-  //  aff_list(t);
     error = 1;
     t_command *c = t->content;
     ret = 0;
     if (!t->next)
-        return (fork_exec_cmd(t->content, line, fix));
+        return (ft_fork_exec_cmd(t->content, line, fix));
     else
     {
         pipe(pipe_fd);
@@ -52,7 +51,7 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
             if (dup2(pipe_fd[1], 1) == -1)
                 exit(-1);
             close(pipe_fd[1]);
-            if ((ret = fork_exec_cmd(t->content, line, fix)) == 0 || ret == -1)
+            if ((ret = ft_fork_exec_cmd(t->content, line, fix)) == 0 || ret == -1)
             {
                 error = -1;
                 exit(-1);
@@ -103,13 +102,33 @@ int ft_builtins(t_command *c, char *line, t_fix *fix, int fd)
     return (-1);
 }
 
-int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
+void    ft_fork_execve(t_command *c, t_fix *fix)
 {
     pid_t   pidf;
+    int status;
+
+    pidf = fork();
+    if (pidf == 0)
+    {
+        signal(SIGINT, ft_sig_handler_process);
+        signal(SIGQUIT, SIG_DFL);
+        ft_execve(c, fix);
+    }
+    else
+    {
+        signal(SIGINT, ft_sig_handler_process);
+        signal(SIGQUIT, ft_sig_handler_process);
+        wait(&status);
+    }
+    if (WIFEXITED(status))
+        fix->error  = WEXITSTATUS(status);
+}
+
+int    ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix)
+{
     char    ***p;
     int ret;
     int fd;
-    int status;
 
     if ((fd = ft_open_redir(c)) == -1)
         return (0);
@@ -122,23 +141,7 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
     else if (ret == 1)
         fix->error = 0;
     else if (ret == -1)
-    {
-        pidf = fork();
-        if (pidf == 0)
-        {
-            signal(SIGINT, ft_sig_handler_process);
-		    signal(SIGQUIT, SIG_DFL);
-            ft_execve(c, fix);
-        }
-        else
-        {
-            signal(SIGINT, ft_sig_handler_process);
-		    signal(SIGQUIT, ft_sig_handler_process);
-            wait(&status);
-        }
-        if (WIFEXITED(status))
-            fix->error  = WEXITSTATUS(status);
-    }
+        ft_fork_execve(c, fix);
     if (c->add != 0)
         close(fd);
     return (1);

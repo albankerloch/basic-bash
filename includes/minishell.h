@@ -14,7 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include <stdio.h>///à supprimer
+# include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/types.h>
@@ -43,6 +43,7 @@ typedef struct s_fix
 
 int     ft_parser_exec(char *line, t_fix *fix);
 int     ft_parser(t_list *t, char *line, int *i);
+int		ft_parse_line(char *line, t_fix *fix, int *i);
 int     ft_exec(t_list *t, char *line, t_fix *fix);
 char    *ft_env_var(char *arg, int h, t_fix *fix);
 int     ft_arg_var(char **arg, t_fix *fix);
@@ -61,7 +62,7 @@ int    ft_touch(t_command *c);
 int     ft_checkfile(t_command *c, t_fix *fix);
 int     ft_open_redir(t_command *c);
 int     ft_builtins(t_command *c, char *line, t_fix *fix, int fd);
-int     fork_exec_cmd(t_command *c, char *line, t_fix *fix);
+int     ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix);
 int     ft_relative_path(t_command *c, t_fix *fix);
 int     ft_new_arg(t_command *c, char *line, int *i);
 int	ft_arg(t_command *c, char *line, int *i, int *k);
@@ -74,6 +75,7 @@ int     ft_export_without_arg(t_fix *fix, int fd);
 int     ft_export_err(char *arg, t_fix *fix);
 int     ft_env_err(t_command *c, t_fix *fix);
 void    ft_execve(t_command *c, t_fix *fix);
+void    ft_fork_execve(t_command *c, t_fix *fix);
 char    **ft_realloc_env(t_fix *fix, char buf[PATH_MAX]);
 void    ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX]);
 void    ft_realloc_concat_buff(char line[PATH_MAX], char c);
