@@ -118,5 +118,6 @@ int    ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix);
 int    ft_empty_redir(t_fix *fix);
 void    ft_close_quotes(char *line, int *i, int *quote);
 
+t_fix	fix;
 
 #endif

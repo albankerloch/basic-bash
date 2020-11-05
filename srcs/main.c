@@ -50,7 +50,6 @@ int ft_parser_exec(char *line, t_fix *fix)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	t_fix	fix;
 	char *line;
 	int	ret;
 	int	parsing;
@@ -61,7 +60,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		signal(SIGINT, ft_sig_handler);
-		signal(SIGQUIT, SIG_IGN);
+		signal(SIGQUIT, ft_sig_handler);
 		ft_putstr("<minishell> ");
 		ret = get_next_line(0, &line);
 		if (ret == 0)

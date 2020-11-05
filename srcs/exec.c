@@ -131,7 +131,11 @@ int    fork_exec_cmd(t_command *c, char *line, t_fix *fix)
             ft_execve(c, fix);
         }
         else
+        {
+            signal(SIGINT, ft_sig_handler_process);
+		    signal(SIGQUIT, ft_sig_handler_process);
             wait(&status);
+        }
         if (WIFEXITED(status))
             fix->error  = WEXITSTATUS(status);
     }
