@@ -113,29 +113,36 @@ int ft_export_without_arg(t_fix *fix, int fd)
 {
     int i;
     int j;
+    char    *sub;
 
     i = 0;
     while (fix->env && fix->env[i])
     {
-        ft_putstr_fd("declare -x ", fd);
         j = 0;
         while (fix->env[i][j] != '=' && fix->env[i][j] != '\0')
         {
-            ft_putchar_fd(fix->env[i][j], fd);
+         //   ft_putchar_fd(fix->env[i][j], fd);
             j++;
         }
-        if (ft_strchr(fix->env[i], '='))
+        sub = ft_substr(fix->env[i], 0, j);
+        if (ft_strcmp(sub, "_"))
         {
-            ft_putchar_fd(fix->env[i][j++], fd);
-            ft_putchar_fd('\"', fd);
-            while (fix->env[i][j])
+            ft_putstr_fd("declare -x ", fd);
+            ft_putstr_fd(sub, fd);
+            if (ft_strchr(fix->env[i], '='))
             {
-                ft_putchar_fd(fix->env[i][j], fd);
-                j++;
+                ft_putchar_fd(fix->env[i][j++], fd);
+                ft_putchar_fd('\"', fd);
+                while (fix->env[i][j])
+                {
+                    ft_putchar_fd(fix->env[i][j], fd);
+                    j++;
+                }
+                ft_putstr_fd("\"", fd);
+                ft_putstr_fd("\n", fd);
             }
-            ft_putstr_fd("\"", fd);
         }
-        ft_putstr_fd("\n", fd);
+        free(sub);
         i++;
     }
     return (1);

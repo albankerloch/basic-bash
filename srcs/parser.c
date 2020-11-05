@@ -46,7 +46,7 @@ int ft_parser(t_list *t, char *line, t_fix *fix, int *i)
             int ret;
             if (!(ret = ft_new_arg(c, line, i, fix)))
                 return (0);
-            printf("new arg=%s %s\n", c->arg[0], c->arg[1]);
+          //  printf("new arg=%s %s\n", c->arg[0], c->arg[1]);
             if (ret == 2 && ft_strlen(c->arg[k]) == 0)
             {
                 free(c->arg[k]);
