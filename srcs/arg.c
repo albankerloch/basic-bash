@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix)
+int    ft_new_input(t_command *c, char *line, int *i)
 {
     int ret;
     int i_start;
@@ -25,15 +25,15 @@ int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix)
         {
             i_start = *i;
             (*i)++;
-            if(!(ret = ft_realloc_var(&(c->n_input), line, i, fix)))
+            if(!(ret = ft_realloc_var(&(c->n_input), line, i, &fix)))
                 return (0);
             if (ret == 2)
-                return (ft_ambiguous_redir(line, i_start, i, fix));
+                return (ft_ambiguous_redir(line, i_start, i, &fix));
         }
         else if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
         {
             (*i)++;
-            if(!(ft_realloc_fix_error(&(c->n_input), fix)))
+            if(!(ft_realloc_fix_error(&(c->n_input), &fix)))
                 return (0);
         }
         else
@@ -49,7 +49,7 @@ int    ft_new_input(t_command *c, char *line, int *i, t_fix *fix)
     return (1);
 }
 
-int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix)
+int    ft_new_out(t_command *c, char *line, int *i)
 {
     int ret;
     int var;
@@ -68,17 +68,17 @@ int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix)
         {
             i_start = *i;
             (*i)++;
-            if(!(ret = ft_realloc_var(&(c->n_out), line, i, fix)))
+            if(!(ret = ft_realloc_var(&(c->n_out), line, i, &fix)))
                 return (0);
             if (ret == 2 && line[*i + 1] == 0)
-                return (ft_ambiguous_redir(line, i_start, i, fix));
+                return (ft_ambiguous_redir(line, i_start, i, &fix));
             else
                 ret = 1;            
         }
         else if (var == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
         {
             (*i)++;
-            if(!(ft_realloc_fix_error(&(c->n_out), fix)))
+            if(!(ft_realloc_fix_error(&(c->n_out), &fix)))
                 return (0);
         }
         else

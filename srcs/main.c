@@ -50,7 +50,7 @@ int		ft_parser_exec(char *line, t_fix *fix)
 	if (!line[0])
 		return (-1);
 	if (!ft_global_parse(line, c))
-		return (ft_syntax_error(fix, c));
+		return (ft_syntax_error(c));
 	while (line[i])
 	{
 		signal(SIGINT, ft_sig_handler);
