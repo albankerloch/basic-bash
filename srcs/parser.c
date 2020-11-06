@@ -86,7 +86,7 @@ int		ft_arg(t_command *c, char *line, int *i, int *k)
 		if (!(c->arg = ft_realloc_arg(c->arg)))
 			return (0);
 	}
-	if (!(ret = ft_new_arg(c, line, i)))
+	if (!(ret = ft_new_arg(c, line, i, k)))
 		return (0);
 	if (ret == 2 && ft_strlen(c->arg[*k]) == 0)
 	{

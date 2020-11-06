@@ -12,6 +12,22 @@ char *ft_strjoin_free(char *s, char const *s2)
     return (new);
 }
 
+char *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char const *s2)
+{
+    char *temp;
+    char *new;
+
+    if (!(temp = ft_substr(s, start, len)))
+        return (NULL);
+    if (!(new = ft_strjoin(temp, s2)))
+    {
+        free(temp);
+        return (NULL);
+    }
+    free(temp);
+    return (new);
+}
+
 int ft_realloc_fix_error(char **arg, t_fix *fix)
 {
 	if (fix->error >= 100)
