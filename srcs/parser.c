@@ -12,6 +12,25 @@
 
 #include "../includes/minishell.h"
 
+int ft_parser_symbol(t_list *t, char *line, int *i, t_command	*c)
+{
+	int			ret;
+
+	if (line[*i] == ' ')
+		(*i)++;
+	else if (line[*i] == '>' || line[*i] == '<')
+	{
+		if ((ret = ft_redirections(t, line, i)) != 1)
+			return (ret);
+	}
+	else if (line[*i] == ';' && c->quote == 0)
+		{
+			(*i)++;
+			return (1);
+		}
+	return (3);
+}
+
 int	ft_parser(t_list *t, char *line, int *i)
 {
 	int			k;
@@ -21,17 +40,10 @@ int	ft_parser(t_list *t, char *line, int *i)
 	k = -1;
 	while (line[*i])
 	{
-		if (line[*i] == ' ')
-			(*i)++;
-		else if (line[*i] == '>' || line[*i] == '<')
+		if (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || (line[*i] == ';' && c->quote == 0))
 		{
-			if ((ret = ft_redirections(t, line, i)) != 1)
+			if ((ret = ft_parser_symbol(t, line, i, c)) != 3)
 				return (ret);
-		}
-		else if (line[*i] == ';' && c->quote == 0)
-		{
-			(*i)++;
-			return (1);
 		}
 		else if (line[*i] == '|')
 		{
