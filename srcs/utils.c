@@ -28,8 +28,9 @@ char *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char cons
     return (new);
 }
 
-int ft_realloc_fix_error(char **arg, t_fix *fix)
+int ft_realloc_fix_error(char **arg, t_fix *fix, int *i)
 {
+	(*i)++;
 	if (fix->error >= 100)
 	{
 		if(!(*arg = ft_realloc_concat(*arg, fix->error / 100 + 48)))

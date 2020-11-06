@@ -70,6 +70,8 @@ int     ft_builtins(t_command *c, char *line, t_fix *fix, int fd);
 int     ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix);
 int     ft_relative_path(t_command *c, t_fix *fix);
 int     ft_new_arg(t_command *c, char *line, int *i, int *k);
+int ft_new_arg_var(char **arg, char *line, int *i, int *quote);
+
 int     ft_redir_var(int quote, char *line, int *i, char **arg);
 int	ft_arg(t_command *c, char *line, int *i, int *k);
 void    ft_env_destroy(char **env);
@@ -120,7 +122,7 @@ int     ft_env_compare(t_fix *fix, char *arg, int n);
 int     ft_export_check_id(char *arg, int i, t_fix *fix);
 char    **ft_unset_env(t_fix *fix, char *arg);
 int     ft_realloc_var(char **arg, char *line, int *i, t_fix *fix);
-int     ft_realloc_fix_error(char **arg, t_fix *fix);
+int     ft_realloc_fix_error(char **arg, t_fix *fix, int *i);
 char    *ft_strjoin_free(char *s, char const *s2);
 int    ft_new_in_out(t_command *c, char **arg, char *line, int *i);
 int ft_quotes(char *line, int *i, int *quote, int *ret);
