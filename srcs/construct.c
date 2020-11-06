@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int ft_add_list(t_list *t, t_fix *fix)
+int ft_add_list(t_list *t)
 {
     t_command   *c;
     t_list      *new;

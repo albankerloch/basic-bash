@@ -6,13 +6,13 @@
 /*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 22:43:02 by aduchemi          #+#    #+#             */
-/*   Updated: 2020/11/05 23:52:41 by aduchemi         ###   ########.fr       */
+/*   Updated: 2020/11/06 11:18:56 by aduchemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int ft_parser_symbol(t_list *t, char *line, int *i, t_command	*c)
+int		ft_parser_symbol(t_list *t, char *line, int *i, t_command *c)
 {
 	int			ret;
 
@@ -28,24 +28,16 @@ int ft_parser_symbol(t_list *t, char *line, int *i, t_command	*c)
 		(*i)++;
 		return (1);
 	}
-	else if (line[*i] == '|')
-	{
-		if (!(ft_add_list(t, &fix)))
-			return (0);
-		t = t->next;
-		c->k = -1;
-		(*i)++;
-	}
 	return (3);
 }
 
-int ft_parser_arg(t_list **t, char *line, int *i, t_command	**c)
+int		ft_parser_arg(t_list **t, char *line, int *i, t_command **c)
 {
 	int			ret;
-		
+
 	if (line[*i] == '|')
 	{
-		if (!(ft_add_list(*t, &fix)))
+		if (!(ft_add_list(*t)))
 			return (0);
 		*t = (*t)->next;
 		(*c)->k = -1;
@@ -60,14 +52,15 @@ int ft_parser_arg(t_list **t, char *line, int *i, t_command	**c)
 	return (3);
 }
 
-int	ft_parser(t_list *t, char *line, int *i)
+int		ft_parser(t_list *t, char *line, int *i)
 {
 	int			ret;
 	t_command	*c;
 
 	while (line[*i])
 	{
-		if (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || (line[*i] == ';' && c->quote == 0))
+		if (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<'
+		|| (line[*i] == ';' && c->quote == 0))
 		{
 			if ((ret = ft_parser_symbol(t, line, i, c)) != 3)
 				return (ret);
@@ -83,9 +76,9 @@ int	ft_parser(t_list *t, char *line, int *i)
 	return (1);
 }
 
-int	ft_arg(t_command *c, char *line, int *i, int *k)
+int		ft_arg(t_command *c, char *line, int *i, int *k)
 {
-	int	ret;
+	int			ret;
 
 	(*k)++;
 	if (*k != 0)
