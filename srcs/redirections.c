@@ -84,7 +84,7 @@ int		ft_redirection_left(t_command *c, char *line, int *i)
 	return (ft_checkfile(c));
 }
 
-int		ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix)
+int		ft_ambiguous_redir(char *line, int i_start, int *i)
 {
 	ft_putstr_fd("bash: ", 2);
 	while (i_start <= *i)
@@ -95,6 +95,6 @@ int		ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix)
 	while (line[*i])
 		(*i)++;
 	ft_putstr_fd(" : ambiguous redirect\n", 2);
-	fix->error = 1;
+	fix.error = 1;
 	return (2);
 }

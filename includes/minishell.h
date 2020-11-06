@@ -121,17 +121,19 @@ char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
 int     ft_env_compare(t_fix *fix, char *arg, int n);
 int     ft_export_check_id(char *arg, int i, t_fix *fix);
 char    **ft_unset_env(t_fix *fix, char *arg);
-int     ft_realloc_var(char **arg, char *line, int *i, t_fix *fix);
-int     ft_realloc_fix_error(char **arg, t_fix *fix, int *i);
+int     ft_realloc_var(char **arg, char *line, int *i);
+int     ft_realloc_fix_error(char **arg, int *i);
 char    *ft_strjoin_free(char *s, char const *s2);
 int    ft_new_in_out(t_command *c, char **arg, char *line, int *i);
 int ft_quotes(char *line, int *i, int *quote, int *ret);
-int    ft_ambiguous_redir(char *line, int i_start, int *i, t_fix *fix);
+int    ft_ambiguous_redir(char *line, int i_start, int *i);
 int    ft_empty_redir(t_fix *fix);
 void    ft_close_quotes(char *line, int *i, int *quote);
 int    ft_syntax_error(char *s);
 int		ft_global_parse(char *line, char *c);
 int	ft_cmd_parse(char *sub, char *c);
+int		ft_sub_parse(char *line, int i, int needle, char *c);
+
 
 t_fix	fix;
 
