@@ -45,6 +45,8 @@ int     ft_parser_exec(char *line, t_fix *fix);
 int     ft_parser(t_list *t, char *line, int *i);
 int		ft_parse_line(char *line, t_fix *fix, int *i);
 int     ft_exec(t_list *t, char *line, t_fix *fix);
+void ft_child_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2]);
+int ft_parent_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2]);
 char    *ft_env_var(char *arg, int h, t_fix *fix);
 int     ft_arg_var(char **arg, t_fix *fix);
 void    ft_fix_construct(t_fix *fix, char **envp);

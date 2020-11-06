@@ -83,17 +83,12 @@ int    ft_new_out(t_command *c, char *line, int *i, t_fix *fix)
         }
         else
         {
-  //          if (ret == 1 && c->quote == 0)
-    //            c->quote = 1;
-       //     printf("realloc concat line=%c\n", line[*i]);
             if(!(c->n_out = ft_realloc_concat(c->n_out, line[*i])))
                 return (0);
         }
         (*i)++;
         ft_close_quotes(line, i, &(c->quote));
     }
- //   if (c->n_out[0] == '$' && c->quote == 1)
-   //     c->quote = 0;
     return (ret);
 }
 

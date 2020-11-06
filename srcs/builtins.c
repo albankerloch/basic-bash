@@ -146,6 +146,13 @@ int ft_cd(t_command *c, t_fix *fix, int fd)
     return (1);
 }
 
+static void    ft_error_num_arg(char *str)
+{
+    ft_putstr_fd("bash: exit: ", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd(": numeric argument required\n", 2);
+}
+
 int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
 {
     ft_putstr("exit\n");
@@ -155,9 +162,7 @@ int ft_builtin_exit(t_command *c, t_fix *fix, int fd)
     {
         if (!(ft_isnum(c->arg[1])))
         {
-            ft_putstr_fd("bash: exit: ", 2);
-            ft_putstr_fd(c->arg[1], 2);
-            ft_putstr_fd(": numeric argument required\n", 2);
+            ft_error_num_arg(c->arg[1]);
             fix->exit = 2;
             fix->error = 2;
         }

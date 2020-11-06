@@ -191,7 +191,7 @@ int ft_env_err(t_command *c, t_fix *fix)
 
 char **ft_realloc_env(t_fix *fix, char buf[PATH_MAX])
 {
-    int j;
+    int     j;
     char    **env2;
 
     j = 0;

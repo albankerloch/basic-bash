@@ -1,42 +1,62 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/15 16:24:18 by aduchemi          #+#    #+#             */
+/*   Updated: 2020/07/15 16:59:40 by aduchemi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void aff_list(t_list *begin)
+int ft_parent_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2])
 {
-    t_command *c;
-    int i;
-    int k;
+    int save_fd;
 
-    k = 0;
-    while(begin)
-    {
-        c = begin->content;
-        i = 0;
-        while(c->arg [i])
-        {
-            printf("%d arg %d |%s|\n", k, i, c->arg[i]);
-            i++;
-        }
-        printf("  output stdout = %s \n", c->n_out);
-        printf("  redir = %d \n", c->add);
-        printf("  input stdin = %s \n", c->n_input);
-        printf("  flag input = %d \n", c->input);
-        k++;
-        begin = begin->next;
-    }
+    t = t->next;
+    if ((save_fd = dup(0)) == -1)
+        return (0);
+    close(pipe_fd[1]);
+    if (dup2(pipe_fd[0], 0) == -1)
+        return (0);
+    close(pipe_fd[0]);
+    if (ft_exec(t, line, fix) == 0)
+        return (0);
+    if (dup2(save_fd, 0) == -1)
+        return (0);
+    close(save_fd);
+    return (1);
+}
+
+void    ft_child_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2])
+{
+    int     save_fd;
+    int     ret;
+
+    if ((save_fd = dup(1)) == -1)
+        exit(-1);
+    close(pipe_fd[0]);
+    if (dup2(pipe_fd[1], 1) == -1)
+        exit(-1);
+    close(pipe_fd[1]);
+    if ((ret = ft_fork_exec_cmd(t->content, line, fix)) == 0 || ret == -1)
+        exit(-1);
+    if (dup2(save_fd, 1) == -1)
+        exit(-1);
+    close(save_fd);
+    exit(0);
 }
 
 int ft_exec(t_list *t, char *line, t_fix *fix)
 {
     pid_t   pid;
-    pid_t   pid2;
     int     pipe_fd[2];
-    int     save_fd;
-    int     ret;
     int     error;
 
     error = 1;
-    t_command *c = t->content;
-    ret = 0;
     if (!t->next)
         return (ft_fork_exec_cmd(t->content, line, fix));
     else
@@ -44,37 +64,11 @@ int ft_exec(t_list *t, char *line, t_fix *fix)
         pipe(pipe_fd);
         pid = fork();
         if (pid == 0)
-        {
-            if ((save_fd = dup(1)) == -1)
-                exit(-1);
-            close(pipe_fd[0]);
-            if (dup2(pipe_fd[1], 1) == -1)
-                exit(-1);
-            close(pipe_fd[1]);
-            if ((ret = ft_fork_exec_cmd(t->content, line, fix)) == 0 || ret == -1)
-            {
-                error = -1;
-                exit(-1);
-            }    
-            if (dup2(save_fd, 1) == -1)
-                exit(-1);
-            close(save_fd);
-            exit(0);
-        }
+            ft_child_exec(t, line, fix, pipe_fd);
         else
         {
-            t = t->next;
-            if ((save_fd = dup(0)) == -1)
+            if (!(ft_parent_exec(t, line, fix, pipe_fd)))
                 return (0);
-            close(pipe_fd[1]);
-            if (dup2(pipe_fd[0], 0) == -1)
-                return (0);
-            close(pipe_fd[0]);
-            if (ft_exec(t, line, fix) == 0)
-                return (0);
-            if (dup2(save_fd, 0) == -1)
-                return (0);
-            close(save_fd);
             wait(&error);
         }
     }
