@@ -40,7 +40,7 @@ int     ft_redir_var(int quote, char *line, int *i, char **arg)
     return (1);
 }
 
-int    ft_new_input(t_command *c, char *line, int *i)
+int    ft_new_in_out(t_command *c, char **arg, char *line, int *i)
 {
     int ret;
     int i_start;
@@ -51,44 +51,16 @@ int    ft_new_input(t_command *c, char *line, int *i)
             break;
         if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
         {
-            if ((ret = ft_redir_var(c->quote, line, i, &(c->n_input))) != 1)
+            if ((ret = ft_redir_var(c->quote, line, i, arg)) != 1)
                 return (ret);
         }
         else if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
         {
             (*i)++;
-            if(!(ft_realloc_fix_error(&(c->n_input), &fix)))
+            if(!(ft_realloc_fix_error(arg, &fix)))
                 return (0);
         }
-        else if (!(c->n_input = ft_realloc_concat(c->n_input, line[*i])))
-            return (0);
-        (*i)++;
-        ft_close_quotes(line, i, &(c->quote));
-    }
-    return (1);
-}
-
-int    ft_new_out(t_command *c, char *line, int *i)
-{
-    int ret;
-    int i_start;
-
-    while (line[*i])
-    {
-        if (!ft_quotes(line, i, &(c->quote), &ret))
-            break;
-        if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))
-        {
-            if ((ret = ft_redir_var(c->quote, line, i, &(c->n_out))) != 1)
-                return (ret);
-        }
-        else if (ret == 0 && line[*i] == '$' && c->quote != 1 && line[*i + 1] && line[*i + 1] == '?')
-        {
-            (*i)++;
-            if(!(ft_realloc_fix_error(&(c->n_out), &fix)))
-                return (0);
-        }
-        else if (!(c->n_out = ft_realloc_concat(c->n_out, line[*i])))
+        else if (!(*arg = ft_realloc_concat(*arg, line[*i])))
             return (0);
         (*i)++;
         ft_close_quotes(line, i, &(c->quote));

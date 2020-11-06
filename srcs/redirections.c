@@ -57,7 +57,7 @@ int		ft_redir_right(t_command *c, char *line, int *i)
 			return (0);
 		c->n_out[0] = '\0';
 	}
-	if ((ret = ft_new_out(c, line, i)) != 1)
+	if ((ret = ft_new_in_out(c, &(c->n_out), line, i)) != 1)
 		return (ret);
 	return (ft_touch(c));
 }
@@ -79,7 +79,7 @@ int		ft_redirection_left(t_command *c, char *line, int *i)
 			return (0);
 		c->n_input[0] = '\0';
 	}
-	if ((ret = ft_new_input(c, line, i)) != 1)
+	if ((ret = ft_new_in_out(c, &(c->n_input), line, i)) != 1)
 		return (ret);
 	return (ft_checkfile(c));
 }
