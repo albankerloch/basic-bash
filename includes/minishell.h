@@ -43,8 +43,10 @@ typedef struct s_fix
 }       t_fix;
 
 int     ft_parser_exec(char *line, t_fix *fix);
-int     ft_parser(t_list *t, char *line, int *i);
 int		ft_parse_line(char *line, t_fix *fix, int *i);
+int     ft_parser(t_list *t, char *line, int *i);
+int ft_parser_arg(t_list **t, char *line, int *i, t_command	**c);
+int ft_parser_symbol(t_list *t, char *line, int *i, t_command	*c);
 int     ft_exec(t_list *t, char *line, t_fix *fix);
 void ft_child_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2]);
 int ft_parent_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2]);

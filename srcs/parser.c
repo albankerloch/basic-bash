@@ -39,13 +39,24 @@ int ft_parser_symbol(t_list *t, char *line, int *i, t_command	*c)
 	return (3);
 }
 
-int ft_parser_arg(t_list **t, char *line, int *i, t_command	*c)
+int ft_parser_arg(t_list **t, char *line, int *i, t_command	**c)
 {
-	if (!(ft_add_list(*t, &fix)))
-		return (0);
-	*t = (*t)->next;
-	c->k = -1;
-	(*i)++;
+	int			ret;
+		
+	if (line[*i] == '|')
+	{
+		if (!(ft_add_list(*t, &fix)))
+			return (0);
+		*t = (*t)->next;
+		(*c)->k = -1;
+		(*i)++;
+	}
+	else
+	{
+		*c = (*t)->content;
+		if ((ret = ft_arg(*c, line, i, &((*c)->k))) != 1)
+			return (ret);
+	}
 	return (3);
 }
 
@@ -54,7 +65,6 @@ int	ft_parser(t_list *t, char *line, int *i)
 	int			ret;
 	t_command	*c;
 
-	c = t->content;
 	while (line[*i])
 	{
 		if (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<' || (line[*i] == ';' && c->quote == 0))
@@ -62,15 +72,9 @@ int	ft_parser(t_list *t, char *line, int *i)
 			if ((ret = ft_parser_symbol(t, line, i, c)) != 3)
 				return (ret);
 		}
-		else if (line[*i] == '|')
-		{
-			if ((ret = ft_parser_arg(&t, line, i, c)) != 3)
-				return (ret);
-		}
 		else
 		{
-			c = t->content;
-			if ((ret = ft_arg(c, line, i, &(c->k))) != 1)
+			if ((ret = ft_parser_arg(&t, line, i, &c)) != 3)
 				return (ret);
 		}
 	}
