@@ -53,6 +53,7 @@ t_command *ft_command_construct()
         return (ft_free_part_command(c, 4));
     c->arg[0][0] = '\0';
     c->arg[1] = NULL;
+    c->k = -1;
     return(c);
 }
 

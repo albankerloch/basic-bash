@@ -32,6 +32,7 @@ typedef struct s_command
   int   add;
   int   quote;
   char  *n_out;
+  int   k;
 }       t_command;
 
 typedef struct s_fix
