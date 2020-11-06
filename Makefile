@@ -10,8 +10,11 @@ SRCS_NAME	= 	main.c \
 					exit.c \
 					redirections.c \
 					arg.c \
-					builtins.c \
-					builtins_utils.c \
+					builtins1.c \
+					builtins2.c \
+					builtins_utils1.c \
+					builtins_utils2.c \
+					builtins_utils3.c \
 					cmd.c \
 					cmd_utils.c \
 					files.c
