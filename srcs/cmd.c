@@ -1,14 +1,10 @@
 #include "../includes/minishell.h"
 
-void ft_execve(t_command *c, t_fix *fix)
+int ft_redir_execve(t_command *c, t_fix *fix, int fd)
 {
-    int fd;
     int fdi;
-    int ret;
-    
-    ret = 0;
-    if ((fd = ft_open_redir(c)) == -1)
-        exit (-1);
+
+    fdi = 0;
     if (c->add != 0)
     {
         if (dup2(fd, 1) == -1)
@@ -30,6 +26,19 @@ void ft_execve(t_command *c, t_fix *fix)
             exit (-1);
         }
     }
+    return (fdi);
+}
+
+void ft_execve(t_command *c, t_fix *fix)
+{
+    int fd;
+    int fdi;
+    int ret;
+    
+    ret = 0;
+    if ((fd = ft_open_redir(c)) == -1)
+        exit (-1);
+    fdi = ft_redir_execve(c, fix, fd);
     if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
         ret = execve(c->arg[0], c->arg, fix->env);
     else
