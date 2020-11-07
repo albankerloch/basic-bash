@@ -52,9 +52,11 @@ int		ft_export(t_command *c, int fd)
 			return (ret);
 		if (ret == 3)
 		{
-			if (ft_env_compare(c->arg[i], ft_strlen(c->arg[i])) == ft_env_len(&fix))
+			if (ft_env_compare(c->arg[i],\
+ft_strlen(c->arg[i])) == ft_env_len(&fix))
 			{
-				if (!(fix.env = ft_replace_env(c->arg[i], ft_strlen(c->arg[i]))))
+				if (!(fix.env = ft_replace_env(c->arg[i],\
+ft_strlen(c->arg[i]))))
 					return (0);
 			}
 		}
