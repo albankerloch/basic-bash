@@ -81,7 +81,7 @@ void    ft_sig_handler_quit(int signum);
 int     ft_syntax_export(t_command *c, int fd, t_fix *fix);
 int     ft_export_without_arg(t_fix *fix, int fd);
 int     ft_export_err(char *arg, t_fix *fix);
-int     ft_env_err(t_command *c, t_fix *fix);
+int     ft_env_err(t_command *c);
 void    ft_execve(t_command *c, t_fix *fix);
 int     ft_redir_execve(t_command *c, t_fix *fix, int fd);
 void    ft_fork_execve(t_command *c, t_fix *fix);
@@ -90,13 +90,13 @@ void    ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX]);
 void    ft_realloc_concat_buff(char line[PATH_MAX], char c);
 void	ft_error(int err);
 
-int ft_echo(t_command *c, t_fix *fix, int fd);
-int ft_env(t_command *c, t_fix *fix, int fd);
-int ft_pwd(t_command *c, t_fix *fix, int fd);
-int ft_export(t_command *c, t_fix *fix, int fd);
-int ft_unset(t_command *c, t_fix *fix, int fd);
-int ft_cd(t_command *c, t_fix *fix, int fd);
-int ft_builtin_exit(t_command *c, t_fix *fix, int fd);
+int ft_echo(t_command *c, int fd);
+int ft_env(t_command *c, int fd);
+int ft_pwd(t_command *c, int fd);
+int ft_export(t_command *c, int fd);
+int ft_unset(t_command *c, int fd);
+int ft_cd(t_command *c, int fd);
+int ft_builtin_exit(t_command *c, int fd);
 
 int     ft_env_len(t_fix *fix);
 char    **ft_replace_env(t_fix *fix, char *arg, int egal);
@@ -118,7 +118,6 @@ char    *ft_strjoin_substr(char const *s1, char const *s, unsigned int start, si
 int		  ft_isnum(char *str);
 int	ft_export_egal(t_command *c, int i);
 void ft_aff_export_without_arg(int i, int *j, int fd);
-
 
 
 char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);

@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int			ft_echo(t_command *c, t_fix *fix, int fd)
+int			ft_echo(t_command *c, int fd)
 {
 	int		i;
 	int		n;
@@ -35,18 +35,18 @@ int			ft_echo(t_command *c, t_fix *fix, int fd)
 	return (1);
 }
 
-int			ft_env(t_command *c, t_fix *fix, int fd)
+int			ft_env(t_command *c, int fd)
 {
 	int		j;
 
 	j = 0;
-	if (ft_env_err(c, fix) == -1)
+	if (ft_env_err(c) == -1)
 		return (2);
-	while (fix->env && fix->env[j])
+	while (fix.env && fix.env[j])
 	{
-		if (ft_strchr(fix->env[j], '='))
+		if (ft_strchr(fix.env[j], '='))
 		{
-			ft_putstr_fd(fix->env[j], fd);
+			ft_putstr_fd(fix.env[j], fd);
 			ft_putchar_fd('\n', fd);
 		}
 		j++;
@@ -56,7 +56,7 @@ int			ft_env(t_command *c, t_fix *fix, int fd)
 	return (1);
 }
 
-int			ft_pwd(t_command *c, t_fix *fix, int fd)
+int			ft_pwd(t_command *c, int fd)
 {
 	int		j;
 	char	here[PATH_MAX];
@@ -78,27 +78,27 @@ static void	ft_error_num_arg(char *str)
 	ft_putstr_fd(": numeric argument required\n", 2);
 }
 
-int			ft_builtin_exit(t_command *c, t_fix *fix, int fd)
+int			ft_builtin_exit(t_command *c, int fd)
 {
 	ft_putstr("exit\n");
 	if (!(c->arg[1]))
-		fix->exit = 0;
+		fix.exit = 0;
 	else
 	{
 		if (!(ft_isnum(c->arg[1])))
 		{
 			ft_error_num_arg(c->arg[1]);
-			fix->exit = 2;
-			fix->error = 2;
+			fix.exit = 2;
+			fix.error = 2;
 		}
 		else
 		{
 			if (!(c->arg[2]))
-				fix->exit = (unsigned char)ft_atoi(c->arg[1]);
+				fix.exit = (unsigned char)ft_atoi(c->arg[1]);
 			else
 			{
 				ft_putstr_fd("bash: exit: too many arguments\n", 2);
-				fix->error = 1;
+				fix.error = 1;
 				return (2);
 			}
 		}

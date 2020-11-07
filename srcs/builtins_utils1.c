@@ -54,19 +54,19 @@ int		ft_env_len(t_fix *fix)
 	return (len);
 }
 
-int		ft_env_err(t_command *c, t_fix *fix)
+int		ft_env_err(t_command *c)
 {
 	if (c->arg[1] && ft_strcmp(c->arg[1], "=") && ft_strcmp(c->arg[1], "-"))
 	{
 		ft_putstr_fd("env: \"", 2);
 		ft_putstr_fd(c->arg[1], 2);
 		ft_putstr_fd("\": No such file or directory\n", 2);
-		fix->error = 127;
+		fix.error = 127;
 		return (-1);
 	}
 	else if (c->arg[1] && !ft_strcmp(c->arg[1], "-"))
 	{
-		fix->error = 0;
+		fix.error = 0;
 		return (-1);
 	}
 	return (1);

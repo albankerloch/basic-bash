@@ -38,13 +38,13 @@ int		ft_export_egal(t_command *c, int i)
 	return (1);
 }
 
-int		ft_export(t_command *c, t_fix *fix, int fd)
+int		ft_export(t_command *c, int fd)
 {
 	int		i;
 	int		ret;
 
 	if (!c->arg[1])
-		return (ft_export_without_arg(fix, fd));
+		return (ft_export_without_arg(&fix, fd));
 	i = 1;
 	while (c->arg[i])
 	{
@@ -52,10 +52,10 @@ int		ft_export(t_command *c, t_fix *fix, int fd)
 			return (ret);
 		if (ret == 3)
 		{
-			if (ft_env_compare(fix, c->arg[i], ft_strlen(c->arg[i])) ==
-			ft_env_len(fix))
+			if (ft_env_compare(&fix, c->arg[i], ft_strlen(c->arg[i])) ==
+			ft_env_len(&fix))
 			{
-				if (!(fix->env = ft_replace_env(fix, c->arg[i],
+				if (!(fix.env = ft_replace_env(&fix, c->arg[i],
 				ft_strlen(c->arg[i]))))
 					return (0);
 			}
@@ -65,20 +65,20 @@ int		ft_export(t_command *c, t_fix *fix, int fd)
 	return (1);
 }
 
-int		ft_unset(t_command *c, t_fix *fix, int fd)
+int		ft_unset(t_command *c, int fd)
 {
 	int		i;
 
 	i = 1;
 	while (c->arg[i])
 	{
-		if (ft_export_check_id(c->arg[i], ft_strlen(c->arg[i]), fix) &&
-		(ft_env_len(fix) != ft_env_compare(fix, c->arg[i],
+		if (ft_export_check_id(c->arg[i], ft_strlen(c->arg[i]), &fix) &&
+		(ft_env_len(&fix) != ft_env_compare(&fix, c->arg[i],
 		ft_strlen(c->arg[i]))))
 		{
 			if (!(c->arg[i][0] == '_' && c->arg[i][1] == '\0'))
 			{
-				if (!(fix->env = ft_unset_env(fix, c->arg[i])))
+				if (!(fix.env = ft_unset_env(&fix, c->arg[i])))
 					return (0);
 			}
 		}
@@ -87,7 +87,7 @@ int		ft_unset(t_command *c, t_fix *fix, int fd)
 	return (1);
 }
 
-int		ft_cd(t_command *c, t_fix *fix, int fd)
+int		ft_cd(t_command *c, int fd)
 {
 	int		ret;
 	char	buf[PATH_MAX];
@@ -98,7 +98,7 @@ int		ft_cd(t_command *c, t_fix *fix, int fd)
 		ret = chdir(c->arg[1]);
 	if (ret == -1)
 	{
-		fix->error = 1;
+		fix.error = 1;
 		ft_error(errno);
 		return (2);
 	}
@@ -107,7 +107,7 @@ int		ft_cd(t_command *c, t_fix *fix, int fd)
 		ft_error(errno);
 		return (0);
 	}
-	if (!(fix->env = ft_realloc_env(fix, buf)))
+	if (!(fix.env = ft_realloc_env(&fix, buf)))
 	{
 		ft_error(errno);
 		return (0);
