@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/06 22:13:12 by aduchemi          #+#    #+#             */
+/*   Updated: 2020/11/06 22:13:14 by aduchemi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void ft_sig_handler(int signum)
+void	ft_sig_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -12,7 +24,7 @@ void ft_sig_handler(int signum)
 		ft_putstr_fd("\b\b  \b\b", 2);
 }
 
-void ft_sig_handler_process(int signum)
+void	ft_sig_handler_process(int signum)
 {
 	if (signum == SIGINT)
 	{
