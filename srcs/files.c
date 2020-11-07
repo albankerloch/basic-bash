@@ -61,7 +61,7 @@ int		ft_checkfile(t_command *c)
 		ft_putstr_fd("bash: ", 2);
 		ft_putstr_fd(c->n_input, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		fix.error = 1;
+		g_f.error = 1;
 		return (-1);
 	}
 	return (1);

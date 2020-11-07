@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int		ft_redir_execve(t_command *c, t_fix *fix, int fd)
+int		ft_redir_execve(t_command *c, t_f *g_f, int fd)
 {
 	int fdi;
 
@@ -41,7 +41,7 @@ S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) == -1)
 	return (fdi);
 }
 
-void	ft_execve(t_command *c, t_fix *fix)
+void	ft_execve(t_command *c, t_f *g_f)
 {
 	int fd;
 	int fdi;
@@ -50,12 +50,12 @@ void	ft_execve(t_command *c, t_fix *fix)
 	ret = 0;
 	if ((fd = ft_open_redir(c)) == -1)
 		exit(-1);
-	fdi = ft_redir_execve(c, fix, fd);
+	fdi = ft_redir_execve(c, g_f, fd);
 	if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
-		ret = execve(c->arg[0], c->arg, fix->env);
+		ret = execve(c->arg[0], c->arg, g_f->env);
 	else
 	{
-		if (ft_relative_path(c, fix) == ft_env_len(fix))
+		if (ft_relative_path(c, g_f) == ft_env_len(g_f))
 			ret = -1;
 	}
 	if (ret == -1)
@@ -70,23 +70,23 @@ void	ft_execve(t_command *c, t_fix *fix)
 int		ft_loop_relative_path(t_command *c, int j, int k,\
 char try_path[PATH_MAX])
 {
-	while (fix.env && fix.env[j])
+	while (g_f.env && g_f.env[j])
 	{
-		if (ft_strncmp(fix.env[j], "PATH", ft_strlen("PATH")) == 0)
+		if (ft_strncmp(g_f.env[j], "PATH", ft_strlen("PATH")) == 0)
 		{
 			k = 5;
 			while (1)
 			{
-				if (fix.env[j][k] != ':' && fix.env[j][k])
-					ft_realloc_concat_buff(try_path, fix.env[j][k]);
+				if (g_f.env[j][k] != ':' && g_f.env[j][k])
+					ft_realloc_concat_buff(try_path, g_f.env[j][k]);
 				else
 				{
 					ft_realloc_concat_buff(try_path, '/');
 					ft_strjoin_buff(try_path, c->arg[0]);
-					execve(try_path, c->arg, fix.env);
+					execve(try_path, c->arg, g_f.env);
 					ft_memset(try_path, '\0', ft_strlen(try_path));
-					if (!fix.env[j][k])
-						return (ft_env_len(&fix));
+					if (!g_f.env[j][k])
+						return (ft_env_len(&g_f));
 				}
 				k++;
 			}
@@ -96,7 +96,7 @@ char try_path[PATH_MAX])
 	return (j);
 }
 
-int		ft_relative_path(t_command *c, t_fix *fix)
+int		ft_relative_path(t_command *c, t_f *g_f)
 {
 	int		j;
 	int		k;

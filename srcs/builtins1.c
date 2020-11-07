@@ -42,11 +42,11 @@ int			ft_env(t_command *c, int fd)
 	j = 0;
 	if (ft_env_err(c) == -1)
 		return (2);
-	while (fix.env && fix.env[j])
+	while (g_f.env && g_f.env[j])
 	{
-		if (ft_strchr(fix.env[j], '='))
+		if (ft_strchr(g_f.env[j], '='))
 		{
-			ft_putstr_fd(fix.env[j], fd);
+			ft_putstr_fd(g_f.env[j], fd);
 			ft_putchar_fd('\n', fd);
 		}
 		j++;
@@ -82,23 +82,23 @@ int			ft_builtin_exit(t_command *c, int fd)
 {
 	ft_putstr("exit\n");
 	if (!(c->arg[1]))
-		fix.exit = 0;
+		g_f.exit = 0;
 	else
 	{
 		if (!(ft_isnum(c->arg[1])))
 		{
 			ft_error_num_arg(c->arg[1]);
-			fix.exit = 2;
-			fix.error = 2;
+			g_f.exit = 2;
+			g_f.error = 2;
 		}
 		else
 		{
 			if (!(c->arg[2]))
-				fix.exit = (unsigned char)ft_atoi(c->arg[1]);
+				g_f.exit = (unsigned char)ft_atoi(c->arg[1]);
 			else
 			{
 				ft_putstr_fd("bash: exit: too many arguments\n", 2);
-				fix.error = 1;
+				g_f.error = 1;
 				return (2);
 			}
 		}

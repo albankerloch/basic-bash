@@ -60,7 +60,7 @@ int		ft_new_in_out(t_command *c, char **arg, char *line, int *i)
 		else if (ret == 0 && line[*i] == '$' && c->quote != 1 &&
 		line[*i + 1] && line[*i + 1] == '?')
 		{
-			if (!(ft_realloc_fix_error(arg, i)))
+			if (!(ft_realloc_g_f_error(arg, i)))
 				return (0);
 		}
 		else if (!(*arg = ft_realloc_concat(*arg, line[*i])))
@@ -99,7 +99,7 @@ int		ft_new_arg(t_command *c, char *line, int *i, int *k)
 			ret = ft_new_arg_var(&(c->arg[*k]), line, i, &(c->quote));
 		else if (var == 0 && line[*i] == '$' && c->quote != 1 &&
 		line[*i + 1] && line[*i + 1] == '?')
-			ret = ft_realloc_fix_error(&(c->arg[*k]), i);
+			ret = ft_realloc_g_f_error(&(c->arg[*k]), i);
 		else if (!(c->arg[*k] = ft_realloc_concat(c->arg[*k], line[*i])))
 			return (0);
 		if (!ret)

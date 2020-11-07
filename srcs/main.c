@@ -12,12 +12,12 @@
 
 #include "../includes/minishell.h"
 
-int		ft_parse_line(char *line, t_fix *fix, int *i)
+int		ft_parse_line(char *line, t_f *g_f, int *i)
 {
 	t_list	*t;
 	int		ret;
 
-	if (!(t = ft_init_list(fix)))
+	if (!(t = ft_init_list(g_f)))
 		return (0);
 	if (!(ret = ft_parser(t, line, i)))
 	{
@@ -26,11 +26,11 @@ int		ft_parse_line(char *line, t_fix *fix, int *i)
 	}
 	else if (ret == 1)
 	{
-		if (!(ft_exec(t, line, fix)))
+		if (!(ft_exec(t, line, g_f)))
 		{
 			ft_lstclear(&t, &ft_del_command);
-			if (fix->exit >= 0)
-				ft_exit(fix, line, fix->exit);
+			if (g_f->exit >= 0)
+				ft_exit(g_f, line, g_f->exit);
 			else
 				return (0);
 		}
@@ -39,7 +39,7 @@ int		ft_parse_line(char *line, t_fix *fix, int *i)
 	return (1);
 }
 
-int		ft_parser_exec(char *line, t_fix *fix)
+int		ft_parser_exec(char *line, t_f *g_f)
 {
 	char	c[2];
 	int		i;
@@ -55,7 +55,7 @@ int		ft_parser_exec(char *line, t_fix *fix)
 	{
 		signal(SIGINT, ft_sig_handler);
 		signal(SIGQUIT, SIG_IGN);
-		if (!(ft_parse_line(line, fix, &i)))
+		if (!(ft_parse_line(line, g_f, &i)))
 			return (0);
 	}
 	return (1);
@@ -67,7 +67,7 @@ int		main(int argc, char *argv[], char *envp[])
 	int		ret;
 	int		parsing;
 
-	ft_fix_construct(&fix, envp);
+	ft_f_construct(&g_f, envp);
 	ret = 1;
 	line = NULL;
 	while (1)
@@ -79,12 +79,12 @@ int		main(int argc, char *argv[], char *envp[])
 		if (ret == 0)
 		{
 			ft_putstr("\nexit\n");
-			ft_exit(&fix, line, EXIT_SUCCESS);
+			ft_exit(&g_f, line, EXIT_SUCCESS);
 		}
 		if (ret == -1)
-			ft_exit(&fix, line, EXIT_FAILURE);
-		if (!(ft_parser_exec(line, &fix)))
-			ft_exit(&fix, line, EXIT_FAILURE);
+			ft_exit(&g_f, line, EXIT_FAILURE);
+		if (!(ft_parser_exec(line, &g_f)))
+			ft_exit(&g_f, line, EXIT_FAILURE);
 		free(line);
 	}
 	return (0);

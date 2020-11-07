@@ -12,10 +12,10 @@
 
 #include "../includes/minishell.h"
 
-void		ft_exit(t_fix *fix, char *line, int e)
+void		ft_exit(t_f *g_f, char *line, int e)
 {
 	free(line);
-	ft_exit_fix(fix, -2, e);
+	ft_exit_f(g_f, -2, e);
 }
 
 t_command	*ft_free_part_command(t_command *c, int i)
@@ -53,24 +53,24 @@ void		ft_free_command(t_command *c)
 	free(c);
 }
 
-int			ft_exit_fix(t_fix *fix, int i, int e)
+int			ft_exit_f(t_f *g_f, int i, int e)
 {
 	int t;
 	int k;
 
-	k = fix->exit;
+	k = g_f->exit;
 	if (i == -2)
 	{
 		i = 0;
-		while (fix->env && fix->env[i])
+		while (g_f->env && g_f->env[i])
 			i++;
 	}
 	t = 0;
 	while (t < i)
 	{
-		free(fix->env[t]);
+		free(g_f->env[t]);
 		t++;
 	}
-	free(fix->env);
+	free(g_f->env);
 	exit(e);
 }

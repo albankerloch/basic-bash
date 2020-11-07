@@ -12,20 +12,20 @@
 
 #include "../includes/minishell.h"
 
-int		ft_realloc_fix_error(char **arg, int *i)
+int		ft_realloc_g_f_error(char **arg, int *i)
 {
 	(*i)++;
-	if (fix.error >= 100)
+	if (g_f.error >= 100)
 	{
-		if (!(*arg = ft_realloc_concat(*arg, fix.error / 100 + 48)))
+		if (!(*arg = ft_realloc_concat(*arg, g_f.error / 100 + 48)))
 			return (0);
 	}
-	if (fix.error >= 10)
+	if (g_f.error >= 10)
 	{
-		if (!(*arg = ft_realloc_concat(*arg, fix.error % 100 / 10 + 48)))
+		if (!(*arg = ft_realloc_concat(*arg, g_f.error % 100 / 10 + 48)))
 			return (0);
 	}
-	if (!(*arg = ft_realloc_concat(*arg, fix.error % 10 + 48)))
+	if (!(*arg = ft_realloc_concat(*arg, g_f.error % 10 + 48)))
 		return (0);
 	return (1);
 }
@@ -39,13 +39,13 @@ int		ft_realloc_var(char **arg, char *line, int *i)
 	while (line[*i + j] && (ft_isalnum(line[*i + j]) || line[*i + j] == '_'))
 		j++;
 	k = 0;
-	while (fix.env && fix.env[k])
+	while (g_f.env && g_f.env[k])
 	{
-		if (ft_strncmp(fix.env[k], &line[*i], j) == 0 && fix.env[k][j] == '=')
+		if (ft_strncmp(g_f.env[k], &line[*i], j) == 0 && g_f.env[k][j] == '=')
 		{
 			*i = *i + j - 1;
 			j++;
-			if (!(*arg = ft_strjoin_free(*arg, &(fix.env[k][j]))))
+			if (!(*arg = ft_strjoin_free(*arg, &(g_f.env[k][j]))))
 				return (0);
 			return (1);
 		}

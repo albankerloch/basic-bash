@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int		ft_builtins(t_command *c, char *line, t_fix *fix, int fd)
+int		ft_builtins(t_command *c, char *line, t_f *g_f, int fd)
 {
 	if (ft_strcmp(c->arg[0], "echo") == 0)
 		return (ft_echo(c, fd));

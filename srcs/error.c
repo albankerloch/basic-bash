@@ -26,7 +26,7 @@ int		ft_syntax_error(char *s)
 	ft_putstr_fd("bash: syntax error near unexpected token \" ", 2);
 	ft_putstr_fd(s, 2);
 	ft_putstr_fd(" \"\n", 2);
-	fix.error = 2;
+	g_f.error = 2;
 	return (2);
 }
 

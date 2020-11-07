@@ -16,7 +16,7 @@ void	ft_sig_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		fix.error = 130;
+		g_f.error = 130;
 		ft_putchar('\n');
 		ft_putstr("<minishell> ");
 	}
@@ -28,12 +28,12 @@ void	ft_sig_handler_process(int signum)
 {
 	if (signum == SIGINT)
 	{
-		fix.error = 130;
+		g_f.error = 130;
 		ft_putchar('\n');
 	}
 	else if (signum == SIGQUIT)
 	{
-		fix.error = 131;
+		g_f.error = 131;
 		ft_putstr_fd("Quitter (core dumped)\n", 2);
 	}
 }

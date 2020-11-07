@@ -95,6 +95,6 @@ int		ft_ambiguous_redir(char *line, int i_start, int *i)
 	while (line[*i])
 		(*i)++;
 	ft_putstr_fd(" : ambiguous redirect\n", 2);
-	fix.error = 1;
+	g_f.error = 1;
 	return (2);
 }

@@ -23,10 +23,10 @@ int		ft_export_egal(t_command *c, int i)
 		{
 			if (c->arg[i][j] == '=')
 			{
-				if ((!(ft_export_check_id(c->arg[i], j, &fix))) ||
+				if ((!(ft_export_check_id(c->arg[i], j, &g_f))) ||
 				(c->arg[i][j - 1] == '_' && j == 1))
 					return (2);
-				if (!(fix.env = ft_replace_env(c->arg[i], j)))
+				if (!(g_f.env = ft_replace_env(c->arg[i], j)))
 					return (0);
 				break ;
 			}
@@ -44,7 +44,7 @@ int		ft_export(t_command *c, int fd)
 	int		ret;
 
 	if (!c->arg[1])
-		return (ft_export_without_arg(&fix, fd));
+		return (ft_export_without_arg(&g_f, fd));
 	i = 1;
 	while (c->arg[i])
 	{
@@ -53,9 +53,9 @@ int		ft_export(t_command *c, int fd)
 		if (ret == 3)
 		{
 			if (ft_env_compare(c->arg[i],\
-ft_strlen(c->arg[i])) == ft_env_len(&fix))
+ft_strlen(c->arg[i])) == ft_env_len(&g_f))
 			{
-				if (!(fix.env = ft_replace_env(c->arg[i],\
+				if (!(g_f.env = ft_replace_env(c->arg[i],\
 ft_strlen(c->arg[i]))))
 					return (0);
 			}
@@ -72,12 +72,12 @@ int		ft_unset(t_command *c, int fd)
 	i = 1;
 	while (c->arg[i])
 	{
-		if (ft_export_check_id(c->arg[i], ft_strlen(c->arg[i]), &fix) &&
-		(ft_env_len(&fix) != ft_env_compare(c->arg[i], ft_strlen(c->arg[i]))))
+		if (ft_export_check_id(c->arg[i], ft_strlen(c->arg[i]), &g_f) &&
+		(ft_env_len(&g_f) != ft_env_compare(c->arg[i], ft_strlen(c->arg[i]))))
 		{
 			if (!(c->arg[i][0] == '_' && c->arg[i][1] == '\0'))
 			{
-				if (!(fix.env = ft_unset_env(&fix, c->arg[i])))
+				if (!(g_f.env = ft_unset_env(&g_f, c->arg[i])))
 					return (0);
 			}
 		}
@@ -97,7 +97,7 @@ int		ft_cd(t_command *c, int fd)
 		ret = chdir(c->arg[1]);
 	if (ret == -1)
 	{
-		fix.error = 1;
+		g_f.error = 1;
 		ft_error(errno);
 		return (2);
 	}
@@ -106,7 +106,7 @@ int		ft_cd(t_command *c, int fd)
 		ft_error(errno);
 		return (0);
 	}
-	if (!(fix.env = ft_realloc_env(&fix, buf)))
+	if (!(g_f.env = ft_realloc_env(&g_f, buf)))
 	{
 		ft_error(errno);
 		return (0);

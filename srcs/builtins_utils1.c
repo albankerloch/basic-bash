@@ -33,10 +33,10 @@ int		ft_env_compare(char *arg, int n)
 
 	i = 0;
 	j = 0;
-	while (fix.env && fix.env[j])
+	while (g_f.env && g_f.env[j])
 	{
-		if (ft_strncmp(arg, fix.env[j], n) == 0 && (fix.env[j][n] == '=' ||
-		fix.env[j][n] == '\0'))
+		if (ft_strncmp(arg, g_f.env[j], n) == 0 && (g_f.env[j][n] == '=' ||
+		g_f.env[j][n] == '\0'))
 			i--;
 		j++;
 		i++;
@@ -44,12 +44,12 @@ int		ft_env_compare(char *arg, int n)
 	return (i);
 }
 
-int		ft_env_len(t_fix *fix)
+int		ft_env_len(t_f *g_f)
 {
 	int		len;
 
 	len = 0;
-	while (fix->env[len])
+	while (g_f->env[len])
 		len++;
 	return (len);
 }
@@ -61,12 +61,12 @@ int		ft_env_err(t_command *c)
 		ft_putstr_fd("env: \"", 2);
 		ft_putstr_fd(c->arg[1], 2);
 		ft_putstr_fd("\": No such file or directory\n", 2);
-		fix.error = 127;
+		g_f.error = 127;
 		return (-1);
 	}
 	else if (c->arg[1] && !ft_strcmp(c->arg[1], "-"))
 	{
-		fix.error = 0;
+		g_f.error = 0;
 		return (-1);
 	}
 	return (1);

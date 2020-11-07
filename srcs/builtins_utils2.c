@@ -12,30 +12,30 @@
 
 #include "../includes/minishell.h"
 
-char	**ft_unset_env(t_fix *fix, char *arg)
+char	**ft_unset_env(t_f *g_f, char *arg)
 {
 	char	**env2;
 	int		i;
 	int		j;
 
 	env2 = NULL;
-	if (!(env2 = malloc(sizeof(char **) * ft_env_len(fix))))
+	if (!(env2 = malloc(sizeof(char **) * ft_env_len(g_f))))
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (fix->env && fix->env[j])
+	while (g_f->env && g_f->env[j])
 	{
-		if (!(ft_strncmp(fix->env[j], arg, ft_strlen(arg)) == 0))
+		if (!(ft_strncmp(g_f->env[j], arg, ft_strlen(arg)) == 0))
 		{
 			env2[i] = NULL;
-			if (!(env2[i] = ft_strdup(fix->env[j])))
+			if (!(env2[i] = ft_strdup(g_f->env[j])))
 				return (ft_free_tab(env2, i));
 			i++;
 		}
 		j++;
 	}
 	env2[i] = NULL;
-	ft_free_tab(fix->env, ft_env_len(fix) - 1);
+	ft_free_tab(g_f->env, ft_env_len(g_f) - 1);
 	return (env2);
 }
 
@@ -43,18 +43,18 @@ void	ft_aff_export_without_arg(int i, int *j, int fd)
 {
 	char	*sub;
 
-	sub = ft_substr(fix.env[i], 0, *j);
+	sub = ft_substr(g_f.env[i], 0, *j);
 	if (ft_strcmp(sub, "_"))
 	{
 		ft_putstr_fd("declare -x ", fd);
 		ft_putstr_fd(sub, fd);
-		if (ft_strchr(fix.env[i], '='))
+		if (ft_strchr(g_f.env[i], '='))
 		{
-			ft_putchar_fd(fix.env[i][(*j)++], fd);
+			ft_putchar_fd(g_f.env[i][(*j)++], fd);
 			ft_putchar_fd('\"', fd);
-			while (fix.env[i][*j])
+			while (g_f.env[i][*j])
 			{
-				ft_putchar_fd(fix.env[i][*j], fd);
+				ft_putchar_fd(g_f.env[i][*j], fd);
 				(*j)++;
 			}
 			ft_putstr_fd("\"", fd);
@@ -64,16 +64,16 @@ void	ft_aff_export_without_arg(int i, int *j, int fd)
 	free(sub);
 }
 
-int		ft_export_without_arg(t_fix *fix, int fd)
+int		ft_export_without_arg(t_f *g_f, int fd)
 {
 	int		i;
 	int		j;
 
 	i = 0;
-	while (fix->env && fix->env[i])
+	while (g_f->env && g_f->env[i])
 	{
 		j = 0;
-		while (fix->env[i][j] != '=' && fix->env[i][j] != '\0')
+		while (g_f->env[i][j] != '=' && g_f->env[i][j] != '\0')
 			j++;
 		ft_aff_export_without_arg(i, &j, fd);
 		i++;
@@ -81,7 +81,7 @@ int		ft_export_without_arg(t_fix *fix, int fd)
 	return (1);
 }
 
-int		ft_export_check_id(char *arg, int j, t_fix *fix)
+int		ft_export_check_id(char *arg, int j, t_f *g_f)
 {
 	int		i;
 
@@ -104,6 +104,6 @@ int		ft_export_err(char *arg)
 	ft_putstr_fd("bash: export: \'", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd("\': not a valid identifier\n", 2);
-	fix.error = 1;
+	g_f.error = 1;
 	return (0);
 }

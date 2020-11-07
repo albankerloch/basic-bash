@@ -18,15 +18,15 @@ int		ft_replace_env_dup(char *arg, int egal, char ***env2, int *i)
 
 	*i = 0;
 	j = 0;
-	while (fix.env && fix.env[j])
+	while (g_f.env && g_f.env[j])
 	{
-		if (ft_strncmp(fix.env[j], arg, egal) == 0 &&
-		(fix.env[j][egal] == '=' || fix.env[j][egal] == '\0'))
+		if (ft_strncmp(g_f.env[j], arg, egal) == 0 &&
+		(g_f.env[j][egal] == '=' || g_f.env[j][egal] == '\0'))
 			(*i)--;
 		else
 		{
 			(*env2)[*i] = NULL;
-			if (!((*env2)[*i] = ft_strdup(fix.env[j])))
+			if (!((*env2)[*i] = ft_strdup(g_f.env[j])))
 			{
 				ft_error(errno);
 				ft_free_tab(*env2, *i);
@@ -59,34 +59,34 @@ char	**ft_replace_env(char *arg, int egal)
 		return (ft_free_tab(env2, i));
 	}
 	env2[i + 1] = NULL;
-	ft_free_tab(fix.env, ft_env_len(&fix) - 1);
+	ft_free_tab(g_f.env, ft_env_len(&g_f) - 1);
 	return (env2);
 }
 
-char	**ft_realloc_env(t_fix *fix, char buf[PATH_MAX])
+char	**ft_realloc_env(t_f *g_f, char buf[PATH_MAX])
 {
 	int		j;
 	char	**env2;
 
 	j = 0;
-	while (fix->env && fix->env[j])
+	while (g_f->env && g_f->env[j])
 		j++;
 	if (!(env2 = malloc(sizeof(char **) * (j + 1))))
 		return (NULL);
 	j = 0;
-	while (fix->env && fix->env[j])
+	while (g_f->env && g_f->env[j])
 	{
-		if (fix->env[j] && ft_strncmp(fix->env[j], "PWD",
+		if (g_f->env[j] && ft_strncmp(g_f->env[j], "PWD",
 		ft_strlen("PWD")) == 0)
 		{
 			if (!(env2[j] = ft_strjoin("PWD=", buf)))
 				return (ft_free_tab(env2, j));
 		}
-		else if (!(env2[j] = ft_strdup(fix->env[j])))
+		else if (!(env2[j] = ft_strdup(g_f->env[j])))
 			return (ft_free_tab(env2, j));
 		j++;
 	}
 	env2[j] = NULL;
-	ft_free_tab(fix->env, ft_env_len(fix) - 1);
+	ft_free_tab(g_f->env, ft_env_len(g_f) - 1);
 	return (env2);
 }

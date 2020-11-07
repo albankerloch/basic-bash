@@ -28,7 +28,7 @@ int			ft_add_list(t_list *t)
 	return (1);
 }
 
-t_list		*ft_init_list(t_fix *fix)
+t_list		*ft_init_list(t_f *g_f)
 {
 	t_list		*t;
 	t_command	*c;
@@ -69,23 +69,23 @@ t_command	*ft_command_construct(void)
 	return (c);
 }
 
-void		ft_fix_construct(t_fix *fix, char **envp)
+void		ft_f_construct(t_f *g_f, char **envp)
 {
 	int		len;
 
 	len = 0;
 	while (envp && envp[len])
 		len++;
-	if (!(fix->env = malloc(sizeof(char **) * (len + 1))))
-		ft_exit_fix(fix, -1, EXIT_FAILURE);
+	if (!(g_f->env = malloc(sizeof(char **) * (len + 1))))
+		ft_exit_f(g_f, -1, EXIT_FAILURE);
 	len = 0;
 	while (envp && envp[len])
 	{
-		if (!(fix->env[len] = ft_strdup(envp[len])))
-			ft_exit_fix(fix, len, EXIT_FAILURE);
+		if (!(g_f->env[len] = ft_strdup(envp[len])))
+			ft_exit_f(g_f, len, EXIT_FAILURE);
 		len++;
 	}
-	fix->env[len] = NULL;
-	fix->error = 0;
-	fix->exit = -1;
+	g_f->env[len] = NULL;
+	g_f->error = 0;
+	g_f->exit = -1;
 }
