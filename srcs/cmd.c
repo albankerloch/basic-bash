@@ -1,100 +1,113 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/05 22:43:15 by aduchemi          #+#    #+#             */
+/*   Updated: 2020/11/06 21:28:31 by aduchemi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-int ft_redir_execve(t_command *c, t_fix *fix, int fd)
+int		ft_redir_execve(t_command *c, t_fix *fix, int fd)
 {
-    int fdi;
+	int fdi;
 
-    fdi = 0;
-    if (c->add != 0)
-    {
-        if (dup2(fd, 1) == -1)
-        {
-            close(fd);
-            exit (-1);
-        }
-    }
-    if (c->input == 1)
-    {
-        if ((fdi = open(c->n_input, O_RDONLY, S_IRUSR | S_IWUSR | 
-        S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) == -1)
-            exit (-1);
-        if (dup2(fdi, 0) == -1)
-        {
-            if (c->add != 0)
-                close(fd);
-            close(fdi);
-            exit (-1);
-        }
-    }
-    return (fdi);
+	fdi = 0;
+	if (c->add != 0)
+	{
+		if (dup2(fd, 1) == -1)
+		{
+			close(fd);
+			exit(-1);
+		}
+	}
+	if (c->input == 1)
+	{
+		if ((fdi = open(c->n_input, O_RDONLY, S_IRUSR | S_IWUSR |
+S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) == -1)
+			exit(-1);
+		if (dup2(fdi, 0) == -1)
+		{
+			if (c->add != 0)
+				close(fd);
+			close(fdi);
+			exit(-1);
+		}
+	}
+	return (fdi);
 }
 
-void ft_execve(t_command *c, t_fix *fix)
+void	ft_execve(t_command *c, t_fix *fix)
 {
-    int fd;
-    int fdi;
-    int ret;
-    
-    ret = 0;
-    if ((fd = ft_open_redir(c)) == -1)
-        exit (-1);
-    fdi = ft_redir_execve(c, fix, fd);
-    if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
-        ret = execve(c->arg[0], c->arg, fix->env);
-    else
-    {
-        if (ft_relative_path(c, fix) == ft_env_len(fix))
-            ret = -1;
-    }
-    if (ret == -1)
-        ft_error(errno);
-    if (c->add != 0)
-        close(fd);
-    if (c->input == 1)
-        close(fdi);
-    exit(-1);
+	int fd;
+	int fdi;
+	int ret;
+
+	ret = 0;
+	if ((fd = ft_open_redir(c)) == -1)
+		exit(-1);
+	fdi = ft_redir_execve(c, fix, fd);
+	if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
+		ret = execve(c->arg[0], c->arg, fix->env);
+	else
+	{
+		if (ft_relative_path(c, fix) == ft_env_len(fix))
+			ret = -1;
+	}
+	if (ret == -1)
+		ft_error(errno);
+	if (c->add != 0)
+		close(fd);
+	if (c->input == 1)
+		close(fdi);
+	exit(-1);
 }
 
-int ft_loop_relative_path(t_command *c, int j, int k, char try_path[PATH_MAX])
+int		ft_loop_relative_path(t_command *c, int j, int k,\
+char try_path[PATH_MAX])
 {
-    while (fix.env && fix.env[j])
-    {
-        if (ft_strncmp(fix.env[j], "PATH", ft_strlen("PATH")) == 0)
-        {
-            k = 5;
-            while (1)
-            {
-                if (fix.env[j][k] != ':' && fix.env[j][k])
-                    ft_realloc_concat_buff(try_path, fix.env[j][k]);
-                else
-                {
-                    ft_realloc_concat_buff(try_path, '/');
-                    ft_strjoin_buff(try_path, c->arg[0]);
-                    execve(try_path, c->arg, fix.env);
-                    ft_memset(try_path, '\0', ft_strlen(try_path));
-                    if (!fix.env[j][k])
-                        return (ft_env_len(&fix));
-                }
-                k++;
-            }
-        }
-        j++;
-    }
-    return (j);
+	while (fix.env && fix.env[j])
+	{
+		if (ft_strncmp(fix.env[j], "PATH", ft_strlen("PATH")) == 0)
+		{
+			k = 5;
+			while (1)
+			{
+				if (fix.env[j][k] != ':' && fix.env[j][k])
+					ft_realloc_concat_buff(try_path, fix.env[j][k]);
+				else
+				{
+					ft_realloc_concat_buff(try_path, '/');
+					ft_strjoin_buff(try_path, c->arg[0]);
+					execve(try_path, c->arg, fix.env);
+					ft_memset(try_path, '\0', ft_strlen(try_path));
+					if (!fix.env[j][k])
+						return (ft_env_len(&fix));
+				}
+				k++;
+			}
+		}
+		j++;
+	}
+	return (j);
 }
 
-int   ft_relative_path(t_command *c, t_fix *fix)
+int		ft_relative_path(t_command *c, t_fix *fix)
 {
-    int j;
-    int k;
-    char try_path[PATH_MAX];
-    
-    j = 0;
-    while (j < PATH_MAX)
-    {
-        try_path[j] = 0;
-        j++;
-    }
-    j = 0;
-    return (ft_loop_relative_path(c, j, k, try_path));
+	int		j;
+	int		k;
+	char	try_path[PATH_MAX];
+
+	j = 0;
+	while (j < PATH_MAX)
+	{
+		try_path[j] = 0;
+		j++;
+	}
+	j = 0;
+	return (ft_loop_relative_path(c, j, k, try_path));
 }
