@@ -24,121 +24,120 @@
 # include <errno.h>
 # include <string.h>
 
-typedef struct s_command
+typedef	struct	s_command
 {
-	char **arg;
-  int   input;
-  char  *n_input;
-  int   add;
-  int   quote;
-  char  *n_out;
-  int   k;
-}       t_command;
+	char	**arg;
+	int		input;
+	char	*n_input;
+	int		add;
+	int		quote;
+	char	*n_out;
+	int		k;
+}				t_command;
 
-typedef struct s_fix
+typedef	struct	s_fix
 {
-  int   error;
-  int   exit;
-  char **env;
-}       t_fix;
+	int		error;
+	int		exit;
+	char	**env;
+}				t_fix;
 
-int     ft_parser_exec(char *line, t_fix *fix);
-int		ft_parse_line(char *line, t_fix *fix, int *i);
-int     ft_parser(t_list *t, char *line, int *i);
-int ft_parser_arg(t_list **t, char *line, int *i, t_command	**c);
-int ft_parser_symbol(t_list *t, char *line, int *i, t_command	*c);
-int     ft_exec(t_list *t, char *line, t_fix *fix);
-void ft_child_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2]);
-int ft_parent_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2]);
-char    *ft_env_var(char *arg, int h, t_fix *fix);
-int     ft_arg_var(char **arg, t_fix *fix);
-void    ft_fix_construct(t_fix *fix, char **envp);
-char    *ft_realloc_concat(char *line, char c);
-int ft_redirections(t_list *t, char *line, int *i);
-int     ft_redirection_right(t_command *c, char *line, int *i);
-int     ft_redirection_left(t_command *c, char *line, int *i);
-int     ft_redir_right(t_command *c, char *line, int *i);
-int     ft_backslash(char *line, int *i, int *quote);
-char	  **ft_realloc_arg(char **arg);
-void    ft_skip_quotes(char *line, int *i, int *quote);
-t_command *    ft_command_construct();
-void    ft_command_destroy(void *c);
-int    ft_touch(t_command *c);
-int     ft_checkfile(t_command *c);
-int     ft_open_redir(t_command *c);
-int     ft_builtins(t_command *c, char *line, t_fix *fix, int fd);
-int     ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix);
-int     ft_loop_relative_path(t_command *c, int j, int k, char try_path[PATH_MAX]);
-int     ft_relative_path(t_command *c, t_fix *fix);
-int     ft_new_arg(t_command *c, char *line, int *i, int *k);
-int ft_new_arg_var(char **arg, char *line, int *i, int *quote);
+int			ft_parser_exec(char *line, t_fix *fix);
+int			ft_parse_line(char *line, t_fix *fix, int *i);
+int			ft_parser(t_list *t, char *line, int *i);
+int			ft_parser_arg(t_list **t, char *line, int *i, t_command	**c);
+int			ft_parser_symbol(t_list *t, char *line, int *i, t_command	*c);
+int			ft_exec(t_list *t, char *line, t_fix *fix);
+void		ft_child_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2]);
+int			ft_parent_exec(t_list *t, char *line, t_fix *fix, int pipe_fd[2]);
+char		*ft_env_var(char *arg, int h, t_fix *fix);
+int			ft_arg_var(char **arg, t_fix *fix);
+void		ft_fix_construct(t_fix *fix, char **envp);
+char		*ft_realloc_concat(char *line, char c);
+int			ft_redirections(t_list *t, char *line, int *i);
+int			ft_redirection_right(t_command *c, char *line, int *i);
+int			ft_redirection_left(t_command *c, char *line, int *i);
+int			ft_redir_right(t_command *c, char *line, int *i);
+int			ft_backslash(char *line, int *i, int *quote);
+char		**ft_realloc_arg(char **arg);
+void		ft_skip_quotes(char *line, int *i, int *quote);
+t_command	*ft_command_construct();
+void		ft_command_destroy(void *c);
+int			ft_touch(t_command *c);
+int			ft_checkfile(t_command *c);
+int			ft_open_redir(t_command *c);
+int			ft_builtins(t_command *c, char *line, t_fix *fix, int fd);
+int			ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix);
+int			ft_loop_relative_path(t_command *c, int j, int k,\
+char try_path[PATH_MAX]);
+int			ft_relative_path(t_command *c, t_fix *fix);
+int			ft_new_arg(t_command *c, char *line, int *i, int *k);
+int			ft_new_arg_var(char **arg, char *line, int *i, int *quote);
+int			ft_redir_var(int quote, char *line, int *i, char **arg);
+int			ft_arg(t_command *c, char *line, int *i, int *k);
+void		ft_env_destroy(char **env);
+void		ft_sig_handler(int signum);
+void		ft_sig_handler_process(int signum);
+void		ft_sig_handler_quit(int signum);
+int			ft_syntax_export(t_command *c, int fd, t_fix *fix);
+int			ft_export_without_arg(t_fix *fix, int fd);
+int			ft_export_err(char *arg);
+int			ft_env_err(t_command *c);
+void		ft_execve(t_command *c, t_fix *fix);
+int			ft_redir_execve(t_command *c, t_fix *fix, int fd);
+void		ft_fork_execve(t_command *c, t_fix *fix);
+char		**ft_realloc_env(t_fix *fix, char buf[PATH_MAX]);
+void		ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX]);
+void		ft_realloc_concat_buff(char line[PATH_MAX], char c);
+void		ft_error(int err);
 
-int     ft_redir_var(int quote, char *line, int *i, char **arg);
-int	ft_arg(t_command *c, char *line, int *i, int *k);
-void    ft_env_destroy(char **env);
-void    ft_sig_handler(int signum);
-void    ft_sig_handler_process(int signum);
-void    ft_sig_handler_quit(int signum);
-int     ft_syntax_export(t_command *c, int fd, t_fix *fix);
-int     ft_export_without_arg(t_fix *fix, int fd);
-int     ft_export_err(char *arg);
-int     ft_env_err(t_command *c);
-void    ft_execve(t_command *c, t_fix *fix);
-int     ft_redir_execve(t_command *c, t_fix *fix, int fd);
-void    ft_fork_execve(t_command *c, t_fix *fix);
-char    **ft_realloc_env(t_fix *fix, char buf[PATH_MAX]);
-void    ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX]);
-void    ft_realloc_concat_buff(char line[PATH_MAX], char c);
-void	ft_error(int err);
+int			ft_echo(t_command *c, int fd);
+int			ft_env(t_command *c, int fd);
+int			ft_pwd(t_command *c, int fd);
+int			ft_export(t_command *c, int fd);
+int			ft_unset(t_command *c, int fd);
+int			ft_cd(t_command *c, int fd);
+int			ft_builtin_exit(t_command *c, int fd);
 
-int ft_echo(t_command *c, int fd);
-int ft_env(t_command *c, int fd);
-int ft_pwd(t_command *c, int fd);
-int ft_export(t_command *c, int fd);
-int ft_unset(t_command *c, int fd);
-int ft_cd(t_command *c, int fd);
-int ft_builtin_exit(t_command *c, int fd);
+int			ft_env_len(t_fix *fix);
+char		**ft_replace_env(char *arg, int egal);
+char		*ft_join_end_var(char *val_var, char *arg, int j);
+char		*ft_valeur_variable(t_fix *fix, char *nom_var);
+void		ft_echo_n(int *n, char **arg, int *i);
 
-int     ft_env_len(t_fix *fix);
-char    **ft_replace_env(char *arg, int egal);
-char    *ft_join_end_var(char *val_var, char *arg, int j);
-char    *ft_valeur_variable(t_fix *fix, char *nom_var);
-void    ft_echo_n(int *n, char **arg, int *i);
+int			ft_exit_fix(t_fix *fix, int i, int e);
+void		ft_exit(t_fix *fix, char *line, int e);
+t_command	*ft_free_part_command(t_command *c, int i);
+void		ft_del_command(void *c);
+void		ft_free_command(t_command *c);
+t_list		*ft_init_list(t_fix *fix);
+int			ft_add_list(t_list *t);
+char		**ft_free_tab(char **new, int i);
+char		*ft_substr_strjoin(char const *s,\
+unsigned int start, size_t len, char const *s2);
+char		*ft_strjoin_substr(char const *s1,\
+char const *s, unsigned int start, size_t len);
+int			ft_isnum(char *str);
+int			ft_export_egal(t_command *c, int i);
+void		ft_aff_export_without_arg(int i, int *j, int fd);
 
+char		**ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
+int			ft_env_compare(char *arg, int n);
+int			ft_export_check_id(char *arg, int i, t_fix *fix);
+char		**ft_unset_env(t_fix *fix, char *arg);
+int			ft_realloc_var(char **arg, char *line, int *i);
+int			ft_realloc_fix_error(char **arg, int *i);
+char		*ft_strjoin_free(char *s, char const *s2);
+int			ft_new_in_out(t_command *c, char **arg, char *line, int *i);
+int			ft_quotes(char *line, int *i, int *quote, int *ret);
+int			ft_ambiguous_redir(char *line, int i_start, int *i);
+int			ft_empty_redir(t_fix *fix);
+void		ft_close_quotes(char *line, int *i, int *quote);
+int			ft_syntax_error(char *s);
+int			ft_global_parse(char *line, char *c);
+int			ft_cmd_parse(char *sub, char *c);
+int			ft_sub_parse(char *line, int i, int needle, char *c);
 
-int     ft_exit_fix(t_fix *fix, int i, int e);
-void    ft_exit(t_fix *fix, char *line, int e);
-t_command  *ft_free_part_command(t_command *c, int i);
-void    ft_del_command(void *c);
-void    ft_free_command(t_command *c);
-t_list  *ft_init_list(t_fix *fix);
-int     ft_add_list(t_list *t);
-char    **ft_free_tab(char **new, int i);
-char    *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char const *s2);
-char    *ft_strjoin_substr(char const *s1, char const *s, unsigned int start, size_t len);
-int		  ft_isnum(char *str);
-int	ft_export_egal(t_command *c, int i);
-void ft_aff_export_without_arg(int i, int *j, int fd);
-
-
-char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
-int     ft_env_compare(char *arg, int n);
-int     ft_export_check_id(char *arg, int i, t_fix *fix);
-char    **ft_unset_env(t_fix *fix, char *arg);
-int     ft_realloc_var(char **arg, char *line, int *i);
-int     ft_realloc_fix_error(char **arg, int *i);
-char    *ft_strjoin_free(char *s, char const *s2);
-int    ft_new_in_out(t_command *c, char **arg, char *line, int *i);
-int ft_quotes(char *line, int *i, int *quote, int *ret);
-int    ft_ambiguous_redir(char *line, int i_start, int *i);
-int    ft_empty_redir(t_fix *fix);
-void    ft_close_quotes(char *line, int *i, int *quote);
-int    ft_syntax_error(char *s);
-int		ft_global_parse(char *line, char *c);
-int	ft_cmd_parse(char *sub, char *c);
-int		ft_sub_parse(char *line, int i, int needle, char *c);
-
-
-t_fix	fix;
+t_fix		fix;
 
 #endif
