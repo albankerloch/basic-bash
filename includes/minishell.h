@@ -116,6 +116,8 @@ char    *ft_substr_strjoin(char const *s, unsigned int start, size_t len, char c
 char    *ft_strjoin_substr(char const *s1, char const *s, unsigned int start, size_t len);
 int		  ft_isnum(char *str);
 int	ft_export_egal(t_command *c, int i);
+void ft_aff_export_without_arg(int i, int *j, int fd);
+
 
 
 char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
