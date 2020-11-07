@@ -55,36 +55,25 @@ void ft_execve(t_command *c, t_fix *fix)
     exit(-1);
 }
 
-int   ft_relative_path(t_command *c, t_fix *fix)
+int ft_loop_relative_path(t_command *c, int j, int k, char try_path[PATH_MAX])
 {
-    int j;
-    int k;
-    char try_path[PATH_MAX];
-    
-    j = 0;
-    while (j < PATH_MAX) // pour éviter uninitialized value (valgrind)
+    while (fix.env && fix.env[j])
     {
-        try_path[j] = 0;
-        j++;
-    }
-    j = 0;
-    while (fix->env && fix->env[j])
-    {
-        if (ft_strncmp(fix->env[j], "PATH", ft_strlen("PATH")) == 0)
+        if (ft_strncmp(fix.env[j], "PATH", ft_strlen("PATH")) == 0)
         {
             k = 5;
             while (1)
             {
-                if (fix->env[j][k] != ':' && fix->env[j][k])
-                    ft_realloc_concat_buff(try_path, fix->env[j][k]);
+                if (fix.env[j][k] != ':' && fix.env[j][k])
+                    ft_realloc_concat_buff(try_path, fix.env[j][k]);
                 else
                 {
                     ft_realloc_concat_buff(try_path, '/');
                     ft_strjoin_buff(try_path, c->arg[0]);
-                    execve(try_path, c->arg, fix->env);
+                    execve(try_path, c->arg, fix.env);
                     ft_memset(try_path, '\0', ft_strlen(try_path));
-                    if (!fix->env[j][k])
-                        return (ft_env_len(fix));
+                    if (!fix.env[j][k])
+                        return (ft_env_len(&fix));
                 }
                 k++;
             }
@@ -92,4 +81,20 @@ int   ft_relative_path(t_command *c, t_fix *fix)
         j++;
     }
     return (j);
+}
+
+int   ft_relative_path(t_command *c, t_fix *fix)
+{
+    int j;
+    int k;
+    char try_path[PATH_MAX];
+    
+    j = 0;
+    while (j < PATH_MAX)
+    {
+        try_path[j] = 0;
+        j++;
+    }
+    j = 0;
+    return (ft_loop_relative_path(c, j, k, try_path));
 }
