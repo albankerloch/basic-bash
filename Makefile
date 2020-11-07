@@ -9,6 +9,7 @@ SRCS_NAME	= 	main.c \
 					construct.c \
 					signal.c \
 					exit.c \
+					ft_check_atoi.c \
 					redirections.c \
 					arg.c \
 					builtins1.c \

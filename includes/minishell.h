@@ -138,6 +138,7 @@ int				ft_syntax_error(char *s);
 int				ft_global_parse(char *line, char *c);
 int				ft_cmd_parse(char *sub, char *c);
 int				ft_sub_parse(char *line, int i, int needle, char *c);
+int				ft_check_atoi(const char *str);
 
 t_f				g_f;
 #endif

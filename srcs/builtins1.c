@@ -85,7 +85,7 @@ int			ft_builtin_exit(t_command *c, int fd)
 		g_f.exit = 0;
 	else
 	{
-		if (!(ft_isnum(c->arg[1])))
+		if (!(ft_isnum(c->arg[1])) || (!(ft_check_atoi(c->arg[1]))))
 		{
 			ft_error_num_arg(c->arg[1]);
 			g_f.exit = 2;
