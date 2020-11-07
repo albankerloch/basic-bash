@@ -81,7 +81,7 @@ void    ft_sig_handler_process(int signum);
 void    ft_sig_handler_quit(int signum);
 int     ft_syntax_export(t_command *c, int fd, t_fix *fix);
 int     ft_export_without_arg(t_fix *fix, int fd);
-int     ft_export_err(char *arg, t_fix *fix);
+int     ft_export_err(char *arg);
 int     ft_env_err(t_command *c);
 void    ft_execve(t_command *c, t_fix *fix);
 int     ft_redir_execve(t_command *c, t_fix *fix, int fd);

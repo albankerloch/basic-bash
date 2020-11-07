@@ -58,8 +58,8 @@ void	ft_aff_export_without_arg(int i, int *j, int fd)
 				(*j)++;
 			}
 			ft_putstr_fd("\"", fd);
-			ft_putstr_fd("\n", fd);
 		}
+		ft_putstr_fd("\n", fd);
 	}
 	free(sub);
 }
@@ -86,24 +86,24 @@ int		ft_export_check_id(char *arg, int j, t_fix *fix)
 	int		i;
 
 	if (j == 0)
-		return (ft_export_err(arg, fix));
+		return (ft_export_err(arg));
 	if (ft_isdigit(arg[i]))
-		return (ft_export_err(arg, fix));
+		return (ft_export_err(arg));
 	i = 0;
 	while (i < j)
 	{
 		if (!(ft_isalnum(arg[i])) && arg[i] != '_')
-			return (ft_export_err(arg, fix));
+			return (ft_export_err(arg));
 		i++;
 	}
 	return (1);
 }
 
-int		ft_export_err(char *arg, t_fix *fix)
+int		ft_export_err(char *arg)
 {
 	ft_putstr_fd("bash: export: \'", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd("\': not a valid identifier\n", 2);
-	fix->error = 1;
+	fix.error = 1;
 	return (0);
 }
