@@ -1,6 +1,7 @@
 SRCS_NAME	= 	main.c \
 					parser.c \
 					exec.c \
+					exec_utils.c \
 					utils.c \
 					error.c \
 					realloc.c \
