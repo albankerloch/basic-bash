@@ -36,7 +36,7 @@ int		ft_check_atoi(const char *str)
 		nb = nb * 10 + str[i] - 48;
 		i++;
 	}
-	if (nb > 9223372036854775807)
+	if ((nb > LLONG_MAX && signe == 1) || (nb - 1 > LLONG_MAX && signe == -1))
 		return (0);
 	return (1);
 }
