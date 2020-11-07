@@ -68,6 +68,7 @@ int     ft_checkfile(t_command *c);
 int     ft_open_redir(t_command *c);
 int     ft_builtins(t_command *c, char *line, t_fix *fix, int fd);
 int     ft_fork_exec_cmd(t_command *c, char *line, t_fix *fix);
+int     ft_loop_relative_path(t_command *c, int j, int k, char try_path[PATH_MAX]);
 int     ft_relative_path(t_command *c, t_fix *fix);
 int     ft_new_arg(t_command *c, char *line, int *i, int *k);
 int ft_new_arg_var(char **arg, char *line, int *i, int *quote);
