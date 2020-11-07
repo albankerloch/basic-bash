@@ -26,7 +26,7 @@ int		ft_export_egal(t_command *c, int i)
 				if ((!(ft_export_check_id(c->arg[i], j, &fix))) ||
 				(c->arg[i][j - 1] == '_' && j == 1))
 					return (2);
-				if (!(fix.env = ft_replace_env(&fix, c->arg[i], j)))
+				if (!(fix.env = ft_replace_env(c->arg[i], j)))
 					return (0);
 				break ;
 			}
@@ -52,11 +52,9 @@ int		ft_export(t_command *c, int fd)
 			return (ret);
 		if (ret == 3)
 		{
-			if (ft_env_compare(&fix, c->arg[i], ft_strlen(c->arg[i])) ==
-			ft_env_len(&fix))
+			if (ft_env_compare(c->arg[i], ft_strlen(c->arg[i])) == ft_env_len(&fix))
 			{
-				if (!(fix.env = ft_replace_env(&fix, c->arg[i],
-				ft_strlen(c->arg[i]))))
+				if (!(fix.env = ft_replace_env(c->arg[i], ft_strlen(c->arg[i]))))
 					return (0);
 			}
 		}
@@ -73,8 +71,7 @@ int		ft_unset(t_command *c, int fd)
 	while (c->arg[i])
 	{
 		if (ft_export_check_id(c->arg[i], ft_strlen(c->arg[i]), &fix) &&
-		(ft_env_len(&fix) != ft_env_compare(&fix, c->arg[i],
-		ft_strlen(c->arg[i]))))
+		(ft_env_len(&fix) != ft_env_compare(c->arg[i], ft_strlen(c->arg[i]))))
 		{
 			if (!(c->arg[i][0] == '_' && c->arg[i][1] == '\0'))
 			{

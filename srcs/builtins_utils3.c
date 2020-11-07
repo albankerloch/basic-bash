@@ -39,14 +39,14 @@ int		ft_replace_env_dup(char *arg, int egal, char ***env2, int *i)
 	return (1);
 }
 
-char	**ft_replace_env(t_fix *fix, char *arg, int egal)
+char	**ft_replace_env(char *arg, int egal)
 {
 	char	**env2;
 	int		i;
 
 	env2 = NULL;
 	if (!(env2 = malloc(sizeof(char **) *
-	(ft_env_compare(fix, arg, egal) + 2))))
+	(ft_env_compare(arg, egal) + 2))))
 	{
 		ft_error(errno);
 		return (NULL);
@@ -59,7 +59,7 @@ char	**ft_replace_env(t_fix *fix, char *arg, int egal)
 		return (ft_free_tab(env2, i));
 	}
 	env2[i + 1] = NULL;
-	ft_free_tab(fix->env, ft_env_len(fix) - 1);
+	ft_free_tab(fix.env, ft_env_len(&fix) - 1);
 	return (env2);
 }
 

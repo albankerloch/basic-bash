@@ -100,7 +100,7 @@ int ft_cd(t_command *c, int fd);
 int ft_builtin_exit(t_command *c, int fd);
 
 int     ft_env_len(t_fix *fix);
-char    **ft_replace_env(t_fix *fix, char *arg, int egal);
+char    **ft_replace_env(char *arg, int egal);
 char    *ft_join_end_var(char *val_var, char *arg, int j);
 char    *ft_valeur_variable(t_fix *fix, char *nom_var);
 void    ft_echo_n(int *n, char **arg, int *i);
@@ -122,7 +122,7 @@ void ft_aff_export_without_arg(int i, int *j, int fd);
 
 
 char    **ft_env_cpy(t_fix *fix, char *arg, int len, int egal);
-int     ft_env_compare(t_fix *fix, char *arg, int n);
+int     ft_env_compare(char *arg, int n);
 int     ft_export_check_id(char *arg, int i, t_fix *fix);
 char    **ft_unset_env(t_fix *fix, char *arg);
 int     ft_realloc_var(char **arg, char *line, int *i);

@@ -26,17 +26,17 @@ void	ft_echo_n(int *n, char **arg, int *i)
 	}
 }
 
-int		ft_env_compare(t_fix *fix, char *arg, int n)
+int		ft_env_compare(char *arg, int n)
 {
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	while (fix->env && fix->env[j])
+	while (fix.env && fix.env[j])
 	{
-		if (ft_strncmp(arg, fix->env[j], n) == 0 && (fix->env[j][n] == '=' ||
-		fix->env[j][n] == '\0'))
+		if (ft_strncmp(arg, fix.env[j], n) == 0 && (fix.env[j][n] == '=' ||
+		fix.env[j][n] == '\0'))
 			i--;
 		j++;
 		i++;
