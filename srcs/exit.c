@@ -1,68 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/15 16:24:18 by aduchemi          #+#    #+#             */
+/*   Updated: 2020/07/15 16:59:40 by aduchemi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void    ft_exit(t_fix *fix, char *line, int e)
+void		ft_exit(t_fix *fix, char *line, int e)
 {
-    free(line);
-    ft_exit_fix(fix, -2, e);
+	free(line);
+	ft_exit_fix(fix, -2, e);
 }
 
-t_command  *ft_free_part_command(t_command *c, int i)
-{    
-    if (i >= 1)
-        free(c->n_input);
-    if (i >= 2)
-        free(c->n_out);
-    if (i >= 3)
-        free(c->arg);
-    if (i >= 4)
-        free(c->arg[0]);
+t_command	*ft_free_part_command(t_command *c, int i)
+{
+	if (i >= 1)
+		free(c->n_input);
+	if (i >= 2)
+		free(c->n_out);
+	if (i >= 3)
+		free(c->arg);
+	if (i >= 4)
+		free(c->arg[0]);
 	free(c);
-    return (NULL);
+	return (NULL);
 }
 
-void    ft_del_command(void *c)
+void		ft_del_command(void *c)
 {
-    ft_free_command(c);
+	ft_free_command(c);
 }
 
-void    ft_free_command(t_command *c)
+void		ft_free_command(t_command *c)
 {
-    int i;
+	int i;
 
-    free(c->n_out);
+	free(c->n_out);
 	free(c->n_input);
-    i = 0;
-    while (c->arg[i])
-    {
-    	free(c->arg[i]);
-        i++;
-    }
+	i = 0;
+	while (c->arg[i])
+	{
+		free(c->arg[i]);
+		i++;
+	}
 	free(c->arg);
 	free(c);
 }
 
-int    ft_exit_fix(t_fix *fix, int i, int e)
+int			ft_exit_fix(t_fix *fix, int i, int e)
 {
-    int t;
-    int k;
+	int t;
+	int k;
 
-    k = fix->exit;
-    if (i == -2)
-    {
-        i = 0;
-        while (fix->env && fix->env[i])
-		    i++;
-    }
-    t = 0;
-    while (t < i)
-    {
-        free(fix->env[t]);
-        t++;
-    }
-    free(fix->env);
-  //  printf("fix->error=%d\n", fix->error);
- /*   if (e == EXIT_FAILURE && k == -1)
-        ft_error(errno);*/
-     //   ft_putstr_fd("fatal error\n", 2);
-    exit(e);
+	k = fix->exit;
+	if (i == -2)
+	{
+		i = 0;
+		while (fix->env && fix->env[i])
+			i++;
+	}
+	t = 0;
+	while (t < i)
+	{
+		free(fix->env[t]);
+		t++;
+	}
+	free(fix->env);
+	exit(e);
 }
