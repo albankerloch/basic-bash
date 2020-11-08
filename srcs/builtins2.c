@@ -48,7 +48,8 @@ int		ft_export(t_command *c, int fd)
 	{
 		if ((ret = ft_export_egal(c, i)) == 0)
 			return (ret);
-		if (ret == 3 && !(ft_export_check_id(c->arg[i], ft_strlen(c->arg[i]), &g_f)))
+		if (ret == 3 && !(ft_export_check_id(c->arg[i],\
+ft_strlen(c->arg[i]), &g_f)))
 		{
 			if (ft_env_compare(c->arg[i],\
 ft_strlen(c->arg[i])) == ft_env_len(&g_f))

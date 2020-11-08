@@ -41,17 +41,17 @@ S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) == -1)
 	return (fdi);
 }
 
-char **ft_copy_env(char **envp)
+char	**ft_copy_env(char **envp)
 {
-	int len;
-	int i;
-	char **env;
+	int		len;
+	int		i;
+	char	**env;
 
 	len = 0;
 	while (envp && envp[len])
 		len++;
 	if (!(env = malloc(sizeof(char **) * (len + 1))))
-		return(NULL);
+		return (NULL);
 	len = 0;
 	i = 0;
 	while (envp && envp[len])
@@ -63,7 +63,6 @@ char **ft_copy_env(char **envp)
 			i++;
 		}
 		len++;
-
 	}
 	env[i] = NULL;
 	return (env);
@@ -78,7 +77,8 @@ void	ft_execve(t_command *c, t_f *g_f)
 	if ((fd = ft_open_redir(c)) == -1)
 		exit(-1);
 	fdi = ft_redir_execve(c, g_f, fd);
-	if (c->arg[0][0] == '/' || (c->arg[0][0] == '.' && c->arg[0][1] && c->arg[0][1] == '/') || (ft_env_compare("PATH", ft_strlen("PATH")) == ft_env_len(g_f)))
+	if (c->arg[0][0] == '/' || (c->arg[0][0] == '.' && c->arg[0][1] && \
+c->arg[0][1] == '/') || (ft_env_compare("PATH", 4) == ft_env_len(g_f)))
 	{
 		if (execve(c->arg[0], c->arg, ft_copy_env(g_f->env)) == -1)
 			ft_custom_error("bash", c->arg[0], "No such file or directory");

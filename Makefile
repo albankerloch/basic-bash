@@ -4,6 +4,7 @@ SRCS_NAME	= 	main.c \
 					exec_utils.c \
 					utils.c \
 					error.c \
+					error_errno.c \
 					realloc.c \
 					quotes.c \
 					construct.c \
