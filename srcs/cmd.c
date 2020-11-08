@@ -58,7 +58,7 @@ void	ft_execve(t_command *c, t_f *g_f)
 	}
 	else
 	{
-		if (ft_relative_path(c, g_f) == ft_env_len(g_f))
+		if (ft_absolute_path(c, g_f) == ft_env_len(g_f))
 			ft_cmd_error(c->arg[0], "commande introuvable");
 	}
 	if (c->add != 0)
@@ -68,7 +68,7 @@ void	ft_execve(t_command *c, t_f *g_f)
 	exit(-1);
 }
 
-int		ft_loop_relative_path(t_command *c, int j, int k,\
+int		ft_loop_absolute_path(t_command *c, int j, int k,\
 char try_path[PATH_MAX])
 {
 	while (g_f.env && g_f.env[j])
@@ -97,7 +97,7 @@ char try_path[PATH_MAX])
 	return (j);
 }
 
-int		ft_relative_path(t_command *c, t_f *g_f)
+int		ft_absolute_path(t_command *c, t_f *g_f)
 {
 	int		j;
 	int		k;
@@ -110,5 +110,5 @@ int		ft_relative_path(t_command *c, t_f *g_f)
 		j++;
 	}
 	j = 0;
-	return (ft_loop_relative_path(c, j, k, try_path));
+	return (ft_loop_absolute_path(c, j, k, try_path));
 }
