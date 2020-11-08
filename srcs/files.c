@@ -24,7 +24,7 @@ int		ft_touch(t_command *c)
 		S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	if (fd == -1)
 	{
-		ft_error(errno);
+		ft_error_errno("bash", c->n_out, errno);
 		return (-1);
 	}
 	if (c->add != 0)
@@ -46,7 +46,7 @@ int		ft_open_redir(t_command *c)
 		S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	if (fd == -1)
 	{
-		ft_error(errno);
+		ft_error_errno("bash", c->n_out, errno);
 		return (-1);
 	}
 	return (fd);
@@ -58,9 +58,7 @@ int		ft_checkfile(t_command *c)
 
 	if (stat(c->n_input, &buffer) != 0)
 	{
-		ft_putstr_fd("bash: ", 2);
-		ft_putstr_fd(c->n_input, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ft_custom_error(c->arg[0], c->n_input, "Aucun fichier ou dossier de ce type");
 		g_f.error = 1;
 		return (-1);
 	}

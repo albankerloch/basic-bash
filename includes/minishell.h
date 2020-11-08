@@ -91,7 +91,8 @@ char			**ft_realloc_env(t_f *g_f, char buf[PATH_MAX]);
 void			ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX]);
 void			ft_realloc_concat_buff(char line[PATH_MAX], char c);
 void			ft_error(int err);
-void			ft_custom_error(char *str, char *message);
+void			ft_error_errno(char *cmd, char *arg, int err);
+void			ft_custom_error(char *cmd, char *arg, char *message);
 void			ft_cmd_error(char *str, char *message);
 
 int				ft_echo(t_command *c, int fd);

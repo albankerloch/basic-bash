@@ -20,12 +20,23 @@ void	ft_cmd_error(char *str, char *message)
 	ft_putchar_fd('\n', 2);
 }
 
-void	ft_custom_error(char *str, char *message)
+void	ft_custom_error(char *cmd, char *arg, char *message)
 {
-	ft_putstr_fd("bash: ", 2);
-	ft_putstr_fd(str, 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(arg, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(message, 2);
+	ft_putchar_fd('\n', 2);
+}
+
+void	ft_error_errno(char *cmd, char *arg, int err)
+{
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(strerror(errno), 2);
 	ft_putchar_fd('\n', 2);
 }
 

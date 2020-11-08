@@ -54,7 +54,7 @@ void	ft_execve(t_command *c, t_f *g_f)
 	if (c->arg[0][0] == '/' || (c->arg[0][0] == '.' && c->arg[0][1] && c->arg[0][1] == '/') || (ft_env_compare("PATH", ft_strlen("PATH")) == ft_env_len(g_f)))
 	{
 		if (execve(c->arg[0], c->arg, g_f->env) == -1)
-			ft_custom_error(c->arg[0], "Aucun fichier ou dossier de ce type");
+			ft_custom_error("bash", c->arg[0], "Aucun fichier ou dossier de ce type");
 	}
 	else
 	{
