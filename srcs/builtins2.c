@@ -16,16 +16,16 @@ int		ft_export_egal(t_command *c, int i)
 {
 	int		j;
 
-	j = 0;
 	if (ft_strchr(c->arg[i], '='))
 	{
+		j = 0;
 		while (c->arg[i][j])
 		{
 			if (c->arg[i][j] == '=')
 			{
 				if ((!(ft_export_check_id(c->arg[i], j, &g_f))) ||
-				(c->arg[i][j - 1] == '_' && j == 1))
-					return (2);
+				(c->arg[i][0] == '_' && j == 1))
+					return (1);
 				if (!(g_f.env = ft_replace_env(c->arg[i], j)))
 					return (0);
 				break ;
@@ -33,9 +33,7 @@ int		ft_export_egal(t_command *c, int i)
 			j++;
 		}
 	}
-	else
-		return (3);
-	return (1);
+	return (3);
 }
 
 int		ft_export(t_command *c, int fd)
@@ -48,9 +46,9 @@ int		ft_export(t_command *c, int fd)
 	i = 1;
 	while (c->arg[i])
 	{
-		if ((ret = ft_export_egal(c, i)) == 0 || ret == 2)
+		if ((ret = ft_export_egal(c, i)) == 0)
 			return (ret);
-		if (ret == 3)
+		if (ret == 3 && !(ft_export_check_id(c->arg[i], ft_strlen(c->arg[i]), &g_f)))
 		{
 			if (ft_env_compare(c->arg[i],\
 ft_strlen(c->arg[i])) == ft_env_len(&g_f))
