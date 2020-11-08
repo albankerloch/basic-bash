@@ -12,6 +12,23 @@
 
 #include "../includes/minishell.h"
 
+void	ft_cmd_error(char *str, char *message)
+{
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(" : ", 2);
+	ft_putstr_fd(message, 2);
+	ft_putchar_fd('\n', 2);
+}
+
+void	ft_custom_error(char *str, char *message)
+{
+	ft_putstr_fd("bash: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(message, 2);
+	ft_putchar_fd('\n', 2);
+}
+
 void	ft_error(int err)
 {
 	ft_putstr_fd("Error : ", 2);

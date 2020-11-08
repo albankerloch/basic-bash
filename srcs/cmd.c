@@ -52,14 +52,15 @@ void	ft_execve(t_command *c, t_f *g_f)
 		exit(-1);
 	fdi = ft_redir_execve(c, g_f, fd);
 	if (c->arg[0][0] == '/' || c->arg[0][0] == '.')
-		ret = execve(c->arg[0], c->arg, g_f->env);
+	{
+		if (execve(c->arg[0], c->arg, g_f->env) == -1)
+			ft_custom_error(c->arg[0], "Aucun fichier ou dossier de ce type");
+	}
 	else
 	{
 		if (ft_relative_path(c, g_f) == ft_env_len(g_f))
-			ret = -1;
+			ft_cmd_error(c->arg[0], "commande introuvable");
 	}
-	if (ret == -1)
-		ft_error(errno);
 	if (c->add != 0)
 		close(fd);
 	if (c->input == 1)
