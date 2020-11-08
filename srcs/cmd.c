@@ -41,25 +41,52 @@ S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) == -1)
 	return (fdi);
 }
 
+char **ft_copy_env(char **envp)
+{
+	int len;
+	int i;
+	char **env;
+
+	len = 0;
+	while (envp && envp[len])
+		len++;
+	if (!(env = malloc(sizeof(char **) * (len + 1))))
+		return(NULL);
+	len = 0;
+	i = 0;
+	while (envp && envp[len])
+	{
+		if (ft_strncmp("LANG=", envp[len], ft_strlen("LANG=")))
+		{
+			if (!(env[i] = ft_strdup(envp[len])))
+				return (ft_free_tab(env, len));
+			i++;
+		}
+		len++;
+
+	}
+	env[i] = NULL;
+	return (env);
+}
+
 void	ft_execve(t_command *c, t_f *g_f)
 {
 	int fd;
 	int fdi;
 	int ret;
 
-	ret = 0;
 	if ((fd = ft_open_redir(c)) == -1)
 		exit(-1);
 	fdi = ft_redir_execve(c, g_f, fd);
 	if (c->arg[0][0] == '/' || (c->arg[0][0] == '.' && c->arg[0][1] && c->arg[0][1] == '/') || (ft_env_compare("PATH", ft_strlen("PATH")) == ft_env_len(g_f)))
 	{
-		if (execve(c->arg[0], c->arg, g_f->env) == -1)
-			ft_custom_error("bash", c->arg[0], "Aucun fichier ou dossier de ce type");
+		if (execve(c->arg[0], c->arg, ft_copy_env(g_f->env)) == -1)
+			ft_custom_error("bash", c->arg[0], "No such file or directory");
 	}
 	else
 	{
 		if (ft_absolute_path(c, g_f) == ft_env_len(g_f))
-			ft_cmd_error(c->arg[0], "commande introuvable");
+			ft_cmd_error(c->arg[0], "command not found");
 	}
 	if (c->add != 0)
 		close(fd);
@@ -84,7 +111,7 @@ char try_path[PATH_MAX])
 				{
 					ft_realloc_concat_buff(try_path, '/');
 					ft_strjoin_buff(try_path, c->arg[0]);
-					execve(try_path, c->arg, g_f.env);
+					execve(try_path, c->arg, ft_copy_env(g_f.env));
 					ft_memset(try_path, '\0', ft_strlen(try_path));
 					if (!g_f.env[j][k])
 						return (ft_env_len(&g_f));

@@ -58,7 +58,8 @@ int		ft_checkfile(t_command *c)
 
 	if (stat(c->n_input, &buffer) != 0)
 	{
-		ft_custom_error(c->arg[0], c->n_input, "Aucun fichier ou dossier de ce type");
+		ft_error_errno(c->arg[0], c->n_input, errno);
+		//ft_custom_error(c->arg[0], c->n_input, "Aucun fichier ou dossier de ce type");
 		g_f.error = 1;
 		return (-1);
 	}
