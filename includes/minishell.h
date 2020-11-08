@@ -94,6 +94,7 @@ void			ft_error(int err);
 void			ft_error_errno(char *cmd, char *arg, int err);
 void			ft_custom_error(char *cmd, char *arg, char *message);
 void			ft_cmd_error(char *str, char *message);
+void			ft_cmd_error_errno(char *str, char *cmd, char *arg, int err);
 
 int				ft_echo(t_command *c, int fd);
 int				ft_env(t_command *c, int fd);

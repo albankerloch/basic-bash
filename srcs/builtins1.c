@@ -63,7 +63,7 @@ int			ft_pwd(t_command *c, int fd)
 
 	if (!(getcwd(here, PATH_MAX)))
 	{
-		ft_error(errno);
+		ft_error_errno("bash", "pwd", errno);
 		return (0);
 	}
 	ft_putstr_fd(here, fd);

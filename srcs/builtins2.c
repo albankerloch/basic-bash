@@ -91,14 +91,14 @@ int		ft_cd(t_command *c, int fd)
 	int		ret;
 	char	buf[PATH_MAX];
 
-	if (!c->arg[1])
-		ret = chdir("/home/user42");
-	else
-		ret = chdir(c->arg[1]);
-	if (ret == -1)
+	if (!c->arg[1] || c->arg[2])
+	{
+		ft_cmd_error("bash", "cd needs one argument");
+	}
+	if (chdir(c->arg[1]) == -1)
 	{
 		g_f.error = 1;
-		ft_error(errno);
+		ft_cmd_error_errno("bash", "cd", c->arg[1], errno);
 		return (2);
 	}
 	if (!(getcwd(buf, PATH_MAX)))
