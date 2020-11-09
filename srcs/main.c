@@ -65,8 +65,9 @@ int		main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
 	int		ret;
-	int		parsing;
 
+	(void)argc;
+	(void)argv;
 	ft_f_construct(&g_f, envp);
 	ret = 1;
 	line = NULL;
