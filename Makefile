@@ -1,36 +1,30 @@
-SRCS_NAME	= 	main.c \
-					parser.c \
-					exec.c \
-					exec_utils.c \
-					utils.c \
-					error.c \
-					error_errno.c \
-					realloc.c \
-					quotes.c \
-					construct.c \
-					signal.c \
-					exit.c \
-					ft_check_atoi.c \
-					redirections.c \
-					arg.c \
-					builtins1.c \
-					builtins2.c \
-					builtins_utils1.c \
-					builtins_utils2.c \
-					builtins_utils3.c \
-					cmd.c \
-					cmd_utils.c \
-					files.c
+SRCS		= 	srcs/main.c \
+				srcs/parser.c \
+				srcs/exec.c \
+				srcs/exec_utils.c \
+				srcs/utils.c \
+				srcs/error.c \
+				srcs/error_errno.c \
+				srcs/realloc.c \
+				srcs/quotes.c \
+				srcs/construct.c \
+				srcs/signal.c \
+				srcs/exit.c \
+				srcs/ft_check_atoi.c \
+				srcs/redirections.c \
+				srcs/arg.c \
+				srcs/builtins1.c \
+				srcs/builtins2.c \
+				srcs/builtins_utils1.c \
+				srcs/builtins_utils2.c \
+				srcs/builtins_utils3.c \
+				srcs/cmd.c \
+				srcs/cmd_utils.c \
+				srcs/files.c
 
-SRCS_DIR	= ./srcs
-
-SRCS		= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
-
-OBJS		= $(SRCS_NAME:.c=.o)
+OBJS		= $(SRCS:.c=.o)
 
 NAME		= minishell
-
-INCLUDES_DIR= ./includes
 
 LIBFT_DIR	= ./libft
 
@@ -40,35 +34,24 @@ CC			= clang
 
 RM			= rm -f
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -I ./includes
 
-IFLAGS		= -I $(INCLUDES_DIR) -I $(LIBFT_DIR)
+HEADER = .
 
-all:		$(LIBFT_EXEC) $(NAME)
+all:		$(NAME)
 
-deb:		$(NAME)
-
-$(NAME):	
-		$(CC) -c $(IFLAGS) $(SRCS)
-		$(CC) -o $@ $(OBJS) $(LIBFT_EXEC) $(CFLAGS)
-
-$(LIBFT_EXEC):
-		cd $(LIBFT_DIR) && $(MAKE)
+$(NAME):	$(OBJS)
+		make bonus -C ./libft
+		$(CC) -o ${NAME} ${OBJS} ./libft/*.o ${CFLAGS}
 
 clean:
+		$(MAKE) clean -C ./libft
 		$(RM) $(OBJS)
-		cd $(LIBFT_DIR) && $(MAKE) $@
 
 fclean:		clean
-		$(RM) $(NAME)
-		cd $(LIBFT_DIR) && $(MAKE) $@
-
-clean_deb:	
-		$(RM) $(OBJS)
+		$(MAKE) fclean -C ./libft
 		$(RM) $(NAME)
 
 re:		fclean all
 
-debug:	clean_deb deb
-
-.PHONY:		all clean fclean re debug
+.PHONY:		all clean fclean re
