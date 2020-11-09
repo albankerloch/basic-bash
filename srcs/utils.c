@@ -6,7 +6,7 @@
 /*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 22:12:34 by aduchemi          #+#    #+#             */
-/*   Updated: 2020/11/09 16:27:24 by aduchemi         ###   ########.fr       */
+/*   Updated: 2020/11/09 22:01:01 by aduchemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,19 @@ char	*ft_substr_strjoin(char const *s, unsigned int start,
 	return (new);
 }
 
-int		ft_global_parse(char *line, char *c)
+int		ft_len_sub_parse(char *line, int *quote, int *needle)
 {
-	int		i;
-	int		quote;
-	int		needle;
-
-	i = 0;
-	quote = 0;
-	needle = 0;
-	while (line[i])
+	while (line[*needle] && line[*needle] != ';' && line[*needle] != '|' &&
+	line[*needle] != '<' && line[*needle] != '>')
 	{
-		while (line[needle] && line[needle] != ';' && line[needle] != '|' &&
-		line[needle] != '<' && line[needle] != '>')
-		{
-			ft_skip_quotes(line, &needle, &quote);
-			ft_close_quotes(line, &needle, &quote);
-			needle++;
-		}
-		if (quote == 0)
-		{
-			if (!ft_sub_parse(line, i, needle, c))
-				return (0);
-		}
-		needle++;
-		i = needle;
+		ft_skip_quotes(line, needle, quote);
+		ft_close_quotes(line, needle, quote);
+		(*needle)++;
 	}
+	if (line[*needle] == '>' && *needle == 0)
+		return (2);
+	if (line[*needle] == '>' && line[*needle + 1] && line[*needle + 1] == '>')
+		(*needle)++;
 	return (1);
 }
 
@@ -93,8 +80,8 @@ int		ft_cmd_parse(char *sub, char *c)
 	i = 0;
 	while (sub[i + j])
 	{
-		if (sub[i + j] == ';' || sub[i + j] == '|' || sub[i + j] == '<'
-		|| sub[i + j] == '>')
+		if (sub[i + j] == ';' || sub[i + j] == '|' ||
+		sub[i + j] == '>' || sub[i + j] == '<')
 		{
 			if (i == 0)
 			{

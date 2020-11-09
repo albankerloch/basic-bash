@@ -12,6 +12,30 @@
 
 #include "../includes/minishell.h"
 
+int		ft_global_parse(char *line, char *c)
+{
+	int		i;
+	int		quote;
+	int		needle;
+
+	i = 0;
+	quote = 0;
+	needle = 0;
+	while (line[i])
+	{
+		if (ft_len_sub_parse(line, &quote, &needle) == 2)
+			return (1);
+		if (quote == 0)
+		{
+			if (!ft_sub_parse(line, i, needle, c))
+				return (0);
+		}
+		needle++;
+		i = needle;
+	}
+	return (1);
+}
+
 int		ft_parser_symbol(t_list *t, char *line, int *i, t_command *c)
 {
 	int			ret;

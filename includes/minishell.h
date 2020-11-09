@@ -143,6 +143,7 @@ int				ft_global_parse(char *line, char *c);
 int				ft_cmd_parse(char *sub, char *c);
 int				ft_sub_parse(char *line, int i, int needle, char *c);
 int				ft_check_atoi(const char *str);
+int				ft_len_sub_parse(char *line, int *quote, int *needle);
 
 t_f				g_f;
 #endif
