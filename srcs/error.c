@@ -18,6 +18,7 @@ void	ft_cmd_error(char *str, char *message)
 	ft_putstr_fd(" : ", 2);
 	ft_putstr_fd(message, 2);
 	ft_putchar_fd('\n', 2);
+	g_f.error = 1;
 }
 
 void	ft_custom_error(char *cmd, char *arg, char *message)

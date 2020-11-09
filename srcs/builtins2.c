@@ -61,7 +61,7 @@ ft_strlen(c->arg[i]))))
 		}
 		i++;
 	}
-	return (1);
+	return (g_f.error == 1 ? 2 : 1);
 }
 
 int		ft_unset(t_command *c, int fd)
@@ -82,7 +82,7 @@ int		ft_unset(t_command *c, int fd)
 		}
 		i++;
 	}
-	return (1);
+	return (g_f.error == 1 ? 2 : 1);
 }
 
 int		ft_cd(t_command *c, int fd)
@@ -93,6 +93,7 @@ int		ft_cd(t_command *c, int fd)
 	if (!c->arg[1] || c->arg[2])
 	{
 		ft_cmd_error("bash", "cd needs one argument");
+		return (2);
 	}
 	if (chdir(c->arg[1]) == -1)
 	{
