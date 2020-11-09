@@ -64,7 +64,7 @@ ft_strlen(c->arg[i]))))
 	return (g_f.error == 1 ? 2 : 1);
 }
 
-int		ft_unset(t_command *c, int fd)
+int		ft_unset(t_command *c)
 {
 	int		i;
 
@@ -85,9 +85,8 @@ int		ft_unset(t_command *c, int fd)
 	return (g_f.error == 1 ? 2 : 1);
 }
 
-int		ft_cd(t_command *c, int fd)
+int		ft_cd(t_command *c)
 {
-	int		ret;
 	char	buf[PATH_MAX];
 
 	if (!c->arg[1] || c->arg[2])

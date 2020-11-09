@@ -100,8 +100,8 @@ int				ft_echo(t_command *c, int fd);
 int				ft_env(t_command *c, int fd);
 int				ft_pwd(int fd);
 int				ft_export(t_command *c, int fd);
-int				ft_unset(t_command *c, int fd);
-int				ft_cd(t_command *c, int fd);
+int				ft_unset(t_command *c);
+int				ft_cd(t_command *c);
 int				ft_builtin_exit(t_command *c);
 
 int				ft_env_len(t_f *g_f);

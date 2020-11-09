@@ -23,9 +23,9 @@ int		ft_builtins(t_command *c, int fd)
 	else if (ft_strcmp(c->arg[0], "export") == 0)
 		return (ft_export(c, fd));
 	else if (ft_strcmp(c->arg[0], "unset") == 0)
-		return (ft_unset(c, fd));
+		return (ft_unset(c));
 	else if (ft_strcmp(c->arg[0], "cd") == 0)
-		return (ft_cd(c, fd));
+		return (ft_cd(c));
 	else if (ft_strcmp(c->arg[0], "exit") == 0)
 		return (ft_builtin_exit(c));
 	return (-1);
