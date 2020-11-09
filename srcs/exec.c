@@ -31,7 +31,7 @@ int		ft_parent_exec(t_list *t, char *line, t_f *g_f, int pipe_fd[2])
 	return (1);
 }
 
-void	ft_child_exec(t_list *t, char *line, t_f *g_f, int pipe_fd[2])
+void	ft_child_exec(t_list *t, t_f *g_f, int pipe_fd[2])
 {
 	int	save_fd;
 	int	ret;
@@ -64,7 +64,7 @@ int		ft_exec(t_list *t, char *line, t_f *g_f)
 		pipe(pipe_fd);
 		pid = fork();
 		if (pid == 0)
-			ft_child_exec(t, line, g_f, pipe_fd);
+			ft_child_exec(t, g_f, pipe_fd);
 		else
 		{
 			error = 0;

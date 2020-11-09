@@ -34,7 +34,7 @@ CC			= clang
 
 RM			= rm -f
 
-CFLAGS		= -I ./includes
+CFLAGS		=  -I ./includes
 
 HEADER = .
 

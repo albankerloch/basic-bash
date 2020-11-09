@@ -48,7 +48,7 @@ int				ft_parser(t_list *t, char *line, int *i);
 int				ft_parser_arg(t_list **t, char *line, int *i, t_command	**c);
 int				ft_parser_symbol(t_list *t, char *line, int *i, t_command	*c);
 int				ft_exec(t_list *t, char *line, t_f *g_f);
-void			ft_child_exec(t_list *t, char *line, t_f *g_f, int pipe_fd[2]);
+void			ft_child_exec(t_list *t, t_f *g_f, int pipe_fd[2]);
 int				ft_parent_exec(t_list *t, char *line, t_f *g_f, int pipe_fd[2]);
 char			*ft_env_var(char *arg, int h, t_f *g_f);
 int				ft_arg_var(char **arg, t_f *g_f);
