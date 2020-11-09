@@ -72,8 +72,8 @@ int		ft_exec(t_list *t, char *line, t_f *g_f)
 			wait(&error);
 		}
 	}
-	if (error != 0)
-		return (-1);
+	if (WIFEXITED(error))
+		g_f->error = WEXITSTATUS(error);
 	return (1);
 }
 
