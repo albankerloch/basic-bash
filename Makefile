@@ -34,7 +34,7 @@ CC			= clang
 
 RM			= rm -f
 
-CFLAGS		= -Wall -Wextra -Werror -I ./includes
+CFLAGS		= -I ./includes
 
 HEADER = .
 

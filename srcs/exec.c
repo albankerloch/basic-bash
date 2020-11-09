@@ -60,12 +60,14 @@ int		ft_exec(t_list *t, char *line, t_f *g_f)
 		return (ft_fork_exec_cmd(t->content, line, g_f));
 	else
 	{
+		pid = 0;
 		pipe(pipe_fd);
 		pid = fork();
 		if (pid == 0)
 			ft_child_exec(t, line, g_f, pipe_fd);
 		else
 		{
+			error = 0;
 			if (!(ft_parent_exec(t, line, g_f, pipe_fd)))
 				return (0);
 			wait(&error);
@@ -81,6 +83,7 @@ void	ft_fork_execve(t_command *c, t_f *g_f)
 	pid_t	pidf;
 	int		status;
 
+	status = 0;
 	pidf = fork();
 	if (pidf == 0)
 	{
@@ -93,14 +96,13 @@ void	ft_fork_execve(t_command *c, t_f *g_f)
 		signal(SIGINT, ft_sig_handler_process);
 		signal(SIGQUIT, ft_sig_handler_process);
 		wait(&status);
+		if (WIFEXITED(status))
+			g_f->error = WEXITSTATUS(status);
 	}
-	if (WIFEXITED(status))
-		g_f->error = WEXITSTATUS(status);
 }
 
 int		ft_fork_exec_cmd(t_command *c, char *line, t_f *g_f)
 {
-	char	***p;
 	int		ret;
 	int		fd;
 
