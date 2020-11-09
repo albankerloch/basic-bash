@@ -108,7 +108,7 @@ int		ft_fork_exec_cmd(t_command *c, char *line, t_f *g_f)
 
 	if ((fd = ft_open_redir(c)) == -1)
 		return (0);
-	if ((ret = ft_builtins(c, line, g_f, fd)) == 0)
+	if ((ret = ft_builtins(c, fd)) == 0)
 	{
 		if (c->add != 0)
 			close(fd);

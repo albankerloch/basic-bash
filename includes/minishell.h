@@ -66,7 +66,7 @@ void			ft_command_destroy(void *c);
 int				ft_touch(t_command *c);
 int				ft_checkfile(t_command *c);
 int				ft_open_redir(t_command *c);
-int				ft_builtins(t_command *c, char *line, t_f *g_f, int fd);
+int				ft_builtins(t_command *c, int fd);
 int				ft_fork_exec_cmd(t_command *c, char *line, t_f *g_f);
 int				ft_loop_absolute_path(t_command *c, int j, int k,\
 char try_path[PATH_MAX]);
