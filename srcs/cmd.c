@@ -56,14 +56,14 @@ char	**ft_copy_env(char **envp)
 	i = 0;
 	while (envp && envp[len])
 	{
-		if (ft_strncmp("LANG=", envp[len], ft_strlen("LANG=")))
+		if (ft_strncmp("LANGUAGE=", envp[len], ft_strlen("LANGUAGE=")))
 		{
 			if (!(env[i] = ft_strdup(envp[len])))
 				return (ft_free_tab(env, len));
 		}
 		else
 		{
-			if (!(env[i] = ft_strdup("LANG=en_US")))
+			if (!(env[i] = ft_strdup("LANGUAGE=en_US")))
 				return (ft_free_tab(env, len));
 		}
 		i++;
