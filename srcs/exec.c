@@ -83,7 +83,6 @@ void	ft_fork_execve(t_command *c, t_f *g_f)
 	pid_t	pidf;
 	int		status;
 
-	status = 0;
 	pidf = fork();
 	if (pidf == 0)
 	{
@@ -92,7 +91,8 @@ void	ft_fork_execve(t_command *c, t_f *g_f)
 		ft_execve(c, g_f);
 	}
 	else
-	{
+	{	
+		status = 0;
 		signal(SIGINT, ft_sig_handler_process);
 		signal(SIGQUIT, ft_sig_handler_process);
 		wait(&status);
