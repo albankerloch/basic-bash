@@ -71,10 +71,10 @@ int		ft_exec(t_list *t, char *line, t_f *g_f)
 			if (!(ft_parent_exec(t, line, g_f, pipe_fd)))
 				return (0);
 			wait(&error);
+			if (WIFEXITED(error) != 0)
+				g_f->error = WEXITSTATUS(error);
 		}
-	}
-	if (WIFEXITED(error) != 0)
-		g_f->error = WEXITSTATUS(error);
+	}	
 	return (1);
 }
 
