@@ -71,7 +71,7 @@ int				ft_fork_exec_cmd(t_command *c, t_f *g_f);
 int				ft_loop_absolute_path(t_command *c, int j, int k,\
 char try_path[PATH_MAX]);
 
-int				ft_absolute_path(t_command *c, t_f *g_f);
+int				ft_absolute_path(t_command *c);
 int				ft_new_arg(t_command *c, char *line, int *i, int *k);
 int				ft_new_arg_var(char **arg, char *line, int *i, int *quote);
 int				ft_redir_var(int quote, char *line, int *i, char **arg);
@@ -85,7 +85,7 @@ int				ft_export_without_arg(t_f *g_f, int fd);
 int				ft_export_err(char *arg);
 int				ft_env_err(t_command *c);
 void			ft_execve(t_command *c, t_f *g_f);
-int				ft_redir_execve(t_command *c, t_f *g_f, int fd);
+int				ft_redir_execve(t_command *c, int fd);
 void			ft_fork_execve(t_command *c, t_f *g_f);
 char			**ft_realloc_env(t_f *g_f, char buf[PATH_MAX]);
 void			ft_strjoin_buff(char s1[PATH_MAX], char s2[PATH_MAX]);

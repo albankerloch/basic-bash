@@ -22,6 +22,8 @@ int		ft_touch(t_command *c)
 	else if (c->add == 2)
 		fd = open(c->n_out, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR |
 		S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+	else
+		fd = 0;
 	if (fd == -1)
 	{
 		ft_error_errno("bash", c->n_out, errno);

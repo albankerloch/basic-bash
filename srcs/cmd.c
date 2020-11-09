@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int		ft_redir_execve(t_command *c, t_f *g_f, int fd)
+int		ft_redir_execve(t_command *c, int fd)
 {
 	int fdi;
 
@@ -74,11 +74,10 @@ void	ft_execve(t_command *c, t_f *g_f)
 {
 	int fd;
 	int fdi;
-	int ret;
 
 	if ((fd = ft_open_redir(c)) == -1)
 		exit(-1);
-	fdi = ft_redir_execve(c, g_f, fd);
+	fdi = ft_redir_execve(c, fd);
 	if (c->arg[0][0] == '/' || (c->arg[0][0] == '.' && c->arg[0][1] && \
 c->arg[0][1] == '/') || (ft_env_compare("PATH", 4) == ft_env_len(g_f)))
 	{
@@ -87,7 +86,7 @@ c->arg[0][1] == '/') || (ft_env_compare("PATH", 4) == ft_env_len(g_f)))
 	}
 	else
 	{
-		if (ft_absolute_path(c, g_f) == ft_env_len(g_f))
+		if (ft_absolute_path(c) == ft_env_len(g_f))
 		{
 			ft_cmd_error(c->arg[0], "command not found");
 		}
@@ -128,13 +127,14 @@ char try_path[PATH_MAX])
 	return (j);
 }
 
-int		ft_absolute_path(t_command *c, t_f *g_f)
+int		ft_absolute_path(t_command *c)
 {
 	int		j;
 	int		k;
 	char	try_path[PATH_MAX];
 
 	j = 0;
+	k = 0;
 	while (j < PATH_MAX)
 	{
 		try_path[j] = 0;
