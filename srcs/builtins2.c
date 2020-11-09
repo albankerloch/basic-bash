@@ -25,10 +25,10 @@ int		ft_export_egal(t_command *c, int i)
 			{
 				if ((!(ft_export_check_id(c->arg[i], j, &g_f))) ||
 				(c->arg[i][0] == '_' && j == 1))
-					return (1);
+					return (2);
 				if (!(g_f.env = ft_replace_env(c->arg[i], j)))
 					return (0);
-				break ;
+				return (1);
 			}
 			j++;
 		}
@@ -48,8 +48,8 @@ int		ft_export(t_command *c, int fd)
 	{
 		if ((ret = ft_export_egal(c, i)) == 0)
 			return (ret);
-		if (ret == 3 && !(ft_export_check_id(c->arg[i],\
-ft_strlen(c->arg[i]), &g_f)))
+		if (ret == 3 && ft_export_check_id(c->arg[i],\
+ft_strlen(c->arg[i]), &g_f))
 		{
 			if (ft_env_compare(c->arg[i],\
 ft_strlen(c->arg[i])) == ft_env_len(&g_f))
