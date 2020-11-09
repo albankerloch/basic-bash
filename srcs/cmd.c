@@ -44,7 +44,6 @@ S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) == -1)
 char	**ft_copy_env(char **envp)
 {
 	int		len;
-	int		i;
 	char	**env;
 
 	len = 0;
@@ -53,23 +52,21 @@ char	**ft_copy_env(char **envp)
 	if (!(env = malloc(sizeof(char **) * (len + 1))))
 		return (NULL);
 	len = 0;
-	i = 0;
 	while (envp && envp[len])
 	{
 		if (ft_strncmp("LANGUAGE=", envp[len], ft_strlen("LANGUAGE=")))
 		{
-			if (!(env[i] = ft_strdup(envp[len])))
+			if (!(env[len] = ft_strdup(envp[len])))
 				return (ft_free_tab(env, len));
 		}
 		else
 		{
-			if (!(env[i] = ft_strdup("LANGUAGE=en_US")))
+			if (!(env[len] = ft_strdup("LANGUAGE=en_US")))
 				return (ft_free_tab(env, len));
 		}
-		i++;
 		len++;
 	}
-	env[i] = NULL;
+	env[len] = NULL;
 	return (env);
 }
 
