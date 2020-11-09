@@ -63,7 +63,7 @@ char	**ft_copy_env(char **envp)
 		}
 		else
 		{
-			if (!(env[i] = ft_strdup("LANG=en_US.UTF-8")))
+			if (!(env[i] = ft_strdup("LANG=en_US")))
 				return (ft_free_tab(env, len));
 		}
 		i++;
@@ -91,13 +91,15 @@ c->arg[0][1] == '/') || (ft_env_compare("PATH", 4) == ft_env_len(g_f)))
 	else
 	{
 		if (ft_absolute_path(c, g_f) == ft_env_len(g_f))
+		{
 			ft_cmd_error(c->arg[0], "command not found");
+		}
 	}
 	if (c->add != 0)
 		close(fd);
 	if (c->input == 1)
 		close(fdi);
-	exit(-1);
+	exit(127);
 }
 
 int		ft_loop_absolute_path(t_command *c, int j, int k,\
