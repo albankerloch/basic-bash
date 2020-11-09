@@ -60,8 +60,13 @@ char	**ft_copy_env(char **envp)
 		{
 			if (!(env[i] = ft_strdup(envp[len])))
 				return (ft_free_tab(env, len));
-			i++;
 		}
+		else
+		{
+			if (!(env[i] = ft_strdup("LANG=en_US.UTF-8")))
+				return (ft_free_tab(env, len));
+		}
+		i++;
 		len++;
 	}
 	env[i] = NULL;
