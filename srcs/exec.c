@@ -42,7 +42,7 @@ void	ft_child_exec(t_list *t, char *line, t_f *g_f, int pipe_fd[2])
 	if (dup2(pipe_fd[1], 1) == -1)
 		exit(-1);
 	close(pipe_fd[1]);
-	if ((ret = ft_fork_exec_cmd(t->content, line, g_f)) == 0 || ret == -1)
+	if ((ret = ft_fork_exec_cmd(t->content, g_f)) == 0 || ret == -1)
 		exit(-1);
 	if (dup2(save_fd, 1) == -1)
 		exit(-1);
@@ -57,7 +57,7 @@ int		ft_exec(t_list *t, char *line, t_f *g_f)
 	int		error;
 
 	if (!t->next)
-		return (ft_fork_exec_cmd(t->content, line, g_f));
+		return (ft_fork_exec_cmd(t->content, g_f));
 	else
 	{
 		pid = 0;
@@ -101,7 +101,7 @@ void	ft_fork_execve(t_command *c, t_f *g_f)
 	}
 }
 
-int		ft_fork_exec_cmd(t_command *c, char *line, t_f *g_f)
+int		ft_fork_exec_cmd(t_command *c, t_f *g_f)
 {
 	int		ret;
 	int		fd;
