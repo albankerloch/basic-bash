@@ -52,7 +52,7 @@ void			ft_child_exec(t_list *t, t_f *g_f, int pipe_fd[2]);
 int				ft_parent_exec(t_list *t, char *line, t_f *g_f, int pipe_fd[2]);
 char			*ft_env_var(char *arg, int h, t_f *g_f);
 int				ft_arg_var(char **arg, t_f *g_f);
-void			ft_f_construct(t_f *g_f, char **envp);
+void			ft_f_construct(t_f *g_f, char **envp, int argc, char *argv[]);
 char			*ft_realloc_concat(char *line, char c);
 int				ft_redirections(t_list *t, char *line, int *i);
 int				ft_redirection_right(t_command *c, char *line, int *i);

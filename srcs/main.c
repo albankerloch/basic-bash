@@ -66,9 +66,7 @@ int		main(int argc, char *argv[], char *envp[])
 	char	*line;
 	int		ret;
 
-	(void)argc;
-	(void)argv;
-	ft_f_construct(&g_f, envp);
+	ft_f_construct(&g_f, envp, argc, argv);
 	ret = 1;
 	line = NULL;
 	while (1)

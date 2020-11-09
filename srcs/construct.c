@@ -69,10 +69,12 @@ t_command	*ft_command_construct(void)
 	return (c);
 }
 
-void		ft_f_construct(t_f *g_f, char **envp)
+void		ft_f_construct(t_f *g_f, char **envp, int argc, char *argv[])
 {
 	int		len;
 
+	(void)argc;
+	(void)argv;
 	len = 0;
 	while (envp && envp[len])
 		len++;
