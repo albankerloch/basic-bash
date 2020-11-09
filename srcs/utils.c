@@ -6,7 +6,7 @@
 /*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 22:12:34 by aduchemi          #+#    #+#             */
-/*   Updated: 2020/11/06 22:12:42 by aduchemi         ###   ########.fr       */
+/*   Updated: 2020/11/09 16:27:24 by aduchemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int		ft_global_parse(char *line, char *c)
 	needle = 0;
 	while (line[i])
 	{
-		while (line[needle] && line[needle] != ';' && line[needle] != '|')
+		while (line[needle] && line[needle] != ';' && line[needle] != '|' &&
+		line[needle] != '<' && line[needle] != '>')
 		{
 			ft_skip_quotes(line, &needle, &quote);
 			ft_close_quotes(line, &needle, &quote);
@@ -92,7 +93,8 @@ int		ft_cmd_parse(char *sub, char *c)
 	i = 0;
 	while (sub[i + j])
 	{
-		if (sub[i + j] == ';' || sub[i + j] == '|')
+		if (sub[i + j] == ';' || sub[i + j] == '|' || sub[i + j] == '<'
+		|| sub[i + j] == '>')
 		{
 			if (i == 0)
 			{
