@@ -81,7 +81,7 @@ int		ft_export_without_arg(t_f *g_f, int fd)
 	return (1);
 }
 
-int		ft_export_check_id(char *arg, int j, t_f *g_f)
+int		ft_export_check_id(char *arg, int j)
 {
 	int		i;
 

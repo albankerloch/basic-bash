@@ -128,7 +128,7 @@ void			ft_aff_export_without_arg(int i, int *j, int fd);
 
 char			**ft_env_cpy(t_f *g_f, char *arg, int len, int egal);
 int				ft_env_compare(char *arg, int n);
-int				ft_export_check_id(char *arg, int i, t_f *g_f);
+int				ft_export_check_id(char *arg, int i);
 char			**ft_unset_env(t_f *g_f, char *arg);
 int				ft_realloc_var(char **arg, char *line, int *i);
 int				ft_realloc_g_f_error(char **arg, int *i);
