@@ -56,9 +56,8 @@ int			ft_env(t_command *c, int fd)
 	return (1);
 }
 
-int			ft_pwd(t_command *c, int fd)
+int			ft_pwd(int fd)
 {
-	int		j;
 	char	here[PATH_MAX];
 
 	if (!(getcwd(here, PATH_MAX)))
@@ -78,7 +77,7 @@ static void	ft_error_num_arg(char *str)
 	ft_putstr_fd(": numeric argument required\n", 2);
 }
 
-int			ft_builtin_exit(t_command *c, int fd)
+int			ft_builtin_exit(t_command *c)
 {
 //	ft_putstr("exit\n");
 	if (!(c->arg[1]))

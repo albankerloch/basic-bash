@@ -17,7 +17,7 @@ int		ft_parse_line(char *line, t_f *g_f, int *i)
 	t_list	*t;
 	int		ret;
 
-	if (!(t = ft_init_list(g_f)))
+	if (!(t = ft_init_list()))
 		return (0);
 	if (!(ret = ft_parser(t, line, i)))
 	{

@@ -45,7 +45,6 @@ int		ft_redir_var(int quote, char *line, int *i, char **arg)
 int		ft_new_in_out(t_command *c, char **arg, char *line, int *i)
 {
 	int		ret;
-	int		i_start;
 
 	while (line[*i])
 	{
