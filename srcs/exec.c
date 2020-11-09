@@ -56,7 +56,6 @@ int		ft_exec(t_list *t, char *line, t_f *g_f)
 	int		pipe_fd[2];
 	int		error;
 
-	error = 1;
 	if (!t->next)
 		return (ft_fork_exec_cmd(t->content, line, g_f));
 	else
@@ -72,7 +71,7 @@ int		ft_exec(t_list *t, char *line, t_f *g_f)
 			wait(&error);
 		}
 	}
-	if (WIFEXITED(error))
+	if (WIFEXITED(error) != 0)
 		g_f->error = WEXITSTATUS(error);
 	return (1);
 }
