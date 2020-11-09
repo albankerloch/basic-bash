@@ -28,7 +28,7 @@ int			ft_add_list(t_list *t)
 	return (1);
 }
 
-t_list		*ft_init_list(t_f *g_f)
+t_list		*ft_init_list(void)
 {
 	t_list		*t;
 	t_command	*c;

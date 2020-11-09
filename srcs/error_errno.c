@@ -14,6 +14,7 @@
 
 void	ft_cmd_error_errno(char *str, char *cmd, char *arg, int err)
 {
+	(void)err;
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(cmd, 2);
@@ -26,6 +27,7 @@ void	ft_cmd_error_errno(char *str, char *cmd, char *arg, int err)
 
 void	ft_error_errno(char *cmd, char *arg, int err)
 {
+	(void)err;
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(arg, 2);
@@ -36,6 +38,7 @@ void	ft_error_errno(char *cmd, char *arg, int err)
 
 void	ft_error(int err)
 {
+	(void)err;
 	ft_putstr_fd("Error : ", 2);
 	ft_putnbr_fd(errno, 2);
 	ft_putchar_fd(' ', 2);

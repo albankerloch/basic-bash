@@ -115,7 +115,7 @@ void			ft_exit(t_f *g_f, char *line, int e);
 t_command		*ft_free_part_command(t_command *c, int i);
 void			ft_del_command(void *c);
 void			ft_free_command(t_command *c);
-t_list			*ft_init_list(t_f *g_f);
+t_list			*ft_init_list();
 int				ft_add_list(t_list *t);
 char			**ft_free_tab(char **new, int i);
 char			*ft_substr_strjoin(char const *s,\
