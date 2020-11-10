@@ -26,8 +26,6 @@ OBJS		= $(SRCS:.c=.o)
 
 NAME		= minishell
 
-LIBFT_DIR	= ./libft
-
 LIBFT_EXEC	= $(LIBFT_DIR)/libft.a
 
 CC			= clang
@@ -35,8 +33,6 @@ CC			= clang
 RM			= rm -f
 
 CFLAGS		= -Wall -Wextra -Werror -I ./includes
-
-HEADER = .
 
 all:		$(NAME)
 
