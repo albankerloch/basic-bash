@@ -6,7 +6,7 @@
 /*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 16:24:18 by aduchemi          #+#    #+#             */
-/*   Updated: 2020/07/15 16:59:40 by aduchemi         ###   ########.fr       */
+/*   Updated: 2020/11/10 14:42:08 by aduchemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	ft_fork_execve(t_command *c, t_f *g_f)
 		ft_execve(c, g_f);
 	}
 	else
-	{	
+	{
 		status = 0;
 		signal(SIGINT, ft_sig_handler_process);
 		signal(SIGQUIT, ft_sig_handler_process);

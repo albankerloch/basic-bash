@@ -54,13 +54,17 @@ int		ft_open_redir(t_command *c)
 	return (fd);
 }
 
-int		ft_checkfile(t_command *c)
+int		ft_checkfile(t_command *c, char *line, int *i)
 {
 	struct stat	buffer;
 
 	if (stat(c->n_input, &buffer) != 0)
 	{
 		ft_error_errno(c->arg[0], c->n_input, errno);
+		while (line[*i] && line[*i] != ';')
+			(*i)++;
+		if (line[*i] == ';')
+			(*i)++;
 		g_f.error = 1;
 		return (-1);
 	}

@@ -6,7 +6,7 @@
 /*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 22:43:02 by aduchemi          #+#    #+#             */
-/*   Updated: 2020/11/06 11:18:56 by aduchemi         ###   ########.fr       */
+/*   Updated: 2020/11/10 14:39:32 by aduchemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int		ft_parser(t_list *t, char *line, int *i)
 	int			ret;
 	t_command	*c;
 
+	c = t->content;
 	while (line[*i])
 	{
 		if (line[*i] == ' ' || line[*i] == '>' || line[*i] == '<'
@@ -97,6 +98,8 @@ int		ft_parser(t_list *t, char *line, int *i)
 	}
 	if (c->quote != 0)
 		ft_putstr_fd("WARNING : Quotes automatically closed\n", 2);
+	if (ft_strlen(c->arg[0]) == 0)
+		return (2);
 	return (1);
 }
 

@@ -81,7 +81,7 @@ int		ft_redirection_left(t_command *c, char *line, int *i)
 	}
 	if ((ret = ft_new_in_out(c, &(c->n_input), line, i)) != 1)
 		return (ret);
-	return (ft_checkfile(c));
+	return (ft_checkfile(c, line, i));
 }
 
 int		ft_ambiguous_redir(char *line, int i_start, int *i)

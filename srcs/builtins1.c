@@ -79,7 +79,7 @@ static void	ft_error_num_arg(char *str)
 
 int			ft_builtin_exit(t_command *c)
 {
-//	ft_putstr("exit\n");
+	ft_putstr("exit\n");
 	if (!(c->arg[1]))
 		g_f.exit = 0;
 	else

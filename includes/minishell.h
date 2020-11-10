@@ -65,7 +65,7 @@ void			ft_skip_quotes(char *line, int *i, int *quote);
 t_command		*ft_command_construct();
 void			ft_command_destroy(void *c);
 int				ft_touch(t_command *c);
-int				ft_checkfile(t_command *c);
+int				ft_checkfile(t_command *c, char *line, int *i);
 int				ft_open_redir(t_command *c);
 int				ft_builtins(t_command *c, int fd);
 int				ft_fork_exec_cmd(t_command *c, t_f *g_f);

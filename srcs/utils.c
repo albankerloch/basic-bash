@@ -6,7 +6,7 @@
 /*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 22:12:34 by aduchemi          #+#    #+#             */
-/*   Updated: 2020/11/09 22:01:01 by aduchemi         ###   ########.fr       */
+/*   Updated: 2020/11/10 14:41:26 by aduchemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,23 @@ char	*ft_substr_strjoin(char const *s, unsigned int start,
 
 int		ft_len_sub_parse(char *line, int *quote, int *needle)
 {
-	while (line[*needle] && line[*needle] != ';' && line[*needle] != '|' &&
-	line[*needle] != '<' && line[*needle] != '>')
+	int	i;
+
+	i = 0;
+	while (line[i] == ' ')
+		i++;
+	while (line[*needle + i] && line[*needle + i] != ';' &&
+	line[*needle + i] != '|' && line[*needle + i] != '<' &&
+	line[*needle + i] != '>')
 	{
-		ft_skip_quotes(line, needle, quote);
-		ft_close_quotes(line, needle, quote);
+		ft_skip_quotes(line, needle + i, quote);
+		ft_close_quotes(line, needle + i, quote);
 		(*needle)++;
 	}
-	if (line[*needle] == '>' && *needle == 0)
+	if (*needle == 0 && (line[*needle + i] == '>' || line[*needle + i] == '<'))
 		return (2);
-	if (line[*needle] == '>' && line[*needle + 1] && line[*needle + 1] == '>')
+	if (line[*needle + i] == '>' && line[*needle + i + 1] &&
+	line[*needle + i + 1] == '>')
 		(*needle)++;
 	return (1);
 }
