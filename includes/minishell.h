@@ -6,7 +6,7 @@
 /*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 16:47:27 by aduchemi          #+#    #+#             */
-/*   Updated: 2020/07/21 21:21:49 by aduchemi         ###   ########.fr       */
+/*   Updated: 2020/11/10 15:50:53 by aduchemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int				ft_builtins(t_command *c, int fd);
 int				ft_fork_exec_cmd(t_command *c, t_f *g_f);
 int				ft_loop_absolute_path(t_command *c, int j, int k,\
 char try_path[PATH_MAX]);
-
 int				ft_absolute_path(t_command *c);
 int				ft_new_arg(t_command *c, char *line, int *i, int *k);
 int				ft_new_arg_var(char **arg, char *line, int *i, int *quote);
@@ -96,7 +95,6 @@ void			ft_error_errno(char *cmd, char *arg, int err);
 void			ft_custom_error(char *cmd, char *arg, char *message);
 void			ft_cmd_error(char *str, char *message);
 void			ft_cmd_error_errno(char *str, char *cmd, char *arg, int err);
-
 int				ft_echo(t_command *c, int fd);
 int				ft_env(t_command *c, int fd);
 int				ft_pwd(int fd);
@@ -104,13 +102,11 @@ int				ft_export(t_command *c, int fd);
 int				ft_unset(t_command *c);
 int				ft_cd(t_command *c);
 int				ft_builtin_exit(t_command *c);
-
 int				ft_env_len(t_f *g_f);
 char			**ft_replace_env(char *arg, int egal);
 char			*ft_join_end_var(char *val_var, char *arg, int j);
 char			*ft_valeur_variable(t_f *g_f, char *nom_var);
 void			ft_echo_n(int *n, char **arg, int *i);
-
 int				ft_exit_f(t_f *g_f, int i, int e);
 void			ft_exit(t_f *g_f, char *line, int e);
 t_command		*ft_free_part_command(t_command *c, int i);
@@ -126,8 +122,6 @@ char const *s, unsigned int start, size_t len);
 int				ft_isnum(char *str);
 int				ft_export_egal(t_command *c, int i);
 void			ft_aff_export_without_arg(int i, int *j, int fd);
-
-char			**ft_env_cpy(t_f *g_f, char *arg, int len, int egal);
 int				ft_env_compare(char *arg, int n);
 int				ft_export_check_id(char *arg, int i);
 char			**ft_unset_env(t_f *g_f, char *arg);
