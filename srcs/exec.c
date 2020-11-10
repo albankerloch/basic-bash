@@ -96,7 +96,7 @@ void	ft_fork_execve(t_command *c, t_f *g_f)
 		signal(SIGINT, ft_sig_handler_process);
 		signal(SIGQUIT, ft_sig_handler_process);
 		wait(&status);
-		if (WIFEXITED(status))
+		if (WIFEXITED(status) != 0)
 			g_f->error = WEXITSTATUS(status);
 	}
 }
