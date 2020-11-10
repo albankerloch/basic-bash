@@ -75,6 +75,7 @@ void		ft_f_construct(t_f *g_f, char **envp, int argc, char *argv[])
 
 	(void)argc;
 	(void)argv;
+	g_f->line = NULL;
 	len = 0;
 	while (envp && envp[len])
 		len++;

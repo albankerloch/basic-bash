@@ -40,6 +40,7 @@ typedef	struct	s_f
 	int		error;
 	int		exit;
 	char	**env;
+	char	*line;
 }				t_f;
 
 int				ft_parser_exec(char *line, t_f *g_f);

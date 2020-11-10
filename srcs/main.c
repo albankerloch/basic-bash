@@ -63,28 +63,26 @@ int		ft_parser_exec(char *line, t_f *g_f)
 
 int		main(int argc, char *argv[], char *envp[])
 {
-	char	*line;
 	int		ret;
 
 	ft_f_construct(&g_f, envp, argc, argv);
 	ret = 1;
-	line = NULL;
 	while (1)
 	{
 		signal(SIGINT, ft_sig_handler);
 		signal(SIGQUIT, ft_sig_handler);
-	//	ft_putstr("<minishell> ");
-		ret = get_next_line(0, &line);
+		//ft_putstr("<minishell> ");
+		ret = get_next_line(0, &g_f.line);
 		if (ret == 0)
 		{
 	//		ft_putstr("\nexit\n");
-			ft_exit(&g_f, line, EXIT_SUCCESS);
+			ft_exit(&g_f, g_f.line, EXIT_SUCCESS);
 		}
 		if (ret == -1)
-			ft_exit(&g_f, line, EXIT_FAILURE);
-		if (!(ft_parser_exec(line, &g_f)))
-			ft_exit(&g_f, line, EXIT_FAILURE);
-		free(line);
+			ft_exit(&g_f, g_f.line, EXIT_FAILURE);
+		if (!(ft_parser_exec(g_f.line, &g_f)))
+			ft_exit(&g_f, g_f.line, EXIT_FAILURE);
+		free(g_f.line);
 	}
 	return (0);
 }

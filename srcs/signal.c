@@ -17,6 +17,7 @@ void	ft_sig_handler(int signum)
 	if (signum == SIGINT)
 	{
 		g_f.error = 130;
+		g_f.line[0] = '\0';
 		ft_putchar('\n');
 		ft_putstr("<minishell> ");
 	}
