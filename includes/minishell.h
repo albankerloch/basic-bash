@@ -6,7 +6,7 @@
 /*   By: aduchemi <aduchemi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 16:47:27 by aduchemi          #+#    #+#             */
-/*   Updated: 2020/11/10 15:50:53 by aduchemi         ###   ########.fr       */
+/*   Updated: 2020/11/10 15:53:51 by aduchemi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/types.h>
