@@ -71,12 +71,12 @@ int		main(int argc, char *argv[], char *envp[])
 	{
 		signal(SIGINT, ft_sig_handler);
 		signal(SIGQUIT, ft_sig_handler);
-		//ft_putstr("<minishell> ");
+		ft_putstr("<minishell> ");
 		ret = get_next_line(0, &g_f.line);
 		if (ret == 0)
 		{
-	//		ft_putstr("\nexit\n");
-			ft_exit(&g_f, g_f.line, EXIT_SUCCESS);
+			ft_putstr("\nexit\n");
+			ft_exit(&g_f, g_f.line, g_f.error);
 		}
 		if (ret == -1)
 			ft_exit(&g_f, g_f.line, EXIT_FAILURE);
