@@ -41,35 +41,6 @@ S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) == -1)
 	return (fdi);
 }
 
-char	**ft_copy_env(char **envp)
-{
-	int		len;
-	char	**env;
-
-	len = 0;
-	while (envp && envp[len])
-		len++;
-	if (!(env = malloc(sizeof(char **) * (len + 1))))
-		return (NULL);
-	len = 0;
-	while (envp && envp[len])
-	{
-		if (ft_strncmp("LANGUAGE=", envp[len], ft_strlen("LANGUAGE=")))
-		{
-			if (!(env[len] = ft_strdup(envp[len])))
-				return (ft_free_tab(env, len));
-		}
-		else
-		{
-			if (!(env[len] = ft_strdup("LANGUAGE=en_US")))
-				return (ft_free_tab(env, len));
-		}
-		len++;
-	}
-	env[len] = NULL;
-	return (env);
-}
-
 void	ft_execve(t_command *c, t_f *g_f)
 {
 	int fd;
@@ -81,7 +52,7 @@ void	ft_execve(t_command *c, t_f *g_f)
 	if (c->arg[0][0] == '/' || (c->arg[0][0] == '.' && c->arg[0][1] && \
 c->arg[0][1] == '/') || (ft_env_compare("PATH", 4) == ft_env_len(g_f)))
 	{
-		if (execve(c->arg[0], c->arg, ft_copy_env(g_f->env)) == -1)
+		if (execve(c->arg[0], c->arg, g_f->env) == -1)
 			ft_custom_error("bash", c->arg[0], "No such file or directory");
 	}
 	else
@@ -114,7 +85,7 @@ char try_path[PATH_MAX])
 				{
 					ft_realloc_concat_buff(try_path, '/');
 					ft_strjoin_buff(try_path, c->arg[0]);
-					execve(try_path, c->arg, ft_copy_env(g_f.env));
+					execve(try_path, c->arg, g_f.env);
 					ft_memset(try_path, '\0', ft_strlen(try_path));
 					if (!g_f.env[j][k])
 						return (ft_env_len(&g_f));
