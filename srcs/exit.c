@@ -56,9 +56,7 @@ void		ft_free_command(t_command *c)
 int			ft_exit_f(t_f *g_f, int i, int e)
 {
 	int t;
-	int k;
 
-	k = g_f->exit;
 	if (i == -2)
 	{
 		i = 0;
