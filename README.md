@@ -1,4 +1,4 @@
-# Small_bash
+# Basic bash
 
 An homemade bash for Unix
 
