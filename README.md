@@ -1,6 +1,7 @@
 # Small_bash
 
-An homemade small bash for Unix
+An homemade bash for Unix
+
 
 ## Installation
 
@@ -20,3 +21,6 @@ make
 
 # a prompt will appeared to be used as bash
 ```
+#### Author : Alban Kerloc'h, Alice Duchemin
+#### Category: Low-level
+#### Tag: C
